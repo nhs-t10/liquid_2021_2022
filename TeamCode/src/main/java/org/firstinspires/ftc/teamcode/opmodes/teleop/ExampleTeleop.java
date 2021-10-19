@@ -27,6 +27,7 @@ public class ExampleTeleop extends OpMode {
     private ManipulationManager hands;
     private InputManager input;
     private boolean precision = false;
+    int driveSpeed = 0;
 
     @Override
     public void init() {
@@ -35,15 +36,17 @@ public class ExampleTeleop extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
 
+
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        DcMotor re = hardwareMap.get(DcMotor.class, "re");
 
         driver = new MovementManager(fl, fr, br, bl);
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {}, new String[] {});
+
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {re}, new String[] {"re"});
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -56,6 +59,15 @@ public class ExampleTeleop extends OpMode {
         );
         input.registerInput("PrecisionDriving",
                 new ButtonNode("b")
+        );
+        input.registerInput("TestDrive",
+                new ButtonNode("y")
+        );
+        input.registerInput("tdIncrease",
+                new ButtonNode("a")
+        );
+        input.registerInput("tdDecrease",
+                new ButtonNode("x")
         );
         input.registerInput("taunts",
                 new MultiInputNode(
@@ -84,6 +96,22 @@ public class ExampleTeleop extends OpMode {
         }
         else {
             precision = false;
+        }
+        if (input.getBool("tdIncrease")) {
+            driveSpeed += 0.1;
+        }
+        else if (input.getBool("tdDecrease")) {
+            driveSpeed -= 0.1;
+
+        }
+        else if (driveSpeed < 0) {
+            driveSpeed = 0;
+        }
+        if (input.getBool("TestDrive")) {
+            hands.setMotorPower("re", driveSpeed);
+        }
+        else {
+            hands.setMotorPower("re", 0);
         }
         telemetry.update();
     }
