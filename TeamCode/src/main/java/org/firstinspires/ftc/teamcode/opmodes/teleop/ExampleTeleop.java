@@ -77,6 +77,7 @@ public class ExampleTeleop extends OpMode {
     @Override
     public void loop() {
         input.update();
+        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f,0.5f, 0.5f);
         }
