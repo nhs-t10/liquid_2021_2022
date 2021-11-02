@@ -35,26 +35,34 @@ public class ExampleAuto extends OpMode {
         switch (step) {
             case(1):
                 timer = new ElapsedTime();
-                driver.backLeft.getCurrentPosition();
-
+                driver.resetEncoders();
+                driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
                 step++;
                 break;
             case (2):
-                delay(200);
+                if (driver.backLeft.getCurrentPosition()>=10) {
                 step++;
+                driver.resetEncoders();
+                }
                 break;
             case (3):
                 driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
-                delay(50);
-                step++;
+                if (driver.backLeft.getCurrentPosition()>=1.5) {
+                    step++;
+                    driver.resetEncoders();
+                }
                 break;
             case (4):
                 driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
                 step++;
                 break;
             case (5):
-                delay(200);
-                driver.stopDrive();
+                if (driver.backLeft.getCurrentPosition()>50) {
+                    driver.stopDrive();
+                    step++;
+                    driver.resetEncoders();
+                }
+                break;
             case(8):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
