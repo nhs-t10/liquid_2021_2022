@@ -80,13 +80,8 @@ public class ExampleTeleop extends OpMode {
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f,0.5f, 0.5f);
         }
-        if (input.getFloat("left_stick_x") < 0f ) {
-            driver.driveOmni(0f, -0.5f, 0f);
-
-        }
-        else if (input.getBool("left_stick_y") ) {
-            driver.driveOmni(0f, -0.5f, 0f );
-
+        if (input.getFloat("left_stick_x") != 0f && input.getFloat("left_stick_y") != 0f ) {
+            driver.driveOmni(input.getFloat("left_stick_y")/2f, input.getFloat("left_stick_x")/2f, 0f);
         }
         else {
             driver.stopDrive();
