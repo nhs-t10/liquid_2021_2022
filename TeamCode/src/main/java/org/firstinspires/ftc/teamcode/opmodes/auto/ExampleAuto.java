@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
 
 
 @Autonomous
-public class ExampleAuto {
+public class ExampleAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -34,7 +35,8 @@ public class ExampleAuto {
         switch (step) {
             case(1):
                 timer = new ElapsedTime();
-                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+                driver.backLeft.getCurrentPosition();
+
                 step++;
                 break;
             case (2):
