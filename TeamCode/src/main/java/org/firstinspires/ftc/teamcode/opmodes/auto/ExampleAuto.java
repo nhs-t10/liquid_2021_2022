@@ -38,7 +38,21 @@ public class ExampleAuto {
                 step++;
                 break;
             case (2):
-
+                delay(200);
+                step++;
+                break;
+            case (3):
+                driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
+                delay(50);
+                step++;
+                break;
+            case (4):
+                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+                step++;
+                break;
+            case (5):
+                delay(200);
+                driver.stopDrive();
             case(8):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
