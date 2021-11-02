@@ -41,12 +41,12 @@ public class ExampleTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor re = hardwareMap.get(DcMotor.class, "re");
+        //DcMotor re = hardwareMap.get(DcMotor.class, "re");
 
         driver = new MovementManager(fl, fr, br, bl);
 
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {re}, new String[] {"re"});
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl}, new String[] {"fl", "fr", "br", "bl"});
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -57,18 +57,13 @@ public class ExampleTeleop extends OpMode {
                         new JoystickNode("right_stick_x")
                 )
         );
-        input.registerInput("PrecisionDriving",
-                new ButtonNode("b")
-        );
+
         input.registerInput("TestDrive",
-                new ButtonNode("y")
-        );
-        input.registerInput("tdIncrease",
                 new ButtonNode("a")
         );
-        input.registerInput("tdDecrease",
-                new ButtonNode("x")
-        );
+
+
+
         input.registerInput("taunts",
                 new MultiInputNode(
                         new ButtonNode("dpad_up"),
@@ -83,38 +78,20 @@ public class ExampleTeleop extends OpMode {
     public void loop() {
         input.update();
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
-        if (input.getBool("PrecisionDriving") == true && precision == false){
-            driver.downScale(0.5f);
-            precision = true;
-        }
-        else if (input.getBool("PrecisionDriving") == true && precision == true){
-            precision = true;
-        }
-        else if (input.getBool("PrecisionDriving") == false && precision == true){
-            driver.upScale(0.5f);
-            precision = false;
-        }
-        else {
-            precision = false;
-        }
-        if (input.getBool("tdIncrease")) {
-            driveSpeed += 0.1;
-        }
-        else if (input.getBool("tdDecrease")) {
-            driveSpeed -= 0.1;
-
-        }
-        else if (driveSpeed < 0) {
-            driveSpeed = 0;
-        }
         if (input.getBool("TestDrive")) {
-            hands.setMotorPower("re", driveSpeed);
+            driver.driveRaw(0.5f, 0.5f,0.5f, 0.5f);
+        }
+        if (input.getFloat("left_stick_x") != 0f && input.getFloat("left_stick_y") != 0f ) {
+            driver.driveOmni(input.getFloat("left_stick_y")/2f, input.getFloat("left_stick_x")/2f, 0f);
         }
         else {
-            hands.setMotorPower("re", 0);
+            driver.stopDrive();
         }
         telemetry.update();
-    }
+}
+
+
+
 
     public void stop() {
         FeatureManager.setIsOpModeRunning(false);
