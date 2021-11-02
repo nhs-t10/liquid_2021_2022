@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
+import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
@@ -29,6 +30,7 @@ public class ExampleAuto extends OpMode {
 
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
+        telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
     }
     public void loop() {
@@ -59,6 +61,8 @@ public class ExampleAuto extends OpMode {
             case (5):
                 if (driver.backLeft.getCurrentPosition()>50) {
                     driver.stopDrive();
+                    step++;
+                    step++;
                     step++;
                     driver.resetEncoders();
                 }

@@ -33,6 +33,7 @@ public class ExampleTeleop extends OpMode {
     public void init() {
         /* Phone is labelled as Not Ready For Use */
         FeatureManager.setIsOpModeRunning(true);
+        float [] omniValues = new float [4];
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
 
@@ -62,7 +63,12 @@ public class ExampleTeleop extends OpMode {
                 new ButtonNode("a")
         );
 
-
+        input.registerInput("turnLeft",
+                new ButtonNode("x")
+        );
+        input.registerInput("turnRight",
+                new ButtonNode("b")
+        );
 
         input.registerInput("taunts",
                 new MultiInputNode(
@@ -81,12 +87,28 @@ public class ExampleTeleop extends OpMode {
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f,0.5f, 0.5f);
         }
-        if (input.getFloat("left_stick_x") != 0f && input.getFloat("left_stick_y") != 0f ) {
-            driver.driveOmni(input.getFloat("left_stick_y")/2f, input.getFloat("left_stick_x")/2f, 0f);
+        if (input.getBool("turnLeft")) {
+            driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
         }
-        else {
-            driver.stopDrive();
+        if (input.getBool("turnRight")) {
+            driver.driveRaw(0.5f, -0.5f, -0.5f, 0.5f);
         }
+
+        /*
+        if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") < 0f) {
+            driver.driveRaw(-0.5f, -0.5f, 0.5f);
+        }
+        else if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") > 0f) {
+            driver.driveOmni(0.5f, -0.5f, 0f);
+        }
+        else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") > 0f) {
+            driver.driveOmni(0.5f, 0.5f, 0f);
+        }
+        else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") < 0f) {
+            driver.driveOmni(-0.5f, 0.5f, 0f);
+        }
+
+         */
         telemetry.update();
 }
 
