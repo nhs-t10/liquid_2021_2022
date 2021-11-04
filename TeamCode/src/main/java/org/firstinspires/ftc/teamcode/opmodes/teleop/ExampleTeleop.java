@@ -27,7 +27,7 @@ public class ExampleTeleop extends OpMode {
     private ManipulationManager hands;
     private InputManager input;
     private boolean precision = false;
-    int driveSpeed = 0;
+    
 
     @Override
     public void init() {
@@ -62,14 +62,16 @@ public class ExampleTeleop extends OpMode {
         input.registerInput("TestDrive",
                 new ButtonNode("a")
         );
-
+        
+        /*
         input.registerInput("turnLeft",
                 new ButtonNode("x")
         );
-        input.registerInput("turnRight",
+        */
+        input.registerInput("duckWheelRight",
                 new ButtonNode("b")
         );
-        input.registerInput("duckWheel",
+        input.registerInput("duckWheelLeft",
                 new ButtonNode("y")
         );
 
@@ -88,16 +90,14 @@ public class ExampleTeleop extends OpMode {
         input.update();
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
-        if (input.getBool("turnLeft")) {
-            driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
-        }
+        
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
-        if (input.getBool("turnRight")) {
-            driver.driveRaw(0.5f, -0.5f, -0.5f, 0.5f);
+        if (input.getBool("duckWheelRight")) {
+            hands.setMotorPower("dw", -0.5);
         }
-        if (input.getBool("duckWheel")) {
+        if (input.getBool("duckWheelLeft")) {
             hands.setMotorPower("dw", 0.5);
         }
 
