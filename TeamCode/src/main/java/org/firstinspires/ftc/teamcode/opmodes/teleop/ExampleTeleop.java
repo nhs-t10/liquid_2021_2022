@@ -42,12 +42,12 @@ public class ExampleTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        //DcMotor re = hardwareMap.get(DcMotor.class, "re");
+        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
 
         driver = new MovementManager(fl, fr, br, bl);
 
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl}, new String[] {"fl", "fr", "br", "bl"});
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -69,6 +69,9 @@ public class ExampleTeleop extends OpMode {
         input.registerInput("turnRight",
                 new ButtonNode("b")
         );
+        input.registerInput("duckWheel",
+                new ButtonNode("y")
+        );
 
         input.registerInput("taunts",
                 new MultiInputNode(
@@ -84,15 +87,21 @@ public class ExampleTeleop extends OpMode {
     public void loop() {
         input.update();
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
-        if (input.getBool("TestDrive")) {
-            driver.driveRaw(0.5f, 0.5f,0.5f, 0.5f);
-        }
+
         if (input.getBool("turnLeft")) {
             driver.driveRaw(-0.5f, 0.5f, 0.5f, -0.5f);
+        }
+        if (input.getBool("TestDrive")) {
+            driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
         if (input.getBool("turnRight")) {
             driver.driveRaw(0.5f, -0.5f, -0.5f, 0.5f);
         }
+        if (input.getBool("duckWheel")) {
+            hands.setMotorPower("dw", 0.5);
+        }
+
+
 
         /*
         if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") < 0f) {
@@ -109,7 +118,11 @@ public class ExampleTeleop extends OpMode {
         }
 
          */
+
+        telemetry.addData("button press x? ", input.getBool("turnLeft"));
+        telemetry.addData("button press b? ", input.getBool("turnRight"));
         telemetry.update();
+
 }
 
 
