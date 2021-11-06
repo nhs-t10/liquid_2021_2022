@@ -30,10 +30,11 @@ public class AutoTestRightLong extends OpMode{
 
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
-        driver = new MovementManager(hardwareMap.get(DcMotor.class, "unknown"),
-                hardwareMap.get(DcMotor.class, "unknown"),
-                hardwareMap.get(DcMotor.class, "unknown"),
-                hardwareMap.get(DcMotor.class, "unknown"));
+        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
+        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
+        DcMotor br = hardwareMap.get(DcMotor.class, "br");
+        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        driver = new MovementManager(fl, fr, br, bl);
         driver.runToPosition();
     }
     public void loop() {

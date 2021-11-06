@@ -27,7 +27,7 @@ public class ExampleTeleop extends OpMode {
     private ManipulationManager hands;
     private InputManager input;
     private boolean precision = false;
-    
+    int driveSpeed = 0;
 
     @Override
     public void init() {
@@ -62,17 +62,12 @@ public class ExampleTeleop extends OpMode {
         input.registerInput("TestDrive",
                 new ButtonNode("a")
         );
-        
-        /*
-        input.registerInput("turnLeft",
-                new ButtonNode("x")
-        );
-        */
         input.registerInput("duckWheelRight",
                 new ButtonNode("b")
         );
+
         input.registerInput("duckWheelLeft",
-                new ButtonNode("y")
+                new ButtonNode("x")
         );
 
         input.registerInput("taunts",
@@ -90,37 +85,40 @@ public class ExampleTeleop extends OpMode {
         input.update();
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
-        
+
+        if (input.getBool("duckWheelRight")) {
+            hands.setMotorPower("dw", -1);
+        }
+        else if (input.getBool("duckWheelLeft")) {
+            hands.setMotorPower("dw", 1);
+        }
+        else {
+            hands.setMotorPower("dw", 0);
+        }
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
-        if (input.getBool("duckWheelRight")) {
-            hands.setMotorPower("dw", -0.5);
-        }
-        if (input.getBool("duckWheelLeft")) {
-            hands.setMotorPower("dw", 0.5);
-        }
-
 
 
         /*
         if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") < 0f) {
-            driver.driveRaw(-0.5f, -0.5f, 0.5f);
+            driver.driveOmni(0.5f, 0f, 0.5f);
         }
         else if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") > 0f) {
-            driver.driveOmni(0.5f, -0.5f, 0f);
+            driver.driveOmni(-0.5f, 0f, 0.5f);
         }
         else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") > 0f) {
-            driver.driveOmni(0.5f, 0.5f, 0f);
+            driver.driveOmni(-0.5f, 0f, -0.5f);
         }
         else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") < 0f) {
-            driver.driveOmni(-0.5f, 0.5f, 0f);
+            driver.driveOmni(0.5f, 0f, -0.5f);
         }
 
          */
 
-        telemetry.addData("button press x? ", input.getBool("turnLeft"));
-        telemetry.addData("button press b? ", input.getBool("turnRight"));
+
+
+
         telemetry.update();
 
 }
