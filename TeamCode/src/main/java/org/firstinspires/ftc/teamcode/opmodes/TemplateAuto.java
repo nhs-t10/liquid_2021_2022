@@ -14,18 +14,18 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class ExampleAutoLong extends OpMode {
+public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
     int step = 1;
     ElapsedTime timer;
-    public void delayDrive(double delay) {
+    public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);
+            //do nothing
         }
-        driver.stopDrive();
+        
 
     }
 
@@ -35,6 +35,7 @@ public class ExampleAutoLong extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
@@ -43,7 +44,6 @@ public class ExampleAutoLong extends OpMode {
         switch (step) {
             case(1):
                 timer = new ElapsedTime();
-                delayDrive(1500);
                 step++;
                 break;
             case(2):
