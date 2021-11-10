@@ -27,7 +27,7 @@ public class ExampleTeleop extends OpMode {
     private ManipulationManager hands;
     private InputManager input;
     private boolean precision = false;
-    int driveSpeed = 0;
+    int dwSpeed = 0;
 
     @Override
     public void init() {
@@ -59,6 +59,7 @@ public class ExampleTeleop extends OpMode {
                 )
         );
 
+
         input.registerInput("TestDrive",
                 new ButtonNode("a")
         );
@@ -86,11 +87,18 @@ public class ExampleTeleop extends OpMode {
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
 
+
         if (input.getBool("duckWheelRight")) {
-            hands.setMotorPower("dw", -1);
+            hands.setMotorPower("dw", -0.5);
+            if (gamepad1.left_stick_button) {
+                hands.setMotorPower("dw", -0.85);
+            }
         }
         else if (input.getBool("duckWheelLeft")) {
-            hands.setMotorPower("dw", 1);
+            hands.setMotorPower("dw", 0.5);
+            if (gamepad1.left_stick_button) {
+                hands.setMotorPower("dw", 0.85);
+            }
         }
         else {
             hands.setMotorPower("dw", 0);
@@ -99,22 +107,7 @@ public class ExampleTeleop extends OpMode {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
 
-
-        /*
-        if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") < 0f) {
-            driver.driveOmni(0.5f, 0f, 0.5f);
-        }
-        else if (input.getFloat("left_stick_x") < 0f && input.getFloat("left_stick_y") > 0f) {
-            driver.driveOmni(-0.5f, 0f, 0.5f);
-        }
-        else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") > 0f) {
-            driver.driveOmni(-0.5f, 0f, -0.5f);
-        }
-        else if (input.getFloat("left_stick_x") > 0f && input.getFloat("left_stick_y") < 0f) {
-            driver.driveOmni(0.5f, 0f, -0.5f);
-        }
-
-         */
+        //driver.driveOmni(gamepad1.left_stick_y/2f, gamepad1.left_stick_x/2f, gamepad1.right_stick_x/2f);
 
 
 
