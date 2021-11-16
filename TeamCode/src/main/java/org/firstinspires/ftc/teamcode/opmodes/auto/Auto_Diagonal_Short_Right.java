@@ -46,6 +46,21 @@ public class Auto_Diagonal_Short_Right extends OpMode {
                 step++;
                 break;
             case(2):
+                driver.setTargetPositions(15, 15, 15, 15); /* numbers are random, test these */
+                step++;
+                break;
+            case(3):
+                hands.setMotorPower("dw", 0.5);
+                delay(5000); /* should spin the wheel for five seconds */
+                hands.setMotorPower("dw", 0);
+                step++;
+                break;
+            case(4):
+                driver.setTargetPositions(-5, 5, 5, -5); /*t urns it some amount. untested if it actually turns the right amount */
+                driver.setTargetPositions(15, 15, 15, 15); /* distance untested*/
+                step++;
+                break;
+            case(5):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
