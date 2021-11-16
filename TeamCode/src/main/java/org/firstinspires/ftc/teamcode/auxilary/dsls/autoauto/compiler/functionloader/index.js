@@ -33,7 +33,7 @@ for (var i = 0; i < managers.length; i++) {
     if(cacheManagers[manager].javaSha === sha) {
         methods.push(cacheManagers[manager].methods);
     } else {
-        cacheManagers[manager].javaSha = sha
+        cacheManagers[manager].javaSha = sha;
         var preexistingNames = methods.map(x=>x[1].map(y=>y[0])).flat();
         
         cacheManagers[manager].methods = generateAaMethods(fileContent, preexistingNames);

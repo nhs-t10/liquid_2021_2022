@@ -55,7 +55,8 @@ public class ExampleTeleop extends OpMode {
                 new MultiInputNode(
                         new JoystickNode("left_stick_y"),
                         new JoystickNode("left_stick_x"),
-                        new JoystickNode("right_stick_x")
+                        new JoystickNode("right_stick_x"),
+                        new JoystickNode("right_stick_y")
                 )
         );
 
@@ -84,7 +85,7 @@ public class ExampleTeleop extends OpMode {
     @Override
     public void loop() {
         input.update();
-        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
+        //driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
 
 
@@ -107,7 +108,7 @@ public class ExampleTeleop extends OpMode {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
 
-        //driver.driveOmni(gamepad1.left_stick_y/2f, gamepad1.left_stick_x/2f, gamepad1.right_stick_x/2f);
+        driver.driveOmni(gamepad1.left_stick_y/2f,gamepad1.right_stick_x/2f, gamepad1.left_stick_x/2f);
 
 
 

@@ -62,6 +62,17 @@ public class MovementManager extends FeatureManager {
         backLeft.setPower(0);
     }
 
+    public void timedDrive(double delay, float fl, float fr, float br, float bl) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            frontLeft.setPower(fl);
+            frontRight.setPower(fr);
+            backRight.setPower(br);
+            backLeft.setPower(bl);
+        }
+
+    }
+
     public void driveOmni(float[] powers) {
         float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
         driveRaw(sum[0], sum[1], sum[2], sum[3]);
