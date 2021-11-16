@@ -62,13 +62,21 @@ public class MovementManager extends FeatureManager {
         backLeft.setPower(0);
     }
 
-    public void timedDrive(double delay, float fl, float fr, float br, float bl) {
+    public void timeDriveRaw(double delay, float fl, float fr, float br, float bl) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
             frontLeft.setPower(fl);
             frontRight.setPower(fr);
             backRight.setPower(br);
             backLeft.setPower(bl);
+        }
+
+    }
+
+    public void timeDriveOmni(double delay, float vert, float rotate, float hori) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            driveOmni(vert, rotate, hori);
         }
 
     }
