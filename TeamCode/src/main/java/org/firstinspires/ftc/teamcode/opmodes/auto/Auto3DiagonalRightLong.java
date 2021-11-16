@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class EliAuto extends OpMode {
+public class Auto3DiagonalRightLong extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -22,7 +22,7 @@ public class EliAuto extends OpMode {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
             if (direction = true) {
-            driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);}
+                driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);}
             else {driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);}
         }
         driver.stopDrive();
@@ -46,7 +46,7 @@ public class EliAuto extends OpMode {
                 step++;
                 break;
             case(2):
-                telemetry.addLine("Autonomous Complete");
+                telemetry.addLine("Reached Opposing Wall");
                 telemetry.addData("Step #", step);
                 telemetry.update();
                 step++;
@@ -56,7 +56,7 @@ public class EliAuto extends OpMode {
                 step++;
                 break;
             case(4):
-                telemetry.addLine("Autonomous Complete");
+                telemetry.addLine("Right Turn Complete");
                 telemetry.addData("Step #", step);
                 telemetry.update();
                 step++;
