@@ -17,10 +17,12 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
   wheel circumference = 27.98
   short move distance 39.37 from duck wheel to carousel
   long move distance 170.18 from duck wheel to carousel
+  ========== goal ==========
+  move from far on same side to duck wheel and then to warehouse
 */
 
 @Autonomous
-public class CorbinAuto extends OpMode {
+public class Auto1 extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     public double circ = 27.98;
@@ -29,6 +31,7 @@ public class CorbinAuto extends OpMode {
     float [] omniValues = new float [4];
     int step = 1;
     ElapsedTime timer;
+
     public void delayDrive(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
@@ -53,7 +56,7 @@ public class CorbinAuto extends OpMode {
         switch (step) {
             case(1):
                 driver.resetEncoders();
-                int move_dist = (int) (smove/circ);
+                int move_dist = (int) (lmove/circ);
                 driver.setTargetPositions(move_dist, move_dist, move_dist, move_dist);
                 step++;
                 break;
@@ -73,6 +76,4 @@ public class CorbinAuto extends OpMode {
                 telemetry.update();
         }
     }
-
 }
-
