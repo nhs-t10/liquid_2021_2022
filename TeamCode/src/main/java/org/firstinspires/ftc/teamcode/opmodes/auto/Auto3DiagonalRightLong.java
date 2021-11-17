@@ -15,17 +15,15 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class Auto3DiagonalRightLong extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    float [] omniValues = new float [4];
+    /*float [] omniValues = new float [4];*/
     int step = 1;
     ElapsedTime timer;
-    public void delayDrive(double delay, boolean direction) {
+    public void delayDrive(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            if (direction = true) {
-                driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);}
-            else {driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);}
+                hands.setMotorPower("dw",0.5);
         }
-        driver.stopDrive();
+        hands.setMotorPower("dw",0);
 
     }
 
@@ -52,7 +50,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(3):
-                /* Add Code For Turning*/
+                driver.setTargetPositions(1,-1,-1,1);
                 step++;
                 break;
             case(4):
@@ -66,28 +64,27 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(6):
-                telemetry.addLine("Autonomous Complete");
+                telemetry.addLine("Reached Duck Wheel");
                 telemetry.addData("Step #", step);
                 telemetry.update();
                 step++;
                 break;
             case(7):
-                /* Add Code For Duck Wheel*/
+                delayDrive(1000);
                 step++;
                 break;
             case(8):
-                telemetry.addLine("Autonomous Complete");
+                telemetry.addLine("Duck Deployed");
                 telemetry.addData("Step #", step);
                 telemetry.update();
                 step++;
                 break;
             case(9):
                 driver.setTargetPositions(-13, -13, -13, -13);
-                delayDrive(0/*Needs Input*/, false);
                 step++;
                 break;
             case(10):
-                telemetry.addLine("Autonomous Complete");
+                telemetry.addLine("Arrived at Warehouse. Autonomous Complete.");
                 telemetry.addData("Step #", step);
                 telemetry.update();
                 step++;
