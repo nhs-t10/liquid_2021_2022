@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 
 /*
   ========== field data ==========
+  Multiply by 560 when using encoders!!!
   wheel circumference = 27.98
   short move distance 39.37 from duck wheel to carousel
   long move distance 170.18 from duck wheel to carousel

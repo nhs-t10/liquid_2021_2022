@@ -46,7 +46,7 @@ public class Auto_Diagonal_Short_Right extends OpMode {
                 step++;
                 break;
             case(2):
-                driver.setTargetPositions(13, 13, 13, 13); /* numbers are semi-random, test these */
+                driver.setTargetPositions(612, 612, 612, 612); /* numbers are semi-random, test these */
                 step++;
                 break;
             case(3):
@@ -56,8 +56,8 @@ public class Auto_Diagonal_Short_Right extends OpMode {
                 step++;
                 break;
             case(4):
-                driver.setTargetPositions(-5, 5, 5, -5); /* turns it some amount. untested if it actually turns the right amount */
-                driver.setTargetPositions(13, 13, 13, 13); /* distance untested */
+                driver.setTargetPositions(-2500, 2500, 2500, -2500); /* turns it some amount. untested if it actually turns the right amount */
+                driver.setTargetPositions(7320, 7320, 7320, 7320); /* distance untested */
                 step++;
                 break;
             case(5):
