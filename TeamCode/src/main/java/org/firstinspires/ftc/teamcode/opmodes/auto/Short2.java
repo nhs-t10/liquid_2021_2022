@@ -20,10 +20,10 @@ public class Short2 extends OpMode {
     float [] omniValues = new float [4];
     int step = 1;
     ElapsedTime timer;
-    public void delayDrive(double delay) {
+    public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);
+
         }
         driver.stopDrive();
 
@@ -44,6 +44,7 @@ public class Short2 extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
+                driver.runToPosition();
                 driver.resetEncoders();
                 int WheelDistCaro = 4;
                 driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
