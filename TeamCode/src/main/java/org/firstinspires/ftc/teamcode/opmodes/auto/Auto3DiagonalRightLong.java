@@ -50,7 +50,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(3):
-                driver.setTargetPositions(0,-0,-0,0); /*Update Distances*/
+                driver.setTargetPositions(1,-1,-1,1);
                 step++;
                 break;
             case(4):
