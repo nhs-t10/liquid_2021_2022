@@ -70,7 +70,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(7):
-                delayDrive(1000);
+                delayDrive(10000);
                 step++;
                 break;
             case(8):
