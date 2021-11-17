@@ -18,12 +18,11 @@ public class Auto3DiagonalRightLong extends OpMode {
     /*float [] omniValues = new float [4];*/
     int step = 1;
     ElapsedTime timer;
-    public void delayDrive(double delay) {
+    public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-                hands.setMotorPower("dw",0.5);
+
         }
-        hands.setMotorPower("dw",0);
 
     }
 
@@ -35,42 +34,45 @@ public class Auto3DiagonalRightLong extends OpMode {
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        driver.runToPosition();
+
     }
     public void loop() {
         switch (step) {
             case(1):
                 driver.setTargetPositions(13, 13, 13, 13);
+                driver.runToPosition();
                 step++;
                 break;
             case(2):
                 telemetry.addLine("Reached Opposing Wall");
                 telemetry.addData("Step #", step);
                 telemetry.update();
+                driver.resetEncoders();
                 step++;
                 break;
             case(3):
                 driver.setTargetPositions(1,-1,-1,1);
+                driver.runToPosition();
                 step++;
                 break;
             case(4):
                 telemetry.addLine("Right Turn Complete");
                 telemetry.addData("Step #", step);
                 telemetry.update();
+                driver.resetEncoders();
                 step++;
                 break;
             case(5):
                 driver.setTargetPositions(6, 6, 6, 6);
+                driver.runToPosition();
                 step++;
                 break;
             case(6):
                 telemetry.addLine("Reached Duck Wheel");
                 telemetry.addData("Step #", step);
                 telemetry.update();
+                driver.resetEncoders();
                 step++;
-                break;
-            case(7):
-                delayDrive(1000);
                 step++;
                 break;
             case(8):
@@ -81,6 +83,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 break;
             case(9):
                 driver.setTargetPositions(-13, -13, -13, -13);
+                driver.runToPosition();
                 step++;
                 break;
             case(10):
