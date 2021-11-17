@@ -85,20 +85,21 @@ public class ExampleTeleop extends OpMode {
     @Override
     public void loop() {
         input.update();
-        //driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
+
+        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
 
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -0.5);
-            if (gamepad1.left_stick_button) {
-                hands.setMotorPower("dw", -0.85);
+            if (gamepad1.left_bumper) {
+                hands.setMotorPower("dw", -1);
             }
         }
         else if (input.getBool("duckWheelLeft")) {
             hands.setMotorPower("dw", 0.5);
-            if (gamepad1.left_stick_button) {
-                hands.setMotorPower("dw", 0.85);
+            if (gamepad1.left_bumper) {
+                hands.setMotorPower("dw", 1);
             }
         }
         else {
@@ -108,7 +109,7 @@ public class ExampleTeleop extends OpMode {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
         }
 
-        driver.driveOmni(gamepad1.left_stick_y/2f,gamepad1.right_stick_x/2f, gamepad1.left_stick_x/2f);
+        //driver.driveOmni(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
 
 
 
