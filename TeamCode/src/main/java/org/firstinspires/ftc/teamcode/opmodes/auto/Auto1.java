@@ -56,7 +56,7 @@ public class Auto1 extends OpMode {
         switch (step) {
             case(1):
                 driver.resetEncoders();
-                int move_dist = (int) (lmove/circ);
+                int move_dist = (int) (lmove / circ * 560);
                 driver.setTargetPositions(move_dist, move_dist, move_dist, move_dist);
                 step++;
                 break;
@@ -66,7 +66,8 @@ public class Auto1 extends OpMode {
                 break;
             case(3):
                 driver.resetEncoders();
-                driver.setTargetPositions(-50, -50, -50, -50);
+                int dist = -50 * 560;
+                driver.setTargetPositions(dist, dist, dist, dist);
                 step++;
                 break;
             default:
