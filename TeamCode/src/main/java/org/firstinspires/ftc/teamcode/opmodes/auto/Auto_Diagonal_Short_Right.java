@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
@@ -11,21 +12,18 @@ import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
 import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
-@Autonomous
-public class EliAuto extends OpMode {
+public class Auto_Diagonal_Short_Right extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
     int step = 1;
     ElapsedTime timer;
-    public void delayDrive(double delay, boolean direction) {
+    public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            if (direction = true) {
-            driver.driveRaw(0.75f, 0.75f, 0.75f, 0.75f);}
-            else {driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);}
+            //do nothing
         }
-        driver.stopDrive();
+
 
     }
 
@@ -35,64 +33,41 @@ public class EliAuto extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        driver.runToPosition();
+
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.setTargetPositions(13, 13, 13, 13);
+                timer = new ElapsedTime();
                 step++;
                 break;
             case(2):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("Step #", step);
-                telemetry.update();
+                driver.setTargetPositions(13, 13, 13, 13); /* numbers are semi-random, test these */
                 step++;
                 break;
             case(3):
-                /* Add Code For Turning*/
+                hands.setMotorPower("dw", 0.5);
+                delay(5000); /* should spin the wheel for five seconds */
+                hands.setMotorPower("dw", 0);
                 step++;
                 break;
             case(4):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("Step #", step);
-                telemetry.update();
+                driver.setTargetPositions(-5, 5, 5, -5); /* turns it some amount. untested if it actually turns the right amount */
+                driver.setTargetPositions(13, 13, 13, 13); /* distance untested */
                 step++;
                 break;
             case(5):
-                driver.setTargetPositions(6, 6, 6, 6);
-                step++;
-                break;
-            case(6):
                 telemetry.addLine("Autonomous Complete");
+                telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
                 telemetry.update();
-                step++;
-                break;
-            case(7):
-                /* Add Code For Duck Wheel*/
-                step++;
-                break;
-            case(8):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("Step #", step);
-                telemetry.update();
-                step++;
-                break;
-            case(9):
-                driver.setTargetPositions(-13, -13, -13, -13);
-                delayDrive(0/*Needs Input*/, false);
-                step++;
-                break;
-            case(10):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("Step #", step);
-                telemetry.update();
-                step++;
-                break;
         }
     }
 
 }
+
+
