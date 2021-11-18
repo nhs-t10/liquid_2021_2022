@@ -32,14 +32,16 @@ public class Auto3DiagonalRightLong extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
+
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
+        driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.setTargetPositions(13, 13, 13, 13);
+                driver.setTargetPositions(7328, 7328, 7328, 7328);
                 driver.runToPosition();
                 step++;
                 break;
@@ -51,7 +53,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(3):
-                driver.setTargetPositions(1,-1,-1,1);
+                driver.setTargetPositions(560,-560,-560,560);
                 driver.runToPosition();
                 step++;
                 break;
@@ -63,7 +65,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(5):
-                driver.setTargetPositions(6, 6, 6, 6);
+                driver.setTargetPositions(3406, 3406, 3406, 3406);
                 driver.runToPosition();
                 step++;
                 break;
@@ -73,6 +75,13 @@ public class Auto3DiagonalRightLong extends OpMode {
                 telemetry.update();
                 driver.resetEncoders();
                 step++;
+                break;
+            case(7):
+                /*Begin Duck Wheel Code*/
+                hands.setMotorPower("dw", 0.5);
+                delay(5000);
+                hands.setMotorPower("dw",0.5);
+                /*End Duck Wheel Code*/
                 step++;
                 break;
             case(8):
@@ -82,7 +91,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(9):
-                driver.setTargetPositions(-13, -13, -13, -13);
+                driver.setTargetPositions(-7328, -7328, -7328, -7328);
                 driver.runToPosition();
                 step++;
                 break;

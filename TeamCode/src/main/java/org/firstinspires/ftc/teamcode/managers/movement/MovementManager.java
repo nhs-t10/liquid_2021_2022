@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.managers.FeatureManager;
   wheel circumference = 27.98
   short move distance 39.37 from duck wheel to carousel
   long move distance 170.18 from duck wheel to carousel
+  field length is 365.76 for full length
 */
 
 public class MovementManager extends FeatureManager {

@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 */
 
 @Autonomous
-public class Auto1 extends OpMode {
+public class Auto_Long extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     public double circ = 27.98;
@@ -39,6 +39,11 @@ public class Auto1 extends OpMode {
         }
         driver.stopDrive();
 
+    }
+
+    public void delay(double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {}
     }
 
     public void init() {
@@ -62,6 +67,8 @@ public class Auto1 extends OpMode {
                 break;
             case(2):
                 hands.setMotorPower("dw", -0.5);
+                this.delay(5*1000);
+                hands.setMotorPower("dw", 0);
                 step++;
                 break;
             case(3):
