@@ -75,6 +75,13 @@ public class Auto3DiagonalRightLong extends OpMode {
                 telemetry.update();
                 driver.resetEncoders();
                 step++;
+                break;
+            case(7):
+                /*Begin Duck Wheel Code*/
+                hands.setMotorPower("dw", 0.5);
+                delay(5000);
+                hands.setMotorPower("dw",0.5);
+                /*End Duck Wheel Code*/
                 step++;
                 break;
             case(8):
