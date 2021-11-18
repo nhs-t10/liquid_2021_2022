@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 */
 
 @Autonomous
-public class Auto1 extends OpMode {
+public class Auto_Long extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     public double circ = 27.98;
