@@ -41,7 +41,7 @@ public class TemplateAuto extends OpMode {
         hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        driver.runToPosition();
+        driver.setDirectionForward();
 
     }
     public void loop() {
@@ -51,7 +51,10 @@ public class TemplateAuto extends OpMode {
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
                 //Moves the robot for 1 unit forward
-                driver.setTargetPositions(5, 5, 5, 5);
+                driver.setTargetPositions(560, 560, 560, 560);
+                driver.runToPosition();
+
+                driver.setPower(0.5);
                 step++;
                 break;
             case(2):

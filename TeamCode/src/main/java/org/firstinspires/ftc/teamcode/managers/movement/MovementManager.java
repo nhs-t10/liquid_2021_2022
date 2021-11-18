@@ -91,7 +91,7 @@ public class MovementManager extends FeatureManager {
 
     public void driveOmni(float[] powers) {
         float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
-        driveRaw(sum[0], sum[1], sum[2], sum[3]);
+        driveRaw(sum[0]/2f, sum[1]/2f, sum[2]/2f, sum[3]/2f);
     }
     public void driveOmni(float v, float h, float r) {
         driveOmni(new float[] {v, h, r});
@@ -146,6 +146,26 @@ public class MovementManager extends FeatureManager {
         backLeft.setTargetPosition(bl);
     }
 
+    public void setPower(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+    }
+
+    public void setDirectionReverse() {
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    public void setDirectionForward() {
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+    }
     public void driveVertical(float power, float distance) {
         int ticks = PaulMath.encoderDistance(distance);
         setTargetPositions(ticks, ticks, ticks, ticks);
