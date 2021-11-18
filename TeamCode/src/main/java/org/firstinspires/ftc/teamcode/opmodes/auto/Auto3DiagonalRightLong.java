@@ -39,7 +39,7 @@ public class Auto3DiagonalRightLong extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driver.setTargetPositions(13, 13, 13, 13);
+                driver.setTargetPositions(13*560, 13*560, 13*560, 13*560);
                 driver.runToPosition();
                 step++;
                 break;
@@ -51,7 +51,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(3):
-                driver.setTargetPositions(1,-1,-1,1);
+                driver.setTargetPositions(560,-560,-560,560);
                 driver.runToPosition();
                 step++;
                 break;
@@ -63,7 +63,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(5):
-                driver.setTargetPositions(6, 6, 6, 6);
+                driver.setTargetPositions(6*560, 6*560, 6*560, 6*560);
                 driver.runToPosition();
                 step++;
                 break;
@@ -82,7 +82,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(9):
-                driver.setTargetPositions(-13, -13, -13, -13);
+                driver.setTargetPositions(-13*560, -13*560, -13*560, -13*560);
                 driver.runToPosition();
                 step++;
                 break;
