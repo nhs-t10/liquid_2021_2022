@@ -35,6 +35,7 @@ public class Auto3DiagonalRightLong extends OpMode {
 
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
+        driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
 
     }
     public void loop() {
