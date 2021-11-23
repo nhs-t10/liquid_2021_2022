@@ -46,6 +46,8 @@ package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime;
             
             scope.put("driveRaw", new DriveRawFunction(manMovement));
             scope.put("stopDrive", new StopDriveFunction(manMovement));
+            scope.put("timeDriveRaw", new TimeDriveRawFunction(manMovement));
+            scope.put("timeDriveOmni", new TimeDriveOmniFunction(manMovement));
             scope.put("driveOmni", new DriveOmniFunction(manMovement));
             scope.put("resetEncodersMovementManager", new ResetEncodersMovementManagerFunction(manMovement));
             scope.put("runToPosition", new RunToPositionFunction(manMovement));

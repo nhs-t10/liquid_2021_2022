@@ -29,6 +29,7 @@ public class ExampleTeleop extends OpMode {
     private boolean precision = false;
     double servoPos = 0;
 
+
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
@@ -87,9 +88,8 @@ public class ExampleTeleop extends OpMode {
     public void loop() {
         input.update();
 
-        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
-
-
+        driver.downScale(0.5f);
+        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -0.5);
