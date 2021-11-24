@@ -63,6 +63,8 @@ public class Auto_Long extends OpMode {
                 driver.resetEncoders();
                 int move_dist = (int) (lmove / circ * 560);
                 driver.setTargetPositions(move_dist, move_dist, move_dist, move_dist);
+                driver.runToPosition(); // move to the position specified by setTargetPosition()
+                driver.setPower(0.5);
                 step++;
                 break;
             case(2):
