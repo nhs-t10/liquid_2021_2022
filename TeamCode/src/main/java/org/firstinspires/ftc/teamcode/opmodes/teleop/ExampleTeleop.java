@@ -30,6 +30,7 @@ public class ExampleTeleop extends OpMode {
     double servoPos = 0;
 
 
+
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
@@ -44,12 +45,13 @@ public class ExampleTeleop extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        DcMotor is = hardwareMap.get(DcMotor.class, "is");
         Servo it = hardwareMap.get(Servo.class, "it");
 
         driver = new MovementManager(fl, fr, br, bl);
 
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {it}, new String[] {"it"}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {it}, new String[] {"it"}, new DcMotor[] {fl, fr, br, bl, dw, is}, new String[] {"fl", "fr", "br", "bl", "dw", "is"});
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -63,7 +65,7 @@ public class ExampleTeleop extends OpMode {
         );
 
 
-        input.registerInput("TestDrive",
+        input.registerInput("intakeSpin",
                 new ButtonNode("a")
         );
         input.registerInput("duckWheelRight",
@@ -89,7 +91,7 @@ public class ExampleTeleop extends OpMode {
         input.update();
 
         driver.downScale(0.5f);
-        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x/2f);
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -0.5);
@@ -106,16 +108,22 @@ public class ExampleTeleop extends OpMode {
         else {
             hands.setMotorPower("dw", 0);
         }
-        if (input.getBool("TestDrive")) {
-            driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+        if (input.getBool("intakeSpin")) {
+            hands.setMotorPower("is", 1);
+        }
+        else {
+            hands.setMotorPower("is", 0);
         }
         if (gamepad1.y) {
-            servoPos = servoPos - 0.1;
+
             hands.setServoPosition("it", 1.0);
         }
         else if (gamepad1.right_bumper) {
-            servoPos = servoPos + 0.1;
-            hands.setServoPosition("it", 0);
+            for (int i=0; i<5; i++) {
+                servoPos = servoPos - 0.2;
+                hands.setServoPosition("it", servoPos);
+            }
+
         }
 
         //driver.driveOmni(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
