@@ -27,7 +27,8 @@ public class ExampleTeleop extends OpMode {
     private ManipulationManager hands;
     private InputManager input;
     private boolean precision = false;
-    int dwSpeed = 0;
+    double servoPos = 0;
+
 
     @Override
     public void init() {
@@ -43,11 +44,12 @@ public class ExampleTeleop extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        Servo it = hardwareMap.get(Servo.class, "it");
 
         driver = new MovementManager(fl, fr, br, bl);
 
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {it}, new String[] {"it"}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -86,9 +88,8 @@ public class ExampleTeleop extends OpMode {
     public void loop() {
         input.update();
 
-        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
-
-
+        driver.downScale(0.5f);
+        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -0.5);
@@ -107,6 +108,14 @@ public class ExampleTeleop extends OpMode {
         }
         if (input.getBool("TestDrive")) {
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+        if (gamepad1.y) {
+            servoPos = servoPos - 0.1;
+            hands.setServoPosition("it", 1.0);
+        }
+        else if (gamepad1.right_bumper) {
+            servoPos = servoPos + 0.1;
+            hands.setServoPosition("it", 0);
         }
 
         //driver.driveOmni(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);

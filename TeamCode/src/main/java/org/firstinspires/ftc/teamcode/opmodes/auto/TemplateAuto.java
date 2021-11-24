@@ -41,7 +41,8 @@ public class TemplateAuto extends OpMode {
         hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        driver.setDirectionForward();
+        driver.setDirection();
+
 
     }
     public void loop() {

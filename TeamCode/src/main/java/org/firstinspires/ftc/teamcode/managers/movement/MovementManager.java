@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.managers.FeatureManager;
   wheel circumference = 27.98
   short move distance 39.37 from duck wheel to carousel
   long move distance 170.18 from duck wheel to carousel
-  field length is 365.76 for full length
 */
 
 public class MovementManager extends FeatureManager {
@@ -24,7 +23,7 @@ public class MovementManager extends FeatureManager {
     public DcMotor backRight;
     private ElapsedTime timer;
 
-    private static float scale = 0.5f;
+    private static float scale = 1f;
 
     /**
      * Create a MovementManager with four motors.
@@ -90,9 +89,29 @@ public class MovementManager extends FeatureManager {
 
     }
 
+    public void setDirection() {
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+
+    public void testDriveOmni(float y, float x, float rx) {
+        double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double flPower = (y+x+rx)/maxValue;
+        double blPower = (y - x + rx) / maxValue;
+        double frPower = (y - x - rx) / maxValue;
+        double brPower = (y + x - rx) / maxValue;
+
+        frontLeft.setPower(flPower);
+        frontRight.setPower(frPower);
+        backRight.setPower(brPower);
+        backLeft.setPower(blPower);
+    }
+
     public void driveOmni(float[] powers) {
         float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
-        driveRaw(sum[0]/2f, sum[1]/2f, sum[2]/2f, sum[3]/2f);
+        driveRaw(sum[0], sum[1], sum[2], sum[3]);
     }
     public void driveOmni(float v, float h, float r) {
         driveOmni(new float[] {v, h, r});
@@ -111,6 +130,12 @@ public class MovementManager extends FeatureManager {
         return motors;
     }
 
+    public void setPower(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+    }
 
     public void resetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -147,26 +172,8 @@ public class MovementManager extends FeatureManager {
         backLeft.setTargetPosition(bl);
     }
 
-    public void setPower(double power) {
-        frontLeft.setPower(power);
-        frontRight.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-    }
 
-    public void setDirectionReverse() {
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-    }
 
-    public void setDirectionForward() {
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-    }
     public void driveVertical(float power, float distance) {
         int ticks = PaulMath.encoderDistance(distance);
         setTargetPositions(ticks, ticks, ticks, ticks);
