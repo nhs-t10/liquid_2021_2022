@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
@@ -28,7 +29,14 @@ public class ExampleTeleop extends OpMode {
     private InputManager input;
     private boolean precision = false;
     double servoPos = 0;
+    ElapsedTime timer;
+    public void delay(double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
 
+        }
+
+    }
 
 
     @Override
@@ -37,6 +45,7 @@ public class ExampleTeleop extends OpMode {
         FeatureManager.setIsOpModeRunning(true);
         float [] omniValues = new float [4];
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
+        ElapsedTime timer;
 
 
 
@@ -89,6 +98,7 @@ public class ExampleTeleop extends OpMode {
     @Override
     public void loop() {
         input.update();
+        ElapsedTime timer;
 
         driver.downScale(0.5f);
         driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x/2f);
@@ -116,13 +126,10 @@ public class ExampleTeleop extends OpMode {
         }
         if (gamepad1.y) {
 
-            hands.setServoPosition("it", 1.0);
+            hands.setServoPosition("it", -0.5);
         }
         else if (gamepad1.right_bumper) {
-            for (int i=0; i<5; i++) {
-                servoPos = servoPos - 0.2;
-                hands.setServoPosition("it", servoPos);
-            }
+            hands.setServoPosition("it", 0.2);
 
         }
 
