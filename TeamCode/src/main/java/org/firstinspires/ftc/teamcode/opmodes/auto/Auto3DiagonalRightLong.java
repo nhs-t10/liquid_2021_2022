@@ -93,6 +93,7 @@ public class Auto3DiagonalRightLong extends OpMode {
             case(9):
                 driver.setTargetPositions(-7328, -7328, -7328, -7328);
                 driver.runToPosition();
+                driver.resetEncoders();
                 step++;
                 break;
             case(10):
