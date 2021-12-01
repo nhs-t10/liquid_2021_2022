@@ -105,7 +105,8 @@ public class CorbinTeleop extends OpMode {
         }
         // Spin 180
         if (input.getBool("spin")) {
-            driver.driveRaw(1.0f, -1.0f, 1.0f, -1.0f);
+            float turnDist = 5.0f;
+            driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
             // todo spin robot correct amount
         }
         // Toggle input motors
