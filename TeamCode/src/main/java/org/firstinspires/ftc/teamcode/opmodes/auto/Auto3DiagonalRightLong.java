@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 @Autonomous
 public class Auto3DiagonalRightLong extends OpMode {
     private MovementManager driver;
-    private ManipulationManager hands;
+  //  private ManipulationManager hands;
     /*float [] omniValues = new float [4];*/
     int step = 1;
     ElapsedTime timer;
@@ -78,9 +78,9 @@ public class Auto3DiagonalRightLong extends OpMode {
                 break;
             case(7):
                 /*Begin Duck Wheel Code*/
-                hands.setMotorPower("dw", 0.5);
+               // hands.setMotorPower("dw", 0.5);
                 delay(5000);
-                hands.setMotorPower("dw",0.5);
+             //   hands.setMotorPower("dw",0.5);
                 /*End Duck Wheel Code*/
                 step++;
                 break;

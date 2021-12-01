@@ -38,22 +38,27 @@ public class BlueBotTestAuto extends OpMode {
        // DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
+
+        driver.setPower(10);
        // hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.runToPosition();
+telemetry.addLine("Start");
                 driver.resetEncoders();
-                int WheelDistCaro = 4;
-                driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
+                driver.setTargetPositions(1000,1000,-1000,-1000);
+                driver.runToPosition();
                 step++;
                 break;
             case(2):
                // hands.setMotorPower("dw", -0.5);
                 step++;
+                telemetry.addLine("end");
                 break;
+
+
             case(3):
                 driver.resetEncoders();
                 int WheelBackCaro = -8;
