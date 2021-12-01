@@ -119,7 +119,7 @@ public class CorbinTeleop extends OpMode {
             hands.setMotorPower("is", 0);
         }
         // Toggle input tray todo correct position numbers
-        if (input.getBool("toggleIn")) {
+        if (input.getBool("toggleTray")) {
             intakePosition = !intakePosition;
         }
         if (intakePosition) {
