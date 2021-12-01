@@ -38,6 +38,8 @@ public class BlueBotTestAuto extends OpMode {
        // DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
+
+        driver.setPower(10);
        // hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
 
     }
