@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
@@ -20,40 +19,28 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyHardwareMap;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
 
+/*
+* A: Turn 180
+* LB: Toggle Servo
+* RB: Toggle Intake Motors
+* L2: Duck Wheel Left
+* R2: Duck Wheel Right
+* LStick: Omni
+* RStick: X: turn
+*/
+
 @TeleOp
 public class CorbinTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private boolean precision = false;
-    int dwSpeed = 0;
-    ElapsedTime timer;
-
-    public void delay(double delay) {
-        double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
-            // wait... wait... wait...
-        }
-    }
-
-    public void autoMove() {
-        // Lower servo to correct height
-        hands.setServoPosition("it", /*todo get correct position*/ 1);
-        // Spin wheel
-        hands.setMotorPower("is", 1);
-        // Sleep long enough to get item todo figure out correct length
-        this.delay(1000);
-        // Stop wheel
-        hands.setMotorPower("is", 0);
-        // Raise servo back up
-        hands.setServoPosition("it", /*todo get correct position*/ 1);
-    }
+    private boolean intakePosition;
+    private boolean intakeRunning;
 
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
         FeatureManager.setIsOpModeRunning(true);
-        float [] omniValues = new float [4];
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -66,7 +53,14 @@ public class CorbinTeleop extends OpMode {
 
         driver = new MovementManager(fl, fr, br, bl);
 
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        hands = new ManipulationManager(
+            new CRServo[] {},
+            new String[] {},
+            new Servo[] {it},
+            new String[] {"it"},
+            new DcMotor[] {fl, fr, br, bl, dw, is},
+            new String[] {"fl", "fr", "br", "bl", "dw", "is"}
+        );
 
         input = new InputManager(gamepad1, gamepad2);
 
@@ -79,29 +73,20 @@ public class CorbinTeleop extends OpMode {
                 )
         );
 
-
-        input.registerInput("TestDrive",
-                new ButtonNode("a")
+        input.registerInput("toggleTray",
+                new ButtonNode("left_bumper")
+        );
+        input.registerInput("toggleIn",
+                new ButtonNode("right_bumper")
         );
         input.registerInput("duckWheelRight",
-                new ButtonNode("b")
+                new ButtonNode("right_trigger")
         );
-
         input.registerInput("duckWheelLeft",
-                new ButtonNode("x")
+                new ButtonNode("left_trigger")
         );
-
-        input.registerInput("taunts",
-                new MultiInputNode(
-                        new ButtonNode("dpad_up"),
-                        new ButtonNode("dpad_left"),
-                        new ButtonNode("dpad_right"),
-                        new ButtonNode("dpad_down")
-                )
-        );
-
-        input.registerInput("autoMove",
-                new ButtonNode("leftbumper")
+        input.registerInput("spin",
+                new ButtonNode("a")
         );
     }
 
@@ -111,30 +96,36 @@ public class CorbinTeleop extends OpMode {
 
         driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
 
-
         if (input.getBool("duckWheelRight")) {
-            hands.setMotorPower("dw", -0.5);
-            if (gamepad1.left_bumper) {
-                hands.setMotorPower("dw", -1);
-            }
+            hands.setMotorPower("dw", -(input.getFloat("duckWheelRight")));
         } else if (input.getBool("duckWheelLeft")) {
-            hands.setMotorPower("dw", 0.5);
-            if (gamepad1.left_bumper) {
-                hands.setMotorPower("dw", 1);
-            }
+            hands.setMotorPower("dw", (input.getFloat("duckWheelLeft")));
         } else {
             hands.setMotorPower("dw", 0);
         }
-        if (input.getBool("TestDrive")) {
-            driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+        // Spin 180
+        if (input.getBool("spin")) {
+            driver.driveRaw(1.0f, -1.0f, 1.0f, -1.0f);
+            // todo spin robot correct amount
         }
-        if (input.getBool("autoMove")) {
-            this.autoMove();
+        // Toggle input motors
+        if (input.getBool("toggleIn")) {
+            intakeRunning = !intakeRunning;
         }
-
-
-        //driver.driveOmni(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
-
+        if (intakeRunning) {
+            hands.setMotorPower("is", 1);
+        } else {
+            hands.setMotorPower("is", 0);
+        }
+        // Toggle input tray todo correct position numbers
+        if (input.getBool("toggleIn")) {
+            intakePosition = !intakePosition;
+        }
+        if (intakePosition) {
+            hands.setMotorPower("it", 1);
+        } else {
+            hands.setMotorPower("it", 0);
+        }
 
         telemetry.update();
     }
