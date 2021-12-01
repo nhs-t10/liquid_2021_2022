@@ -52,18 +52,22 @@ public class TemplateAuto extends OpMode {
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
                 //Moves the robot for 1 unit forward
-                driver.setTargetPositions(560, 560, 560, 560);
+                driver.setTargetPositions(0, 0, 560, 5);
                 driver.runToPosition();
 
-                driver.setPower(0.5);
+                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
                 step++;
                 break;
-            case(2):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("time", timer.milliseconds());
-                telemetry.addData("Step #", step);
-                telemetry.update();
         }
+        telemetry.addData("fl enc", driver.frontLeft.getCurrentPosition());
+        telemetry.addData("fr enc", driver.frontRight.getCurrentPosition());
+        telemetry.addData("bl enc", driver.backLeft.getCurrentPosition());
+        telemetry.addData("br enc", driver.backRight.getCurrentPosition());
+
+        telemetry.addData("fl m", driver.frontLeft.getMode());
+        telemetry.addData("fr m", driver.frontRight.getMode());
+        telemetry.addData("bl m", driver.backLeft.getMode());
+        telemetry.addData("br m", driver.backRight.getMode());
     }
 
 }
