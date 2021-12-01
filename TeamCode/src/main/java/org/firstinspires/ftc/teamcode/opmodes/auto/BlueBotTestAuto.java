@@ -44,10 +44,11 @@ public class BlueBotTestAuto extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driver.runToPosition();
+
                 driver.resetEncoders();
                 int WheelDistCaro = 4;
                 driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
+                driver.runToPosition();
                 step++;
                 break;
             case(2):
