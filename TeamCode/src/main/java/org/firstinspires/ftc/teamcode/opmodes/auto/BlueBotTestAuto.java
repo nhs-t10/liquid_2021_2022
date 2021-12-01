@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_Short extends OpMode {
+public class BlueBotTestAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
