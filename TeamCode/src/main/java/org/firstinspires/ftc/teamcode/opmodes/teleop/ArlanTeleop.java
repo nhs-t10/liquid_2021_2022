@@ -30,7 +30,7 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class CorbinTeleop extends OpMode {
+public class ArlanTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
@@ -103,10 +103,11 @@ public class CorbinTeleop extends OpMode {
         } else {
             hands.setMotorPower("dw", 0);
         }
-        // Spin 180
+        // Spin 180 - TEST THIS
         if (input.getBool("spin")) {
-            driver.driveRaw(1.0f, -1.0f, 1.0f, -1.0f);
-            // todo spin robot correct amount
+            float turnDist = 5.0f;
+            driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
+            driver.setTargetPositions(-324, 324, 324, -324);
         }
         // Toggle input motors
         if (input.getBool("toggleIn")) {

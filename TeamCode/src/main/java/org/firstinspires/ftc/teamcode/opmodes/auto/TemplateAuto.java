@@ -38,7 +38,14 @@ public class TemplateAuto extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        hands = new ManipulationManager(
+                new CRServo[] {},
+                new String[] {},
+                new Servo[] {},
+                new String[] {},
+                new DcMotor[] {fl, fr, br, bl, dw},
+                new String[] {"fl", "fr", "br", "bl", "dw"}
+            );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
