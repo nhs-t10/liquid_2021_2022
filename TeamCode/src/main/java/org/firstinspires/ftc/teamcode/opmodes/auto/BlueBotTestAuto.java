@@ -53,8 +53,10 @@ telemetry.addLine("Start");
             case(2):
                // hands.setMotorPower("dw", -0.5);
                 step++;
-                break;
                 telemetry.addLine("end");
+                break;
+
+
             case(3):
                 driver.resetEncoders();
                 int WheelBackCaro = -8;
