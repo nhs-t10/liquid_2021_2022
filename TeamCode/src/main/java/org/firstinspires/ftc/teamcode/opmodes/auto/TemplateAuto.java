@@ -49,21 +49,15 @@ public class TemplateAuto extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        driver.setTargetPositions(0,0,0,0);
-        driver.runToPosition();
-
+        timer = new ElapsedTime();
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                timer = new ElapsedTime();
-                //Make sure to add this line in each "case"
-                driver.resetEncoders();
-                //Moves the robot for 1 unit forward
-                driver.setTargetPositions(560, 560, 560, 560);
 
-                driver.setPower(0.5);
+                driver.encoderDriveRaw(560,560,560,560, 0.5f);
+
                 step++;
                 break;
             case(2):

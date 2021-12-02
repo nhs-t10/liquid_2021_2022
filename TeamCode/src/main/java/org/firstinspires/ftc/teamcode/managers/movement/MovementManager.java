@@ -129,14 +129,6 @@ public class MovementManager extends FeatureManager {
 
         return motors;
     }
-
-    public void setPower(double power) {
-        frontLeft.setPower(power);
-        frontRight.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-    }
-
     public void resetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -144,6 +136,33 @@ public class MovementManager extends FeatureManager {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    public void encoderDriveRaw (
+            int flDistance,
+            int frDistance,
+            int blDistance,
+            int brDistance, 
+            float drivePower) {
+        resetEncoders();
+        drivePower = Math.abs(drivePower);
+        int flDiff = Math.abs(frontLeft.getCurrentPosition() - flDistance);
+        int frDiff = Math.abs(frontRight.getCurrentPosition() - frDistance);
+        int blDiff = Math.abs(backLeft.getCurrentPosition() - blDistance);
+        int brDiff = Math.abs(backRight.getCurrentPosition() - brDistance);
+
+        if (flDiff > 0) {
+            frontLeft.setPower(Math.signum(frDistance) * drivePower);
+        } else {frontLeft.setPower(0);}
+        if (frDiff > 0) {
+            frontRight.setPower(Math.signum(frDistance) * drivePower);
+        } else {frontRight.setPower(0);}
+        if (blDiff > 0) {
+            backLeft.setPower(Math.signum(frDistance) * drivePower);
+        } else {backLeft.setPower(0);}
+        if (brDiff > 0) {
+            backRight.setPower(Math.signum(frDistance) * drivePower);
+        } else {backRight.setPower(0);}
+
+    }
     public void runToPosition() {
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -225,9 +244,19 @@ public class MovementManager extends FeatureManager {
 
     }
 
-    public int getTicks() {
+    public int flGetTicks() {
+        return frontLeft.getCurrentPosition();
+    }
+    public int frGetTicks() {
+        return frontRight.getCurrentPosition();
+    }
+    public int blGetTicks() {
         return backLeft.getCurrentPosition();
     }
+    public int brGetTicks() {
+        return backRight.getCurrentPosition();
+    }
+
     public int getHorizontalTicks() { return frontRight.getCurrentPosition(); }
     public int getVerticalTicks() { return  backLeft.getCurrentPosition(); }
 
