@@ -56,9 +56,8 @@ public class TemplateAuto extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-
-
     }
+
     public void loop() {
         switch (step) {
             case(1):
@@ -66,7 +65,8 @@ public class TemplateAuto extends OpMode {
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
                 //Moves the robot for 1 rotation forward
-                driver.setTargetPositions(560, 560, 560, 560);
+//                driver.setTargetPositions(560, 560, 560, 560);
+                driveToPos(driver.backLeft, 560, 1);
                 driver.runToPosition();
 
                 driver.setPower(0.5);
