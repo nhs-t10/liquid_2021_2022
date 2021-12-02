@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
@@ -31,6 +31,7 @@ public class Arlan_180_Test extends OpMode {
 
     }
 
+
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -49,6 +50,7 @@ public class Arlan_180_Test extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
+
 
 
     }

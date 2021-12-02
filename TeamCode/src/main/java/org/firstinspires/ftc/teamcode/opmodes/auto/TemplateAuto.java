@@ -27,15 +27,8 @@ public class TemplateAuto extends OpMode {
         while (timer.milliseconds() <= endTime) {
             //do nothing
         }
-    }
 
-    public void driveToPos(DcMotor motor, int position, int power) {
-        driver.resetEncoders();
-        if (motor.getCurrentPosition() < position) {
-            driver.driveRaw(power, power, power, power);
-        } else {
-            driver.driveRaw(0, 0, 0, 0);
-        }
+
     }
 
     public void init() {
@@ -56,18 +49,19 @@ public class TemplateAuto extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-    }
+        driver.setTargetPositions(0,0,0,0);
+        driver.runToPosition();
 
+
+    }
     public void loop() {
         switch (step) {
             case(1):
                 timer = new ElapsedTime();
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
-                //Moves the robot for 1 rotation forward
-//                driver.setTargetPositions(560, 560, 560, 560);
-                driveToPos(driver.backLeft, 560, 1);
-                driver.runToPosition();
+                //Moves the robot for 1 unit forward
+                driver.setTargetPositions(560, 560, 560, 560);
 
                 driver.setPower(0.5);
                 step++;
