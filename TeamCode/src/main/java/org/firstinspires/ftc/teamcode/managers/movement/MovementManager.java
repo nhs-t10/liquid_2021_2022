@@ -90,10 +90,10 @@ public class MovementManager extends FeatureManager {
     }
 
     public void setDirection() {
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void testDriveOmni(float y, float x, float rx) {
@@ -226,7 +226,7 @@ public class MovementManager extends FeatureManager {
     }
 
     public int getTicks() {
-        return frontLeft.getCurrentPosition();
+        return backLeft.getCurrentPosition();
     }
     public int getHorizontalTicks() { return frontRight.getCurrentPosition(); }
     public int getVerticalTicks() { return  backLeft.getCurrentPosition(); }
