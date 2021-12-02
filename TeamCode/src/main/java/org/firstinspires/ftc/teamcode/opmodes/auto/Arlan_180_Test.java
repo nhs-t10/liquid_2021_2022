@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -22,15 +24,15 @@ public class Arlan_180_Test extends OpMode {
     float [] omniValues = new float [4];
     int step = 1;
     ElapsedTime timer;
+    IntegratingGyroscope gyro;
+    ModernRoboticsI2cGyro modernRoboticsI2cGyro;
+
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
             //do nothing
         }
-
-
     }
-
 
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
@@ -51,9 +53,21 @@ public class Arlan_180_Test extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
 
+        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "gyro");
+        gyro = (IntegratingGyroscope)modernRoboticsI2cGyro;
 
+        telemetry.log().add("Gyro Calibrating. Do Not Move!");
+        modernRoboticsI2cGyro.calibrate();
 
+        while (modernRoboticsI2cGyro.isCalibrating())  {
+            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
+            telemetry.update();
+        }
+
+        telemetry.log().clear(); telemetry.log().add("Gyro Calibrated. Press Start.");
+        telemetry.clear(); telemetry.update();
     }
+
     public void loop() {
         switch (step) {
             case(1):
@@ -61,10 +75,17 @@ public class Arlan_180_Test extends OpMode {
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
                 //Moves the robot for 1 unit forward
-                driver.setTargetPositions(560, 560, 560, 560);
-                float turnDist = 5.0f;
+//                driver.setTargetPositions(560, 560, 560, 560);
+                float turnDist = 100.0f;
                 driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
-                driver.setTargetPositions(-324, 324, 324, -324);
+//                driver.setTargetPositions(-324, 324, 324, -324);
+                while (modernRoboticsI2cGyro.getHeading() <= 180) {
+                    telemetry.addData("fl", driver.frontLeft.getTargetPosition());
+                    telemetry.addData("fr", driver.frontRight.getTargetPosition());
+                    telemetry.addData("br", driver.backRight.getTargetPosition());
+                    telemetry.addData("bl", driver.backLeft.getTargetPosition());
+                    telemetry.update();
+                }
                 step++;
                 break;
             case(2):
