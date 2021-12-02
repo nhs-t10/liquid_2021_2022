@@ -49,6 +49,8 @@ public class TemplateAuto extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
+        driver.setTargetPositions(0,0,0,0);
+        driver.runToPosition();
 
 
     }
@@ -60,7 +62,6 @@ public class TemplateAuto extends OpMode {
                 driver.resetEncoders();
                 //Moves the robot for 1 unit forward
                 driver.setTargetPositions(560, 560, 560, 560);
-                driver.runToPosition();
 
                 driver.setPower(0.5);
                 step++;

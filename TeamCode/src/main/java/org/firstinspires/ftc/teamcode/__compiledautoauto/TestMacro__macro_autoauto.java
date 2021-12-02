@@ -60,13 +60,13 @@ public class TestMacro__macro_autoauto extends AutoautoMacro {
     /*USER_DEFINED_FUNCTIONS*/
 
     public static AutoautoProgram generateProgram() {
-final String i="setServoPosition",j="i",m="arm",v="s",q0="end";
+final String h="setServoPosition",i="i",l="arm",u="s",p0="end";
 
-AutoautoUnitValue u=E(3,v);AutoautoNumericValue o=C(3),k0=C(1);AutoautoString l=U(m),i0=U(m);AutoautoValue[]k={l,o},h0={i0,
-k0};FunctionCall h=M(i,k),e0=M(i,h0);NextStatement y=N();FunctionCallStatement g=F(h),d0=F(e0);GotoStatement p0=G(q0);AfterStatement t=W(u,
-y);Statement[]$f=new Statement[]{g,t},$c0={d0,p0};State f=A($f),c0=A($c0);State[]$e=new State[]{f,c0};Statepath e=S($e,j);HashMap<String,
-Statepath> d = new HashMap<String,Statepath>();d.put(j,e);AutoautoProgram x0 = P(d,j);sL(l,L(j,0,2,18));sL(o,L(j,0,2,25));sL(h,
-L(j,0,2,1));sL(g,L(j,0,2,1));sL(u,L(j,0,2,35));sL(y,L(j,0,2,38));sL(t,L(j,0,2,29));sL(f,L(j,0,2,1));sL(i0,L(j,1,3,18));sL(k0,
-L(j,1,3,25));sL(e0,L(j,1,3,1));sL(d0,L(j,1,3,1));sL(p0,L(j,1,3,29));sL(c0,L(j,1,2,43));return x0;
+AutoautoUnitValue t=E(3,u);AutoautoNumericValue n=C(3),j0=C(1);AutoautoString k=U(l),h0=U(l);AutoautoValue[]j={k,n},g0={h0,
+j0};FunctionCall g=M(h,j),d0=M(h,g0);NextStatement x=N();FunctionCallStatement f=F(g),c0=F(d0);GotoStatement o0=G(p0);AfterStatement s=W(t,
+x);Statement[]$e=new Statement[]{f,s},$b0={c0,o0};State e=A($e),b0=A($b0);State[]$d=new State[]{e,b0};Statepath d=S($d,i);HashMap<String,
+Statepath> c = new HashMap<String,Statepath>();c.put(i,d);AutoautoProgram w0 = P(c,i);sL(k,L(i,0,2,18));sL(n,L(i,0,2,25));sL(g,
+L(i,0,2,1));sL(f,L(i,0,2,1));sL(t,L(i,0,2,35));sL(x,L(i,0,2,38));sL(s,L(i,0,2,29));sL(e,L(i,0,2,1));sL(h0,L(i,1,3,18));sL(j0,
+L(i,1,3,25));sL(d0,L(i,1,3,1));sL(c0,L(i,1,3,1));sL(o0,L(i,1,3,29));sL(b0,L(i,1,2,43));return w0;
     }
 }
