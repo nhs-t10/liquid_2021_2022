@@ -46,7 +46,7 @@ public class BlueBotTestAuto extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-telemetry.addLine("Start");
+                telemetry.addLine("Start");
                 driver.resetEncoders();
                 driver.setTargetPositions(1000,1000,-1000,-1000);
                 driver.runToPosition();

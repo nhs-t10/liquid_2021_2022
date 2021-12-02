@@ -24,7 +24,7 @@ dependencies {
 
 task generateAutoautoSources {
     doFirst {
-        def script = "node TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/autoauto/compiler/compiler.js".execute()
+        def script = "\"C:\\Program Files\\nodejs\\node.exe\" TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/autoauto/compiler/compiler.js".execute()
         script.in.eachLine { line -> println line }
         script.err.eachLine { line ->
             if(!line.startsWith("WARNING: ")) println "ERROR: " + line;
@@ -39,7 +39,7 @@ task generateAutoautoSources {
 
 task recordBuildHistory {
     doFirst {
-        def script = "node TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/buildhistory/preprocess.js".execute()
+        def script = "\"C:\\Program Files\\nodejs\\node.exe\" TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/buildhistory/preprocess.js".execute()
         script.in.eachLine { line -> println line }
         script.err.eachLine { line ->
             if(!line.startsWith("WARNING: ")) println "ERROR: " + line;
@@ -51,7 +51,7 @@ task recordBuildHistory {
 
 task generateControlsSources {
     doFirst {
-        def script = "node TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/controls2/compiler/compiler.js".execute()
+        def script = "\"C:\\Program Files\\nodejs\\node.exe\" TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/controls2/compiler/compiler.js".execute()
         script.in.eachLine { line -> println line }
         script.err.eachLine { line ->
             if(!line.startsWith("WARNING: ")) println "ERROR: " + line;
@@ -63,7 +63,7 @@ task generateControlsSources {
 
 task generateControls3Sources {
     doFirst {
-        def script = "node TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/controls3/compiler/compiler.js".execute()
+        def script = "\"C:\\Program Files\\nodejs\\node.exe\" TeamCode/src/main/java/org/firstinspires/ftc/teamcode/auxilary/dsls/controls3/compiler/compiler.js".execute()
         script.in.eachLine { line -> println line }
         script.err.eachLine { line ->
             if(!line.startsWith("WARNING: ")) println "ERROR: " + line;
