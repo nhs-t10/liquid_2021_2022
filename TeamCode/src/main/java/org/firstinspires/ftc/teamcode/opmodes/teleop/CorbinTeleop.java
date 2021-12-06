@@ -37,6 +37,8 @@ public class CorbinTeleop extends OpMode {
     private boolean intakeServoStatus = false;
     private boolean intakeRunning = false;
     private boolean bumperStatus = false;
+    private boolean lBumperDown = false;
+    private boolean rBumperDown = false;
 
     @Override
     public void init() {
@@ -112,26 +114,28 @@ public class CorbinTeleop extends OpMode {
             // todo spin robot correct amount
         }
         // Toggle input motors
-        if (gamepad1.right_bumper) {
+        if (gamepad1.right_bumper && !rBumperDown) {
+            rBumperDown = true;
             intakeRunning = !intakeRunning;
-        }
+        } else if (!gamepad1.right_bumper && rBumperDown) {
+            rBumperDown = false;
         if (intakeRunning) {
             hands.setMotorPower("is", 1);
         } else if (!intakeRunning) {
             hands.setMotorPower("is", 0);
         }
         // Toggle input tray todo correct position numbers
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_bumper && !lBumperDown) {
+            lBumperDown = true;
             intakeServoStatus = !intakeServoStatus;
+        } else if (!gamepad1.left_bumper && lBumperDown) {
+            lBumperDown = false;
         }
-        /*
         if (intakeServoStatus) {
             hands.setServoPosition("it", 0);
         } else if (!intakeServoStatus){
             hands.setServoPosition("it", 0);
         }
-
-         */
 
         if (gamepad1.x) {
             driver.driveRaw(0.5f,0,0,0);
