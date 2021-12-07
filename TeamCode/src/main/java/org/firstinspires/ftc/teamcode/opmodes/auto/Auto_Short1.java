@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_Short extends OpMode {
+public class Auto_Short1 extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -52,6 +52,7 @@ public class Auto_Short extends OpMode {
                 break;
             case(2):
                 hands.setMotorPower("dw", -0.5);
+                hands.setMotorPower("dw", 0);
                 step++;
                 break;
             case(3):
