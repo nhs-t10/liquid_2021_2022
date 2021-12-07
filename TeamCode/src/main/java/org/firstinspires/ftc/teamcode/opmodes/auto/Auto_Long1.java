@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 */
 
 @Autonomous
-public class Auto_Long extends OpMode {
+public class Auto_Long1 extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     public double circ = 27.98;
@@ -64,7 +64,7 @@ public class Auto_Long extends OpMode {
                 int move_dist = (int) (lmove / circ * 560);
                 driver.setTargetPositions(move_dist, move_dist, move_dist, move_dist);
                 driver.runToPosition(); // move to the position specified by setTargetPosition()
-                driver.setPower(0.5);
+                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
                 step++;
                 break;
             case(2):
