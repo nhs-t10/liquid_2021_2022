@@ -122,7 +122,7 @@ public class CorbinTeleop extends OpMode {
         }
         if (intakeRunning) {
             hands.setMotorPower("is", 1);
-        } else if (!intakeRunning) {
+        } else {
             hands.setMotorPower("is", 0);
         }
         // Toggle input tray todo correct position numbers
@@ -134,8 +134,8 @@ public class CorbinTeleop extends OpMode {
         }
         if (intakeServoStatus) {
             hands.setServoPosition("it", 0);
-        } else if (!intakeServoStatus){
-            hands.setServoPosition("it", 0);
+        } else {
+            hands.setServoPosition("it", 1);
         }
 
         if (gamepad1.x) {
