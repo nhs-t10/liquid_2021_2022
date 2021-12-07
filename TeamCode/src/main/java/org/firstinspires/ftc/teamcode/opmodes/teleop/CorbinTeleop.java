@@ -34,8 +34,11 @@ public class CorbinTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private boolean intakePosition;
-    private boolean intakeRunning;
+    private boolean intakeServoStatus = false;
+    private boolean intakeRunning = false;
+    private boolean bumperStatus = false;
+    private boolean lBumperDown = false;
+    private boolean rBumperDown = false;
 
     @Override
     public void init() {
@@ -88,13 +91,14 @@ public class CorbinTeleop extends OpMode {
         input.registerInput("spin",
                 new ButtonNode("a")
         );
+        driver.setDirection();
     }
 
     @Override
     public void loop() {
         input.update();
 
-        driver.driveOmni(input.getFloatArrayOfInput("drivingControls"));
+        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x/2f);
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -(input.getFloat("duckWheelRight")));
@@ -105,28 +109,42 @@ public class CorbinTeleop extends OpMode {
         }
         // Spin 180
         if (input.getBool("spin")) {
-            driver.driveRaw(1.0f, -1.0f, 1.0f, -1.0f);
+            float turnDist = 1.0f;
+            driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
             // todo spin robot correct amount
         }
         // Toggle input motors
-        if (input.getBool("toggleIn")) {
+        if (gamepad1.right_bumper && !rBumperDown) {
+            rBumperDown = true;
             intakeRunning = !intakeRunning;
-        }
+        } else if (!gamepad1.right_bumper && rBumperDown) {
+            rBumperDown = false;
         if (intakeRunning) {
             hands.setMotorPower("is", 1);
-        } else {
+        } else if (!intakeRunning) {
             hands.setMotorPower("is", 0);
         }
         // Toggle input tray todo correct position numbers
-        if (input.getBool("toggleIn")) {
-            intakePosition = !intakePosition;
+        if (gamepad1.left_bumper && !lBumperDown) {
+            lBumperDown = true;
+            intakeServoStatus = !intakeServoStatus;
+        } else if (!gamepad1.left_bumper && lBumperDown) {
+            lBumperDown = false;
         }
-        if (intakePosition) {
-            hands.setMotorPower("it", 1);
-        } else {
-            hands.setMotorPower("it", 0);
+        if (intakeServoStatus) {
+            hands.setServoPosition("it", 0);
+        } else if (!intakeServoStatus){
+            hands.setServoPosition("it", 0);
         }
 
+        if (gamepad1.x) {
+            driver.driveRaw(0.5f,0,0,0);
+        }
+        if (gamepad1.y) {
+            driver.driveRaw(0f,0.5f,0,0);
+        }
+
+        telemetry.addData("wheel position", driver.getMotorPositions());
         telemetry.update();
     }
 

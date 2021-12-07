@@ -98,7 +98,7 @@ public class MovementManager extends FeatureManager {
 
     public void testDriveOmni(float y, float x, float rx) {
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double flPower = (y+x+rx)/maxValue;
+        double flPower = (y + x + rx)/maxValue;
         double blPower = (y - x + rx) / maxValue;
         double frPower = (y - x - rx) / maxValue;
         double brPower = (y + x - rx) / maxValue;
@@ -109,40 +109,67 @@ public class MovementManager extends FeatureManager {
         backLeft.setPower(blPower);
     }
 
-    public void driveOmni(float[] powers) {
-        float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
-        driveRaw(sum[0], sum[1], sum[2], sum[3]);
-    }
-    public void driveOmni(float v, float h, float r) {
-        driveOmni(new float[] {v, h, r});
+
+
+    public void encoderDriveRaw (
+            int flDistance,
+            int frDistance,
+            int blDistance,
+            int brDistance, 
+            float drivePower) {
+        resetEncoders();
+        drivePower = Math.abs(drivePower);
+        int flDiff = Math.abs(frontLeft.getCurrentPosition() - flDistance);
+        int frDiff = Math.abs(frontRight.getCurrentPosition() - frDistance);
+        int blDiff = Math.abs(backLeft.getCurrentPosition() - blDistance);
+        int brDiff = Math.abs(backRight.getCurrentPosition() - brDistance);
+
+        if (flDiff > 5) {
+            frontLeft.setPower(Math.signum(frDistance) * drivePower);
+        } else {frontLeft.setPower(0);}
+        if (frDiff > 5) {
+            frontRight.setPower(Math.signum(frDistance) * drivePower);
+        } else {frontRight.setPower(0);}
+        if (blDiff > 5) {
+            backLeft.setPower(Math.signum(frDistance) * drivePower);
+        } else {backLeft.setPower(0);}
+        if (brDiff > 5) {
+            backRight.setPower(Math.signum(frDistance) * drivePower);
+        } else {backRight.setPower(0);}
     }
 
-    public void driveOmniExponential(float[] powers) {
-        float[] sum = PaulMath.omniCalc(
-                (float) Math.pow(powers[0], EXPONENTIAL_SCALAR),
-                (float) Math.pow(powers[1], EXPONENTIAL_SCALAR),
-                (float) Math.pow(powers[2], EXPONENTIAL_SCALAR));
-        driveRaw(sum[0], sum[1], sum[2], sum[3]);
-    }
-    public DcMotor[] getMotor(){
-        DcMotor[] motors = {frontLeft, frontRight, backRight, backLeft};
+    public void encoderDriveOmni (
+            float y,
+            float x,
+            float rx,
+            int totalDistance) {
+        double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double flPower = (y + x + rx) / maxValue;
+        double blPower = (y - x + rx) / maxValue;
+        double frPower = (y - x - rx) / maxValue;
+        double brPower = (y + x - rx) / maxValue;
 
-        return motors;
+        resetEncoders();
+
+        double flDiff = Math.abs(frontLeft.getCurrentPosition() - (flPower * totalDistance));
+        double frDiff = Math.abs(frontRight.getCurrentPosition() - (frPower * totalDistance));
+        double blDiff = Math.abs(backLeft.getCurrentPosition() - (blPower * totalDistance));
+        double brDiff = Math.abs(backRight.getCurrentPosition() - (brPower * totalDistance));
+
+        if (flDiff > 5) {
+            frontLeft.setPower(Math.signum(totalDistance) * flPower);
+        } else {frontLeft.setPower(0);}
+        if (frDiff > 5) {
+            frontRight.setPower(Math.signum(totalDistance) * frPower);
+        } else {frontRight.setPower(0);}
+        if (blDiff > 5) {
+            backLeft.setPower(Math.signum(totalDistance) * blDiff);
+        } else {backLeft.setPower(0);}
+        if (brDiff > 5) {
+            backRight.setPower(Math.signum(totalDistance) * brDiff);
+        } else {backRight.setPower(0);}
     }
 
-    public void setPower(double power) {
-        frontLeft.setPower(power);
-        frontRight.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-    }
-
-    public void resetEncoders() {
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
 
     public void runToPosition() {
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -189,6 +216,32 @@ public class MovementManager extends FeatureManager {
         }
         stopDrive();
     }
+    public void driveOmni(float[] powers) {
+        float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
+        driveRaw(sum[0], sum[1], sum[2], sum[3]);
+    }
+    public void driveOmni(float v, float h, float r) {
+        driveOmni(new float[] {v, h, r});
+    }
+
+    public void driveOmniExponential(float[] powers) {
+        float[] sum = PaulMath.omniCalc(
+                (float) Math.pow(powers[0], EXPONENTIAL_SCALAR),
+                (float) Math.pow(powers[1], EXPONENTIAL_SCALAR),
+                (float) Math.pow(powers[2], EXPONENTIAL_SCALAR));
+        driveRaw(sum[0], sum[1], sum[2], sum[3]);
+    }
+    public DcMotor[] getMotor(){
+        DcMotor[] motors = {frontLeft, frontRight, backRight, backLeft};
+
+        return motors;
+    }
+    public void resetEncoders() {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
     public float getScale(){
         return scale;
     }
@@ -225,9 +278,19 @@ public class MovementManager extends FeatureManager {
 
     }
 
-    public int getTicks() {
+    public int flGetTicks() {
         return frontLeft.getCurrentPosition();
     }
+    public int frGetTicks() {
+        return frontRight.getCurrentPosition();
+    }
+    public int blGetTicks() {
+        return backLeft.getCurrentPosition();
+    }
+    public int brGetTicks() {
+        return backRight.getCurrentPosition();
+    }
+
     public int getHorizontalTicks() { return frontRight.getCurrentPosition(); }
     public int getVerticalTicks() { return  backLeft.getCurrentPosition(); }
 

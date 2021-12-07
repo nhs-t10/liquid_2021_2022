@@ -37,11 +37,11 @@ public class Short2 extends OpMode {
                     driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
                     step++;
                     break;
+                //case(2):
+                    //hands.setMotorPower("dw", -0.5);
+                    //step++;
+                    //break;
                 case(2):
-                    hands.setMotorPower("dw", -0.5);
-                    step++;
-                    break;
-                case(3):
                     driver.resetEncoders();
                     int WheelBackCaro = -8;
                     driver.setTargetPositions(WheelBackCaro,WheelBackCaro,WheelBackCaro,WheelBackCaro);
