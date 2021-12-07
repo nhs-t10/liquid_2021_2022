@@ -1,15 +1,26 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import static com.google.blocks.ftcrobotcontroller.hardware.HardwareType.BNO055IMU;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
+import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.managers.FeatureManager;
+import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
 import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
@@ -19,8 +30,9 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    float [] omniValues = new float [4];
+    private ImuManager gyro;
     int step = 1;
+    public BNO055IMU imu;
     ElapsedTime timer;
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
@@ -47,9 +59,11 @@ public class TemplateAuto extends OpMode {
                 new String[] {"fl", "fr", "br", "bl", "dw"}
             );
         driver = new MovementManager(fl, fr, br, bl);
+        driver.runUsingEncoders();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
+        gyro = new ImuManager(imu);
 
     }
     public void loop() {
@@ -61,11 +75,28 @@ public class TemplateAuto extends OpMode {
                 step++;
                 break;
             case(2):
+
+                driver.encoderDriveRaw(560,560,-560,-560, 0.5f);
+
+                step++;
+                step++;
+                break;
+            case(3):
+
+                step++;
+                break;
+            case(4):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
                 telemetry.update();
         }
+        telemetry.addLine("Encoder Values");
+        telemetry.addData("fl pos", driver.flGetTicks());
+        telemetry.addData("fr pos", driver.frGetTicks());
+        telemetry.addData("bl pos", driver.blGetTicks());
+        telemetry.addData("br pos", driver.brGetTicks());
+        telemetry.update();
     }
 
 }
