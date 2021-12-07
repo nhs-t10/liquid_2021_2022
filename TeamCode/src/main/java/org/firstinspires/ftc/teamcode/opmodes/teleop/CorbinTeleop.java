@@ -119,6 +119,7 @@ public class CorbinTeleop extends OpMode {
             intakeRunning = !intakeRunning;
         } else if (!gamepad1.right_bumper && rBumperDown) {
             rBumperDown = false;
+        }
         if (intakeRunning) {
             hands.setMotorPower("is", 1);
         } else if (!intakeRunning) {
