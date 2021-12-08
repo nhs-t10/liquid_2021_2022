@@ -35,15 +35,15 @@ public class Auto_TimeBased_Long_Right extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        /*DcMotor dw = hardwareMap.get(DcMotor.class, "dw"); todo uncomment this */
         hands = new ManipulationManager(
                 new CRServo[] {},
                 new String[] {},
                 new Servo[] {},
                 new String[] {},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
-            );
+                new DcMotor[] {fl, fr, br, bl, /*dw*/}, // todo uncomment this
+                new String[] {"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
+        );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
