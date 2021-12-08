@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class BlueBotTestAuto extends OpMode {
+public class Auto_Short_Left extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -35,30 +35,26 @@ public class BlueBotTestAuto extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-       // DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-
-        //driver.setPower(10);
-       // hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                telemetry.addLine("Start");
-                driver.resetEncoders();
-                driver.setTargetPositions(1000,1000,-1000,-1000);
                 driver.runToPosition();
+                driver.resetEncoders();
+                int WheelDistCaro = 4;
+                driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
                 step++;
                 break;
             case(2):
-               // hands.setMotorPower("dw", -0.5);
+                hands.setMotorPower("dw", 0.5);
+                hands.setMotorPower("dw", 0);
                 step++;
-                telemetry.addLine("end");
                 break;
-
-
             case(3):
                 driver.resetEncoders();
                 int WheelBackCaro = -8;

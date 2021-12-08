@@ -40,14 +40,14 @@ public class Arlan_180_Test extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        //DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         hands = new ManipulationManager(
                 new CRServo[] {},
                 new String[] {},
                 new Servo[] {},
                 new String[] {},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
+                new DcMotor[] {fl, fr, br, bl},
+                new String[] {"fl", "fr", "br", "bl"}
         );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
@@ -75,10 +75,10 @@ public class Arlan_180_Test extends OpMode {
                 //Make sure to add this line in each "case"
                 driver.resetEncoders();
                 //Moves the robot for 1 unit forward
-                driver.setTargetPositions(560, 560, 560, 560);
-                float turnDist = 5.0f;
+//                driver.setTargetPositions(560, 560, 560, 560);
+                float turnDist = 100.0f;
                 driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
-                driver.setTargetPositions(-324, 324, 324, -324);
+//                driver.setTargetPositions(-324, 324, 324, -324);
                 while (modernRoboticsI2cGyro.getHeading() <= 180) {
                     telemetry.addData("fl", driver.frontLeft.getTargetPosition());
                     telemetry.addData("fr", driver.frontRight.getTargetPosition());
