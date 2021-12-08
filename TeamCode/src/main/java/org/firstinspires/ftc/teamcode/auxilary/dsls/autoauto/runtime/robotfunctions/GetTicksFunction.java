@@ -13,6 +13,6 @@ public class GetTicksFunction extends NativeRobotFunction {
 
     @Override
     public AutoautoPrimitive call(AutoautoPrimitive[] args) {
-        if(args.length == 0) {return new AutoautoNumericValue(manager.getTicks());}throw new org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.errors.AutoautoNoNativeMethodOverloadException("No getTicks with 0 args");
+        if(args.length == 0) {return new AutoautoNumericValue(manager.getHorizontalTicks());}throw new org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.errors.AutoautoNoNativeMethodOverloadException("No getTicks with 0 args");
     }
 }
