@@ -57,7 +57,7 @@ public class Auto_TimeBased_Short_Right extends OpMode {
                 driver.timeDriveRaw(2000, 0.5f, 0.5f, 0.5f, 0.5f);
                 hands.setMotorPower("dw", -0.5);
                 delay(5000);
-                hands.setMotorPower("dw",0);  //todo uncomment duck wheel later
+                /*hands.setMotorPower("dw",0);  //todo uncomment duck wheel later*/
                 driver.timeDriveRaw(5000,-0.5f,-0.5f, -0.5f, -0.5f);
                 step++;
                 break;
