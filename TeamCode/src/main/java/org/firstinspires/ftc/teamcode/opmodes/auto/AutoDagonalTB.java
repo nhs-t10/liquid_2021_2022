@@ -14,12 +14,12 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_TimeBased_Short_Right extends OpMode {
+public class AutoDagonalTB extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
     int step = 1;
-    ElapsedTime timer;
+    ElapsedTime timer = new ElapsedTime();
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
@@ -51,22 +51,7 @@ public class Auto_TimeBased_Short_Right extends OpMode {
 
     }
     public void loop() {
-        switch (step) {
-            case(1):
-
-                driver.timeDriveRaw(2000, 0.5f, 0.5f, 0.5f, 0.5f);
-                /*hands.setMotorPower("dw", -0.5);
-                delay(5000);
-                hands.setMotorPower("dw",0);  //todo uncomment duck wheel later*/
-                driver.timeDriveRaw(5000,-0.5f,-0.5f, -0.5f, -0.5f);
-                step++;
-                break;
-            case(2):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("time", timer.milliseconds());
-                telemetry.addData("Step #", step);
-                telemetry.update();
-        }
+        driver.timeDriveRaw(10000,10,10,10,10);
     }
 
 }
