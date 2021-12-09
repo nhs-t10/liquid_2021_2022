@@ -78,15 +78,16 @@ public class MovementManager extends FeatureManager {
             backRight.setPower(br);
             backLeft.setPower(bl);
         }
+        stopDrive();
 
     }
 
     public void timeDriveOmni(double delay, float vert, float rotate, float hori) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            driveOmni(vert, rotate, hori);
+            testDriveOmni(vert, rotate, hori);
         }
-
+        stopDrive();
     }
 
     public void setDirection() {
@@ -117,12 +118,15 @@ public class MovementManager extends FeatureManager {
             int blDistance,
             int brDistance, 
             float drivePower) {
-        resetEncoders();
+        final int flStart = frontLeft.getCurrentPosition();
+        final int frStart = frontRight.getCurrentPosition();
+        final int blStart = backLeft.getCurrentPosition();
+        final int brStart = backRight.getCurrentPosition();
         drivePower = Math.abs(drivePower);
-        int flDiff = Math.abs(frontLeft.getCurrentPosition() - flDistance);
-        int frDiff = Math.abs(frontRight.getCurrentPosition() - frDistance);
-        int blDiff = Math.abs(backLeft.getCurrentPosition() - blDistance);
-        int brDiff = Math.abs(backRight.getCurrentPosition() - brDistance);
+        int flDiff = Math.abs(frontLeft.getCurrentPosition() - flStart - flDistance);
+        int frDiff = Math.abs(frontRight.getCurrentPosition() - frStart - frDistance);
+        int blDiff = Math.abs(backLeft.getCurrentPosition() - blStart - blDistance);
+        int brDiff = Math.abs(backRight.getCurrentPosition() - brStart - brDistance);
 
         if (flDiff > 5) {
             frontLeft.setPower(Math.signum(frDistance) * drivePower);
