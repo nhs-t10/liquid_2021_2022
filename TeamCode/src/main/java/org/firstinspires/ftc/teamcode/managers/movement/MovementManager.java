@@ -78,6 +78,7 @@ public class MovementManager extends FeatureManager {
             backRight.setPower(br);
             backLeft.setPower(bl);
         }
+        stopDrive();
 
     }
 
@@ -86,6 +87,7 @@ public class MovementManager extends FeatureManager {
         while (timer.milliseconds() <= endTime) {
             driveOmni(vert, rotate, hori);
         }
+        stopDrive();
 
     }
 
