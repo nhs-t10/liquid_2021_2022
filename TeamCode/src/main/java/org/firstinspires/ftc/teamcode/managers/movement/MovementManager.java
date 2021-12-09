@@ -21,7 +21,7 @@ public class MovementManager extends FeatureManager {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
-    private ElapsedTime timer;
+    ElapsedTime timer = new ElapsedTime();
 
     private static float scale = 1f;
 
@@ -169,7 +169,6 @@ public class MovementManager extends FeatureManager {
             backRight.setPower(Math.signum(totalDistance) * brDiff);
         } else {backRight.setPower(0);}
     }
-
 
     public void runToPosition() {
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);

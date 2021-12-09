@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
@@ -34,16 +35,26 @@ public class CorbinTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private boolean intakeServoStatus = false;
-    private boolean intakeRunning = false;
-    private boolean bumperStatus = false;
-    private boolean lBumperDown = false;
+    private boolean rintakeRunning = false;
+    private boolean lintakeRunning = false;
     private boolean rBumperDown = false;
+    private boolean lBumperDown = false;
+
+    ElapsedTime timer;
+    public void delay(double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            //do nothing
+        }
+
+
+    }
 
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
         FeatureManager.setIsOpModeRunning(true);
+        timer = new ElapsedTime();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -92,13 +103,17 @@ public class CorbinTeleop extends OpMode {
                 new ButtonNode("a")
         );
         driver.setDirection();
+
+
+
     }
 
     @Override
     public void loop() {
         input.update();
 
-        driver.testDriveOmni(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x/2f);
+        driver.downScale(0.5f);
+        driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -(input.getFloat("duckWheelRight")));
@@ -108,36 +123,54 @@ public class CorbinTeleop extends OpMode {
             hands.setMotorPower("dw", 0);
         }
         // Spin 180
+        /*
         if (input.getBool("spin")) {
             float turnDist = 1.0f;
             driver.driveRaw(turnDist, -turnDist, turnDist, -turnDist);
             // todo spin robot correct amount
         }
+
+         */
         // Toggle input motors
         if (gamepad1.right_bumper && !rBumperDown) {
             rBumperDown = true;
-            intakeRunning = !intakeRunning;
+            rintakeRunning = !rintakeRunning;
         } else if (!gamepad1.right_bumper && rBumperDown) {
             rBumperDown = false;
         }
-        if (intakeRunning) {
+        if (rintakeRunning) {
             hands.setMotorPower("is", 1);
-        } else {
+        } else if (!rintakeRunning) {
             hands.setMotorPower("is", 0);
         }
-        // Toggle input tray todo correct position numbers
+
         if (gamepad1.left_bumper && !lBumperDown) {
             lBumperDown = true;
-            intakeServoStatus = !intakeServoStatus;
+            lintakeRunning = !lintakeRunning;
         } else if (!gamepad1.left_bumper && lBumperDown) {
             lBumperDown = false;
         }
-        if (intakeServoStatus) {
-            hands.setServoPosition("it", 0);
-        } else {
-            hands.setServoPosition("it", 1);
+        if (lintakeRunning) {
+            hands.setMotorPower("is", -1);
+        } else if (!lintakeRunning) {
+            hands.setMotorPower("is", 0);
+        }
+        // Toggle input tray todo correct position numbers
+        if (gamepad1.y) {
+            hands.setServoPosition("it", 0.2);
+        }
+        if (gamepad1.b) {
+            hands.setServoPosition("it", 0.216);
+            delay(100);
+            hands.setServoPosition("it", 0.429);
+            delay(100);
+            hands.setServoPosition("it", 0.65);
+        }
+        if (gamepad1.x) {
+            hands.setServoPosition("it", 0.4);
         }
 
+        /*
         if (gamepad1.x) {
             driver.driveRaw(0.5f,0,0,0);
         }
@@ -145,7 +178,13 @@ public class CorbinTeleop extends OpMode {
             driver.driveRaw(0f,0.5f,0,0);
         }
 
-        telemetry.addData("wheel position", driver.getMotorPositions());
+         */
+
+        telemetry.addLine("Encoder Values");
+        telemetry.addData("fl pos", driver.flGetTicks());
+        telemetry.addData("fr pos", driver.frGetTicks());
+        telemetry.addData("bl pos", driver.blGetTicks());
+        telemetry.addData("br pos", driver.brGetTicks());
         telemetry.update();
     }
 
