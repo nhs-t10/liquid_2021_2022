@@ -48,10 +48,10 @@ public class EmergencyParkngCode extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-
+        driver.timeDriveRaw(10000,-10,-10,-10,-10);
     }
     public void loop() {
-        driver.timeDriveRaw(10000,-10,-10,-10,-10);
+        //driver.timeDriveRaw(10000,-10,-10,-10,-10);
     }
 
 }
