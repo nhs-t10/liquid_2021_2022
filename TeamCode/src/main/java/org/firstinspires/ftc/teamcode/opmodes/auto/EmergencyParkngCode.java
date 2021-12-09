@@ -17,9 +17,10 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class EmergencyParkngCode extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    float [] omniValues = new float [4];
+    float[] omniValues = new float[4];
     int step = 1;
     ElapsedTime timer = new ElapsedTime();
+
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
@@ -37,22 +38,32 @@ public class EmergencyParkngCode extends OpMode {
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         /*DcMotor dw = hardwareMap.get(DcMotor.class, "dw"); todo uncomment this */
         hands = new ManipulationManager(
-                new CRServo[] {},
-                new String[] {},
-                new Servo[] {},
-                new String[] {},
-                new DcMotor[] {fl, fr, br, bl, /*dw*/}, // todo uncomment this
-                new String[] {"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
+                new CRServo[]{},
+                new String[]{},
+                new Servo[]{},
+                new String[]{},
+                new DcMotor[]{fl, fr, br, bl, /*dw*/}, // todo uncomment this
+                new String[]{"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
         );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        driver.timeDriveRaw(10000,-10,-10,-10,-10);
-    }
-    public void loop() {
-        //driver.timeDriveRaw(10000,-10,-10,-10,-10);
     }
 
+    public void loop() {
+        switch (step) {
+            case (1):
+                driver.timeDriveRaw(1500, 1f, 1f, 1f, 1f);
+
+                step++;
+                break;
+            case (2):
+
+                break;
+
+        }
+
+    }
 }
 

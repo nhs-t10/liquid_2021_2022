@@ -34,13 +34,12 @@ public class TemplateAuto extends OpMode {
     int step = 1;
     //public BNO055IMU imu;
     ElapsedTime timer;
-    public void delay(double delay) {
+    public void dwSpinDelay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-            //do nothing
+            hands.setMotorPower("dw", 1);
         }
-
-
+        hands.setMotorPower("dw", 0);
     }
 
     public void init() {
@@ -59,30 +58,26 @@ public class TemplateAuto extends OpMode {
                 new String[] {"fl", "fr", "br", "bl", "dw"}
             );
         driver = new MovementManager(fl, fr, br, bl);
-        driver.runUsingEncoders();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
+        hands.setServoPosition("it", 0);
         //gyro = new ImuManager(imu);
 
     }
     public void loop() {
         switch (step) {
             case(1):
-
-                driver.encoderDriveRaw(560,560,560,560, 0.5f);
+                driver.timeDriveRaw(1000, 0.5f, 0.5f, 0.5f, 0.5f);
 
                 step++;
                 break;
             case(2):
-
-                driver.encoderDriveRaw(560,560,-560,-560, 0.5f);
-
-                step++;
+                dwSpinDelay(500);
                 step++;
                 break;
             case(3):
-
+                driver.timeDriveRaw(1000, -0.5f, -0.5f, -0.5f, -0.5f);
                 step++;
                 break;
             case(4):
