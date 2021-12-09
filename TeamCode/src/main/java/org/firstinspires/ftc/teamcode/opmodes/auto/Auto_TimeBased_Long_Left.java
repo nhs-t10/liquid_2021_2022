@@ -54,9 +54,9 @@ public class Auto_TimeBased_Long_Left extends OpMode {
         switch (step) {
             case(1):
 
-                driver.timeDriveOmni(4000, 0.5f, 0, 0);
-                /*hands.setMotorPower("dw",0); */ //todo uncomment duck wheel laater
-                driver.timeDriveOmni(5000,-0.5f,0, 0);
+                driver.timeDriveRaw(4000, 0.5f, 0.5f, 0.5f, 0.5f);
+                /*hands.setMotorPower("dw",0); */ //todo uncomment duck wheel later
+                driver.timeDriveRaw(5000,-0.5f,-0.5f, -0.5f, -0.5f);
                 step++;
                 break;
             case(2):
