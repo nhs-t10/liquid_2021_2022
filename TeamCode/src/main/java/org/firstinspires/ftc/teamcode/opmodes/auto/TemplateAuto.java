@@ -30,9 +30,9 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    private ImuManager gyro;
+    //private ImuManager gyro;
     int step = 1;
-    public BNO055IMU imu;
+    //public BNO055IMU imu;
     ElapsedTime timer;
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
@@ -63,7 +63,7 @@ public class TemplateAuto extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        gyro = new ImuManager(imu);
+        //gyro = new ImuManager(imu);
 
     }
     public void loop() {
