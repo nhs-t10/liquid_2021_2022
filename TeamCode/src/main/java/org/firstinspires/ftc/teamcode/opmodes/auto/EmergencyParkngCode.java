@@ -36,30 +36,35 @@ public class EmergencyParkngCode extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        /*DcMotor dw = hardwareMap.get(DcMotor.class, "dw"); todo uncomment this */
+        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        Servo it = hardwareMap.get(Servo.class, "it");
         hands = new ManipulationManager(
                 new CRServo[]{},
                 new String[]{},
-                new Servo[]{},
-                new String[]{},
-                new DcMotor[]{fl, fr, br, bl, /*dw*/}, // todo uncomment this
-                new String[]{"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
+                new Servo[]{it},
+                new String[]{"it"},
+                new DcMotor[]{fl, fr, br, bl, dw}, // todo uncomment this
+                new String[]{"fl", "fr", "br", "bl", "dw"} //todo uncomment this
         );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
+        hands.setServoPosition("it", 0);
     }
 
     public void loop() {
         switch (step) {
             case (1):
-                driver.timeDriveRaw(1500, 1f, 1f, 1f, 1f);
+                driver.timeDriveRaw(800, 1f, 1f, 1f, 1f);
 
                 step++;
                 break;
             case (2):
-
+                telemetry.addLine("Autonomous Complete");
+                telemetry.addData("time", timer.milliseconds());
+                telemetry.addData("Step #", step);
+                telemetry.update();
                 break;
 
         }
