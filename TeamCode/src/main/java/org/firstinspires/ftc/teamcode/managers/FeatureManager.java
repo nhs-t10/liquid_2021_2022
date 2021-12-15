@@ -13,7 +13,7 @@ public class FeatureManager {
     public final static int TICK_PER_ROT = 1680;
 
     public final static float P = 0.03f;
-    public final static double ENCODER_CPR = 1680;
+    public final static double ENCODER_CPR = 537.6;
     public final static double GEAR_RATIO = 1;
     public final static double WHEEL_DIAMETER = 4;
     public final static double SLIP = 0.7;

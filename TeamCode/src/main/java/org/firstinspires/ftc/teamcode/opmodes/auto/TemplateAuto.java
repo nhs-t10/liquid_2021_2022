@@ -30,17 +30,11 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    //private ImuManager gyro;
+    private ImuManager gyro;
     int step = 1;
-    //public BNO055IMU imu;
+    public BNO055IMU imu;
     ElapsedTime timer;
-    public void dwSpinDelay(double delay) {
-        double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
-            hands.setMotorPower("dw", 1);
-        }
-        hands.setMotorPower("dw", 0);
-    }
+
 
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
@@ -58,26 +52,26 @@ public class TemplateAuto extends OpMode {
                 new String[] {"fl", "fr", "br", "bl", "dw"}
             );
         driver = new MovementManager(fl, fr, br, bl);
+        gyro = new ImuManager(imu);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        hands.setServoPosition("it", 0);
-        //gyro = new ImuManager(imu);
+        driver.runWithOutEncoders();
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.timeDriveRaw(1000, 0.5f, 0.5f, 0.5f, 0.5f);
-
+                driver.encoderDriveRaw(500, 500, 500, 500, 0.5f);
                 step++;
                 break;
             case(2):
-                dwSpinDelay(500);
+                hands.timeSetMotorPower("dw", 1, 500);
+                driver.holdUp(500);
                 step++;
                 break;
             case(3):
-                driver.timeDriveRaw(1000, -0.5f, -0.5f, -0.5f, -0.5f);
+                driver.encoderDriveRaw(-1300, -1300, -1300, -1300, 0.5f);
                 step++;
                 break;
             case(4):

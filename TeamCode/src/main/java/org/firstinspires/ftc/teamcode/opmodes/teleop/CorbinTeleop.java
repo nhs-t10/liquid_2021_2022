@@ -116,9 +116,16 @@ public class CorbinTeleop extends OpMode {
         driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
         if (input.getBool("duckWheelRight")) {
-            hands.setMotorPower("dw", -(input.getFloat("duckWheelRight")));
-        } else if (input.getBool("duckWheelLeft")) {
-            hands.setMotorPower("dw", (input.getFloat("duckWheelLeft")));
+            hands.setMotorPower("dw", -1);
+        } else if (!input.getBool("duckWheelRight")) {
+            hands.timeSetMotorPower("dw", 0.15, 100);
+        } else {
+            hands.setMotorPower("dw", 0);
+        }
+        if (input.getBool("duckWheelLeft")) {
+            hands.setMotorPower("dw", 1);
+        } else if (!input.getBool("duckWheelLeft")) {
+            hands.timeSetMotorPower("dw", -0.15, 100);
         } else {
             hands.setMotorPower("dw", 0);
         }

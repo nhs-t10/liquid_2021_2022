@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.managers.manipulation;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 
@@ -12,6 +13,7 @@ public class ManipulationManager extends FeatureManager {
     public CRServo[] crservos;
     public DcMotor[] motors;
     public Servo[] servos;
+    ElapsedTime timer = new ElapsedTime();
 
     public String[] crservoNames;
     public String[] motorNames;
@@ -73,6 +75,13 @@ public class ManipulationManager extends FeatureManager {
         int index = (Arrays.asList(motorNames)).indexOf(name);
         if(index == -1) throw new IllegalArgumentException("Motor " + name + " does not exist or is not registered");
         motors[index].setPower(power);
+    }
+    public void timeSetMotorPower(String name, double power, double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            setMotorPower(name, power);
+        }
+        setMotorPower(name, 0);
     }
 
     public double getMotorPower(String name) {
