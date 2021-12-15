@@ -48,7 +48,8 @@ public class BlueBotTestAuto extends OpMode {
             case(1):
                 telemetry.addLine("Start");
                 driver.resetEncoders();
-                driver.setTargetPositions(1000,1000,-1000,-1000);
+                int movedist = 10;
+                driver.setTargetPositions(movedist*560,movedist*560,-movedist*560,-movedist*560);
                 driver.runToPosition();
                 step++;
                 break;
@@ -57,8 +58,6 @@ public class BlueBotTestAuto extends OpMode {
                 step++;
                 telemetry.addLine("end");
                 break;
-
-
             case(3):
                 driver.resetEncoders();
                 int WheelBackCaro = -8;
