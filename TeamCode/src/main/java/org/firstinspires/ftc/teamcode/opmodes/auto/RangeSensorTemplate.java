@@ -42,6 +42,14 @@ public class RangeSensorTemplate extends OpMode {
         while (timer.milliseconds() <= endTime) { }
     }
 
+    public void driveToDistance(float power, double cm) {
+        driver.driveRaw(power, power, power, power);
+        while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
+            //wait
+        }
+        driver.stopDrive();
+    }
+
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
