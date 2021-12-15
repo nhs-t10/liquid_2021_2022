@@ -71,6 +71,7 @@ public class RangeSensor extends OpMode {
                 break;
             case(2):
                 step++;
+                step++;
                 break;
             case(3):
                 telemetry.addLine("Autonomous Complete");
