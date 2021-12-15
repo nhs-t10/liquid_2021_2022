@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class RangeSensor extends OpMode {
+public class RangeSensorTemplate extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     ModernRoboticsI2cRangeSensor rangeSensor;
