@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto3DiagonalRightLong extends OpMode {
+public class Auto3DiagonalRightLong_Encoder extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     /*float [] omniValues = new float [4];*/
@@ -35,13 +35,13 @@ public class Auto3DiagonalRightLong extends OpMode {
 
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
+
 
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.setTargetPositions(7328, 7328, -7328, -7328);
+                driver.encoderDriveRaw(7328, 7328, -7328, -7328, 0.5f);
                 driver.runToPosition();
                 step++;
                 break;
@@ -53,7 +53,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(3):
-                driver.setTargetPositions(560,-560,560,-560);
+                driver.encoderDriveRaw(560,-560,560,-560, 0.5f);
                 driver.runToPosition();
                 step++;
                 break;
@@ -65,7 +65,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(5):
-                driver.setTargetPositions(3406, 3406, -3406, -3406);
+                driver.encoderDriveRaw(3406, 3406, -3406, -3406, 0.5f);
                 driver.runToPosition();
                 step++;
                 break;
@@ -91,7 +91,7 @@ public class Auto3DiagonalRightLong extends OpMode {
                 step++;
                 break;
             case(9):
-                driver.setTargetPositions(-7328, -7328, 7328, 7328);
+                driver.encoderDriveRaw(-7328, -7328, 7328, 7328, 0.5f);
                 driver.runToPosition();
                 driver.resetEncoders();
                 step++;
