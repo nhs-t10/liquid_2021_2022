@@ -97,5 +97,4 @@ public class RangeSensorLeftAuto extends OpMode {
         telemetry.addData("back cm", "%.2f cm", backDist.getDistance(DistanceUnit.CM)); //cm distance
         telemetry.update();
     }
-
 }
