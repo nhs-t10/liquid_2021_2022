@@ -28,9 +28,17 @@ public class RangeSensorLeftAuto extends OpMode {
         while (timer.milliseconds() <= endTime) { }
     }
 
-    public void driveToDistance(float power, double cm) {
+    public void driveToDistanceForward(float power, double cm) {
         driver.driveRaw(power, power, power, power);
         while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
+            //wait
+        }
+        driver.stopDrive();
+    }
+
+    public void driveToDistanceBackward(float power, double cm) {
+        driver.driveRaw(power, power, power, power);
+        while (rangeSensor.getDistance(DistanceUnit.CM) <= cm) {
             //wait
         }
         driver.stopDrive();
@@ -61,7 +69,7 @@ public class RangeSensorLeftAuto extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driveToDistance(0.5f, 20);
+                driveToDistanceForward(0.5f, 20);
                 step++;
                 break;
             case(2):
@@ -71,7 +79,7 @@ public class RangeSensorLeftAuto extends OpMode {
                 step++;
                 break;
             case(3):
-                driveToDistance(-0.5f, 20);
+                driveToDistanceBackward(-0.5f, 20);
                 step++;
                 break;
             case(4):
