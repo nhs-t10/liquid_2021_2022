@@ -42,9 +42,16 @@ public class RangeSensorTemplate extends OpMode {
         while (timer.milliseconds() <= endTime) { }
     }
 
-    public void driveToDistance(float power, double cm) {
+    public void driveToDistanceForward(float power, double cm) {
         driver.driveRaw(power, power, power, power);
         while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
+            //wait
+        }
+        driver.stopDrive();
+    }
+    public void driveToDistanceBackward(float power, double cm) {
+        driver.driveRaw(power, power, power, power);
+        while (rangeSensor.getDistance(DistanceUnit.CM) <= cm) {
             //wait
         }
         driver.stopDrive();
@@ -75,13 +82,20 @@ public class RangeSensorTemplate extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
+                driveToDistanceForward(0, 0);
                 step++;
                 break;
             case(2):
-                step++;
+                hands.setMotorPower("dw", 0f);
+                delay(0);
+                hands.setMotorPower("dw", 0f);
                 step++;
                 break;
             case(3):
+                driveToDistanceBackward(0, 0);
+                step++;
+                break;
+            case(4):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
