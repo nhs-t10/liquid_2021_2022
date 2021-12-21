@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.managers.movement;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
+import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
 
 /*
   ========== field data ==========
-  Multiply by 560 when using encoders!!!
+  Multiply by 537.6 when using encoders!!!
   wheel circumference = 27.98
   short move distance 39.37 from duck wheel to carousel
   long move distance 170.18 from duck wheel to carousel
@@ -22,6 +25,11 @@ public class MovementManager extends FeatureManager {
     public DcMotor backLeft;
     public DcMotor backRight;
     ElapsedTime timer = new ElapsedTime();
+    public BNO055IMU imu;
+    public ImuManager gyro = new ImuManager(imu);
+    Orientation angles = gyro.getOrientation();
+
+
 
     private static float scale = 1f;
 
@@ -69,6 +77,22 @@ public class MovementManager extends FeatureManager {
         backRight.setPower(0);
         backLeft.setPower(0);
     }
+    public void holdUp(double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            stopDrive();
+        }
+    }
+
+    public void rotate(int degrees, float power) {
+        float leftSidePower = -1 * Math.signum(degrees) * power;
+        float rightSidePower = Math.signum(degrees) * power;
+
+
+
+        driveRaw(leftSidePower, rightSidePower, leftSidePower, rightSidePower);
+
+    }
 
     public void timeDriveRaw(double delay, float fl, float fr, float br, float bl) {
         double endTime = timer.milliseconds() + delay;
@@ -104,10 +128,10 @@ public class MovementManager extends FeatureManager {
         double frPower = (y - x - rx) / maxValue;
         double brPower = (y + x - rx) / maxValue;
 
-        frontLeft.setPower(flPower);
-        frontRight.setPower(frPower);
-        backRight.setPower(brPower);
-        backLeft.setPower(blPower);
+        frontLeft.setPower(flPower * scale);
+        frontRight.setPower(frPower * scale);
+        backRight.setPower(brPower * scale);
+        backLeft.setPower(blPower * scale);
     }
 
 
@@ -122,24 +146,24 @@ public class MovementManager extends FeatureManager {
         final int frStart = frontRight.getCurrentPosition();
         final int blStart = backLeft.getCurrentPosition();
         final int brStart = backRight.getCurrentPosition();
-        drivePower = Math.abs(drivePower);
-        int flDiff = Math.abs(frontLeft.getCurrentPosition() - flStart - flDistance);
-        int frDiff = Math.abs(frontRight.getCurrentPosition() - frStart - frDistance);
-        int blDiff = Math.abs(backLeft.getCurrentPosition() - blStart - blDistance);
-        int brDiff = Math.abs(backRight.getCurrentPosition() - brStart - brDistance);
 
-        if (flDiff > 5) {
-            frontLeft.setPower(Math.signum(frDistance) * drivePower);
-        } else {frontLeft.setPower(0);}
-        if (frDiff > 5) {
-            frontRight.setPower(Math.signum(frDistance) * drivePower);
-        } else {frontRight.setPower(0);}
-        if (blDiff > 5) {
-            backLeft.setPower(Math.signum(frDistance) * drivePower);
-        } else {backLeft.setPower(0);}
-        if (brDiff > 5) {
-            backRight.setPower(Math.signum(frDistance) * drivePower);
-        } else {backRight.setPower(0);}
+        drivePower = Math.abs(drivePower);
+
+        driveRaw(Math.signum(flDistance) * drivePower, Math.signum(frDistance) * drivePower, Math.signum(brDistance) * drivePower, Math.signum(blDistance) * drivePower);
+
+        if (Math.abs(frontLeft.getCurrentPosition() - flStart - flDistance) < 10) {
+            frontLeft.setPower(0);
+        }
+        if (Math.abs(frontRight.getCurrentPosition() - frStart - frDistance) < 10) {
+            frontRight.setPower(0);
+        }
+        if (Math.abs(backLeft.getCurrentPosition() - blStart - blDistance) < 10) {
+            backLeft.setPower(0);
+        }
+        if (Math.abs(backRight.getCurrentPosition() - brStart - brDistance) < 10) {
+            backRight.setPower(0);
+        }
+
     }
 
     public void encoderDriveOmni (
