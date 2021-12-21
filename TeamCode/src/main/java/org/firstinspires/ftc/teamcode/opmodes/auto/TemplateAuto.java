@@ -30,10 +30,16 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    private ImuManager gyro;
     int step = 1;
     public BNO055IMU imu;
+    public ImuManager gyro = new ImuManager(imu);
     ElapsedTime timer;
+    public void delay(double delay) {
+        double endTime = timer.milliseconds() + delay;
+        while (timer.milliseconds() <= endTime) {
+            //relax and wait
+        }
+    }
 
 
     public void init() {
@@ -42,21 +48,25 @@ public class TemplateAuto extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         hands = new ManipulationManager(
                 new CRServo[] {},
                 new String[] {},
                 new Servo[] {},
                 new String[] {},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
+                new DcMotor[] {fl, fr, br, bl, /*dw*/},
+                new String[] {"fl", "fr", "br", "bl", /*"dw"*/}
             );
         driver = new MovementManager(fl, fr, br, bl);
-        gyro = new ImuManager(imu);
+
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        driver.runWithOutEncoders();
+
+        while (!imu.isGyroCalibrated()) {
+            delay(50);
+        }
 
     }
     public void loop() {
@@ -66,7 +76,7 @@ public class TemplateAuto extends OpMode {
                 step++;
                 break;
             case(2):
-                hands.timeSetMotorPower("dw", 1, 500);
+                //hands.timeSetMotorPower("dw", 1, 500);
                 driver.holdUp(500);
                 step++;
                 break;
