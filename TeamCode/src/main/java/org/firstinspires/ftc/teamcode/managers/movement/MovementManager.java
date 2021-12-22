@@ -25,9 +25,9 @@ public class MovementManager extends FeatureManager {
     public DcMotor backLeft;
     public DcMotor backRight;
     ElapsedTime timer = new ElapsedTime();
-    public BNO055IMU imu;
-    public ImuManager gyro = new ImuManager(imu);
-    Orientation angles = gyro.getOrientation();
+    //public BNO055IMU imu;
+    //public ImuManager gyro = new ImuManager(imu);
+    //Orientation angles = gyro.getOrientation();
 
 
 

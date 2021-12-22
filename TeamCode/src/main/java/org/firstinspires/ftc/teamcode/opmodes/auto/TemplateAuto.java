@@ -31,8 +31,8 @@ public class TemplateAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     int step = 1;
-    public BNO055IMU imu;
-    public ImuManager gyro = new ImuManager(imu);
+    //public BNO055IMU imu;
+    //public ImuManager gyro = new ImuManager(imu);
     ElapsedTime timer;
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
@@ -48,7 +48,7 @@ public class TemplateAuto extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         //DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         hands = new ManipulationManager(
                 new CRServo[] {},
@@ -64,9 +64,11 @@ public class TemplateAuto extends OpMode {
         driver.setDirection();
         timer = new ElapsedTime();
 
+        /*
         while (!imu.isGyroCalibrated()) {
             delay(50);
         }
+         */
 
     }
     public void loop() {

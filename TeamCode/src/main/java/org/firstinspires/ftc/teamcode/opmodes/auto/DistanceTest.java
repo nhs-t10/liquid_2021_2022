@@ -15,7 +15,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsAnalogOpticalDistanceSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -33,7 +35,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class DistanceTest extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    ModernRoboticsI2cRangeSensor rangeSensor;
+    Rev2mDistanceSensor rangeSensor;
     int step = 1;
     ElapsedTime timer;
 
@@ -73,11 +75,10 @@ public class DistanceTest extends OpMode {
                 new String[] {"fl", "fr", "br", "bl", "dw"}
         );
         driver = new MovementManager(fl, fr, br, bl);
-        driver.runUsingEncoders();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
+        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "rangeSensor");
     }
     public void loop() {
         switch (step) {
@@ -88,16 +89,14 @@ public class DistanceTest extends OpMode {
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
                 telemetry.update();
+                step++;
         }
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
-        telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic()); //ultrasonic data
-        telemetry.addData("raw optical", rangeSensor.rawOptical()); //optical data
-        telemetry.addData("cm optical", "%.2f cm", rangeSensor.cmOptical()); //cm distance? todo learn more
-        telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM)); //cm distance
+        telemetry.addData("range", String.format("%.01f cm", rangeSensor.getDistance(DistanceUnit.CM)));
         telemetry.update();
     }
 
