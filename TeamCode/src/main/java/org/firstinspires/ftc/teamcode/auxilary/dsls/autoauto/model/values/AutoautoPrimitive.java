@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
 
 public abstract class AutoautoPrimitive extends AutoautoValue {
     @NotNull

@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values;
 
+import com.google.firebase.database.annotations.NotNull;
+
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntimeVariableScope;
-import org.jetbrains.annotations.NotNull;
 
 public class AutoautoUndefined extends AutoautoPrimitive {
     private Location location;

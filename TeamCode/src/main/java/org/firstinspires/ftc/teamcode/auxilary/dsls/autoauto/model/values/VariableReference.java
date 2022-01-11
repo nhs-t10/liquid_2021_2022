@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values;
 
+import com.google.firebase.database.annotations.NotNull;
+
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.AutoautoProgram;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntimeVariableScope;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.errors.AutoautoNameException;
-import org.jetbrains.annotations.NotNull;
 
 public class VariableReference extends AutoautoValue {
     String name;

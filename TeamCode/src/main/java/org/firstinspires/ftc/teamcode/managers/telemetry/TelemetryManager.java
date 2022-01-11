@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
-import org.firstinspires.ftc.teamcode.auxilary.buildhistory.BuildHistory;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
+//import org.firstinspires.ftc.teamcode.auxilary.buildhistory.BuildHistory;
 import org.firstinspires.ftc.teamcode.managers.telemetry.pojotracker.OhNoJavaFieldMonitorAndExposer;
 import org.firstinspires.ftc.teamcode.managers.telemetry.server.Server;
 
@@ -62,7 +62,7 @@ public class TelemetryManager extends FeatureManager implements Telemetry {
 
         this.fields = new HashMap<String, String>();
 
-        if((config & BITMASKS.BUILD_HISTORY) != 0) BuildHistory.init();
+        //if((config & BITMASKS.BUILD_HISTORY) != 0) BuildHistory.init();
 
         setGamepads(opmode.gamepad1, opmode.gamepad2);
     }

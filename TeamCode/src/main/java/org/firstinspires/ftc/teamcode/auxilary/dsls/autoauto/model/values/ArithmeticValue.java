@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values;
 
+import com.google.firebase.database.annotations.NotNull;
+
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.errors.AutoautoNameException;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntimeVariableScope;
-import org.jetbrains.annotations.NotNull;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.errors.AutoautoNameException;
 
 public class ArithmeticValue extends AutoautoValue {
     String operator;

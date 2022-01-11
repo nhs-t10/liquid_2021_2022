@@ -1,53 +1,38 @@
 package org.firstinspires.ftc.teamcode.__compiledautoauto;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.auxilary.buildhistory.BuildHistory;
-
-import org.firstinspires.ftc.teamcode.auxilary.EncodedMotor;
-import org.firstinspires.ftc.teamcode.auxilary.ColorSensor;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.*;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.*;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.*;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntime;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoOpmode;
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoMacro;
-import org.firstinspires.ftc.teamcode.managers.*;
-import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
-import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
-import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
-import org.firstinspires.ftc.teamcode.managers.sensor.SensorManager;
-import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
-import org.junit.Test;
-import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyHardwareMap;
-
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location.L;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.AutoautoProgram.P;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntime.R;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Statepath.S;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location.L;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.State.A;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.NextStatement.N;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.FunctionCallStatement.F;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Statepath.S;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.AfterStatement.W;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.FunctionCall.M;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.ArithmeticValue.O;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.FunctionCallStatement.F;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.GotoStatement.G;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.NextStatement.N;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoNumericValue.C;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoString.U;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoTable.K;
 import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoUnitValue.E;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.GotoStatement.G;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.LetStatement.D;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.IfStatement.I;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.BooleanOperator.T;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.VariableReference.H;
-import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoBooleanValue.B;
+import static org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.FunctionCall.M;
+
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.AutoautoProgram;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.AutoautoProgramElement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Location;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.State;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.Statepath;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.AfterStatement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.FunctionCallStatement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.GotoStatement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.NextStatement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.statements.Statement;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoNumericValue;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoString;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoUnitValue;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoValue;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.FunctionCall;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoMacro;
 
 import java.util.HashMap;
+
+//import org.firstinspires.ftc.teamcode.auxilary.buildhistory.BuildHistory;
 
 @SuppressWarnings("WrongPackageStatement")
 public class TestMacro__macro_autoauto extends AutoautoMacro {

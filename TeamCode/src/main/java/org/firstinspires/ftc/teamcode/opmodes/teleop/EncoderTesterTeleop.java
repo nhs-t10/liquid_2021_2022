@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
-import org.firstinspires.ftc.teamcode.managers.input.nodes.ButtonNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.JoystickNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -36,8 +34,13 @@ import org.junit.Test;
 public class EncoderTesterTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    ModernRoboticsI2cRangeSensor rangeSensor;
+    Rev2mDistanceSensor frontDist;
+    Rev2mDistanceSensor backDist;
     private InputManager input;
+    final int flStart = driver.flGetTicks();
+    final int frStart = driver.frGetTicks();
+    final int blStart = driver.blGetTicks();
+    final int brStart = driver.brGetTicks();
 
 
     ElapsedTime timer;
@@ -64,7 +67,8 @@ public class EncoderTesterTeleop extends OpMode {
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         DcMotor is = hardwareMap.get(DcMotor.class, "is");
         Servo it = hardwareMap.get(Servo.class, "it");
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
+        frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
+        backDist = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
 
         driver = new MovementManager(fl, fr, br, bl);
 
@@ -102,9 +106,6 @@ public class EncoderTesterTeleop extends OpMode {
 
         // Toggle input motors
 
-        if (gamepad1.y) {
-            hands.setServoPosition("it", 0.2);
-        }
         if (gamepad1.b) {
             hands.setServoPosition("it", 0.216);
             delay(100);
@@ -117,6 +118,10 @@ public class EncoderTesterTeleop extends OpMode {
         }
 
         if (gamepad1.a) {
+            final int flStart = driver.flGetTicks();
+            final int frStart = driver.frGetTicks();
+            final int blStart = driver.blGetTicks();
+            final int brStart = driver.brGetTicks();
 
         }
 
@@ -130,15 +135,17 @@ public class EncoderTesterTeleop extends OpMode {
             driver.driveRaw(0f,0.5f,0,0);
         }
 
-         */
 
-        telemetry.addLine("Encoder Values");
+        telemetry.addLine("Encoder Values: ");
         telemetry.addData("fl pos", driver.flGetTicks());
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
-        telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM)); //cm distance
+        telemetry.addData("cm", "%.2f cm", frontDist.getDistance(DistanceUnit.CM));
+        telemetry.addData("cm", "%.2f cm", backDist.getDistance(DistanceUnit.CM)); //cm distance
         telemetry.update();
+
+         */
     }
 
     public void stop() {

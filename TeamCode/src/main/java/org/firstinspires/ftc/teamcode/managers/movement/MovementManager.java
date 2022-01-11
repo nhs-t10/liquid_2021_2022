@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.managers.movement;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
-import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
 
 /*
   ========== field data ==========
@@ -96,11 +93,8 @@ public class MovementManager extends FeatureManager {
 
     public void timeDriveRaw(double delay, float fl, float fr, float br, float bl) {
         double endTime = timer.milliseconds() + delay;
+        driveRaw(fl,fr,br,bl);
         while (timer.milliseconds() <= endTime) {
-            frontLeft.setPower(fl);
-            frontRight.setPower(fr);
-            backRight.setPower(br);
-            backLeft.setPower(bl);
         }
         stopDrive();
 

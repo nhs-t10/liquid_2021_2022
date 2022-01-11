@@ -78,10 +78,29 @@ public class ManipulationManager extends FeatureManager {
     }
     public void timeSetMotorPower(String name, double power, double delay) {
         double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
-            setMotorPower(name, power);
+        setMotorPower(name, power);
+        if (timer.milliseconds() >= endTime) {
+            setMotorPower(name, 0);
         }
-        setMotorPower(name, 0);
+
+
+    }
+
+    public int getPosition(String name) {
+        int index = (Arrays.asList(motorNames)).indexOf(name);
+        if(index == -1) throw new IllegalArgumentException("Motor " + name + " does not exist or is not registered");
+        return motors[index].getCurrentPosition();
+    }
+    public void autoTimeSetMotorPower(String name, double power, double delay, int step1) {
+        double endTime = timer.milliseconds() + delay;
+        setMotorPower(name, power);
+        if (timer.milliseconds() >= endTime) {
+            setMotorPower(name, 0);
+            step1++;
+
+        }
+
+
     }
 
     public double getMotorPower(String name) {

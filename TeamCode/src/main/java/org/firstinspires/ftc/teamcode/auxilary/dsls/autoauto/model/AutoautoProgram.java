@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model;
 
-import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoString;
+import com.google.firebase.database.annotations.NotNull;
+
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoNumericValue;
+import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.model.values.AutoautoString;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoRuntimeVariableScope;
 import org.firstinspires.ftc.teamcode.auxilary.dsls.autoauto.runtime.AutoautoSystemVariableNames;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
