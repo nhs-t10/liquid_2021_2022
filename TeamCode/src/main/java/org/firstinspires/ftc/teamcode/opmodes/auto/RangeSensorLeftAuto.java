@@ -65,8 +65,8 @@ public class RangeSensorLeftAuto extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "front_dist");
-        backDist = hardwareMap.get(Rev2mDistanceSensor.class, "back_dist");
+        frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
+        backDist = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
     }
     public void loop() {
         switch (step) {
