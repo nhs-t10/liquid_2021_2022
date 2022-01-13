@@ -38,6 +38,13 @@ public class RangeSensorRightAuto extends OpMode {
         driver.stopDrive();
     }
 
+    double smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
+        double num1, num2;
+        num1 = sens1.getDistance(DistanceUnit.CM);
+        num2 = sens2.getDistance(DistanceUnit.CM);
+        return Math.min(num1, num2);
+    }
+
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -60,6 +67,7 @@ public class RangeSensorRightAuto extends OpMode {
         frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "front_dist");
         backDist = hardwareMap.get(Rev2mDistanceSensor.class, "back_dist");
     }
+
     public void loop() {
         switch (step) {
             case(1):

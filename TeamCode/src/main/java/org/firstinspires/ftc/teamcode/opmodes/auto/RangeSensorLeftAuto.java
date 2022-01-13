@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
-
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
@@ -27,17 +27,22 @@ public class RangeSensorLeftAuto extends OpMode {
 
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
-        if (timer.milliseconds() >= endTime) {
-            step++;
-        }
+        while (timer.milliseconds() <= endTime) { }
     }
 
     public void driveToDist(Rev2mDistanceSensor sensor, float power, double cm) {
         driver.driveRaw(power, power, power, power);
-        if (sensor.getDistance(CM) <= cm) {
-            driver.stopDrive();
+        while (sensor.getDistance(DistanceUnit.CM) >= cm) {
+            //wait
         }
+        driver.stopDrive();
+    }
 
+    double smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
+        double num1, num2;
+        num1 = sens1.getDistance(DistanceUnit.CM);
+        num2 = sens2.getDistance(DistanceUnit.CM);
+        return Math.min(num1, num2);
     }
 
     public void init() {
@@ -56,32 +61,27 @@ public class RangeSensorLeftAuto extends OpMode {
                 new String[] {"fl", "fr", "br", "bl", "dw"}
         );
         driver = new MovementManager(fl, fr, br, bl);
+        driver.runUsingEncoders();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
+        frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "front_dist");
         backDist = hardwareMap.get(Rev2mDistanceSensor.class, "back_dist");
-        telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM));
-
     }
     public void loop() {
         switch (step) {
             case(1):
-                driver.driveRaw(0.2f,0.2f,0.2f,0.2f);
-                if (backDist.getDistance(CM) <= 22) {
-                    driver.stopDrive();
-                    step++;
-                }
+                driveToDist(backDist, 0.5f, 20);
+                step++;
                 break;
             case(2):
-                hands.setMotorPower("dw", 1);
-                if (hands.getPosition("dw") > 1500) {
-                    hands.setMotorPower("dw", 0);
-                    step++;
-
-                }
+                hands.setMotorPower("dw", 0.5);
+                delay(5000);
+                hands.setMotorPower("dw",0);
+                step++;
                 break;
             case(3):
-                driver.timeDriveRaw(5000, -0.5f, -0.5f, -0.5f, -0.5f);
+                driveToDist(frontDist, -0.5f, 20);
                 step++;
                 break;
             case(4):
@@ -89,8 +89,6 @@ public class RangeSensorLeftAuto extends OpMode {
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
                 telemetry.update();
-                step++;
-                break;
         }
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
@@ -101,11 +99,11 @@ public class RangeSensorLeftAuto extends OpMode {
         //telemetry.addData("front raw ultrasonic", frontDist.rawUltrasonic()); //ultrasonic data
         //telemetry.addData("front raw optical", frontDist.rawOptical()); //optical data
         //telemetry.addData("front cm optical", "%.2f cm", frontDist.cmOptical()); //cm distance? todo learn more
-        //telemetry.addData("front cm", "%.2f cm", frontDist.getDistance(DistanceUnit.CM)); //cm distance
+        telemetry.addData("front cm", "%.2f cm", frontDist.getDistance(DistanceUnit.CM)); //cm distance
         //telemetry.addData("back raw ultrasonic", backDist.rawUltrasonic()); //ultrasonic data
         //telemetry.addData("back raw optical", backDist.rawOptical()); //optical data
         //telemetry.addData("back cm optical", "%.2f cm", backDist.cmOptical()); //cm distance? todo learn more
-        telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM)); //cm distance
+        telemetry.addData("back cm", "%.2f cm", backDist.getDistance(DistanceUnit.CM)); //cm distance
         telemetry.update();
     }
 }
