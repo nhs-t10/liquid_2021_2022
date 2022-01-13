@@ -61,15 +61,15 @@ public class CorbinTeleop extends OpMode {
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         DcMotor is = hardwareMap.get(DcMotor.class, "is");
-        Servo in_servo_l = hardwareMap.get(Servo.class, "isl");
-        Servo in_servo_r = hardwareMap.get(Servo.class, "isr");
+        Servo isl = hardwareMap.get(Servo.class, "isl");
+        Servo isr = hardwareMap.get(Servo.class, "isr");
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
             new CRServo[] {},
             new String[] {},
-            new Servo[] {in_servo_l, in_servo_r},
+            new Servo[] {isl, isr},
             new String[] {"it"},
             new DcMotor[] {fl, fr, br, bl, dw, is},
             new String[] {"fl", "fr", "br", "bl", "dw", "is"}
