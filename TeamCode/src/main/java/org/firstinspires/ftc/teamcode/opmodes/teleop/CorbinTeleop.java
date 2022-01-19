@@ -60,19 +60,20 @@ public class CorbinTeleop extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        DcMotor is = hardwareMap.get(DcMotor.class, "is");
-        Servo isl = hardwareMap.get(Servo.class, "isl");
-        Servo isr = hardwareMap.get(Servo.class, "isr");
+        //Servo isl = hardwareMap.get(Servo.class, "isl");
+        //Servo isr = hardwareMap.get(Servo.class, "isr");
+        Servo is = hardwareMap.get(Servo.class, "is");
+
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
             new CRServo[] {},
             new String[] {},
-            new Servo[] {isl, isr},
-            new String[] {"it"},
-            new DcMotor[] {fl, fr, br, bl, dw, is},
-            new String[] {"fl", "fr", "br", "bl", "dw", "is"}
+            new Servo[] {is},
+            new String[] {"is"},
+            new DcMotor[] {fl, fr, br, bl, dw},
+            new String[] {"fl", "fr", "br", "bl", "dw"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -113,15 +114,11 @@ public class CorbinTeleop extends OpMode {
 
         if (input.getBool("duckWheelRight")) {
             hands.setMotorPower("dw", -1);
-        } else if (!input.getBool("duckWheelRight")) {
-            hands.timeSetMotorPower("dw", 0.15, 100);
         } else {
             hands.setMotorPower("dw", 0);
         }
         if (input.getBool("duckWheelLeft")) {
             hands.setMotorPower("dw", 1);
-        } else if (!input.getBool("duckWheelLeft")) {
-            hands.timeSetMotorPower("dw", -0.15, 100);
         } else {
             hands.setMotorPower("dw", 0);
         }
@@ -134,9 +131,11 @@ public class CorbinTeleop extends OpMode {
             rBumperDown = false;
         }
         if (rintakeRunning) {
-            hands.setMotorPower("is", 1);
+            //hands.setServoPower("isl", 1);
+            //hands.setServoPower("isr", -1);
         } else {
-            hands.setMotorPower("is", 0);
+            //hands.setServoPower("isl", 0);
+            //hands.setServoPower("isr", 0);
         }
 
         if (gamepad1.left_bumper && !lBumperDown) {
@@ -146,28 +145,20 @@ public class CorbinTeleop extends OpMode {
             lBumperDown = false;
         }
         if (lintakeRunning) {
-            hands.setMotorPower("is", -1);
+            //hands.setServoPower("isl", -1);
+            //hands.setServoPower("isr", 1);
         } else {
-            hands.setMotorPower("is", 0);
-        }
-        // Toggle input tray todo correct position numbers
-        if (gamepad1.y) {
-            hands.setServoPosition("isl", 0.2);
-            hands.setServoPosition("isr", 0.2);
+            //hands.setServoPower("isl", 0);
+            //hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("isl", 0.216);
-            hands.setServoPosition("isr", 0.216);
+            hands.setServoPosition("is", 0.216);
             delay(100);
-            hands.setServoPosition("isl", 0.429);
-            hands.setServoPosition("isr", 0.429);
+            hands.setServoPosition("is", 0.429);
             delay(100);
-            hands.setServoPosition("isl", 0.65);
-            hands.setServoPosition("isr", 0.65);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("isl", 0.4);
-            hands.setServoPosition("isr", 0.4);
+            hands.setServoPosition("is", 0.5);
         }
 
         telemetry.addLine("Encoder Values");

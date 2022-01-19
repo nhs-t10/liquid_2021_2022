@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
+
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -9,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
@@ -32,17 +32,23 @@ public class RangeSensorRightAuto extends OpMode {
 
     public void driveToDist(Rev2mDistanceSensor sensor, float power, double cm) {
         driver.driveRaw(power, power, power, power);
-        while (sensor.getDistance(DistanceUnit.CM) >= cm) {
+        while (sensor.getDistance(CM) >= cm) {
             //wait
         }
         driver.stopDrive();
     }
 
-    double smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
+    public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
         double num1, num2;
-        num1 = sens1.getDistance(DistanceUnit.CM);
-        num2 = sens2.getDistance(DistanceUnit.CM);
-        return Math.min(num1, num2);
+        num1 = sens1.getDistance(CM);
+        num2 = sens2.getDistance(CM);
+        if (num1>num2) {
+            return sens1;
+        }else if (num2>num1) {
+            return sens2;
+        }else {
+            return sens1;
+        }
     }
 
     public void init() {
@@ -95,9 +101,9 @@ public class RangeSensorRightAuto extends OpMode {
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
-        telemetry.addData("back cm", "%.2f cm", backDist.getDistance(DistanceUnit.CM)); //cm distance
+        telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM)); //cm distance
         telemetry.update();
-        telemetry.addData("back cm", "%.2f cm", frontDist.getDistance(DistanceUnit.CM)); //cm distance
+        telemetry.addData("back cm", "%.2f cm", frontDist.getDistance(CM)); //cm distance
         telemetry.update();
     }
 }
