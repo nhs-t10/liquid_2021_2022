@@ -60,8 +60,8 @@ public class CorbinTeleop extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        //Servo isl = hardwareMap.get(Servo.class, "isl");
-        //Servo isr = hardwareMap.get(Servo.class, "isr");
+        Servo isl = hardwareMap.get(Servo.class, "isl");
+        Servo isr = hardwareMap.get(Servo.class, "isr");
         Servo is = hardwareMap.get(Servo.class, "is");
 
 
@@ -70,8 +70,8 @@ public class CorbinTeleop extends OpMode {
         hands = new ManipulationManager(
             new CRServo[] {},
             new String[] {},
-            new Servo[] {is},
-            new String[] {"is"},
+            new Servo[] {is, isl, isr},
+            new String[] {"is", "isl", "isr"},
             new DcMotor[] {fl, fr, br, bl, dw},
             new String[] {"fl", "fr", "br", "bl", "dw"}
         );
@@ -112,14 +112,14 @@ public class CorbinTeleop extends OpMode {
         driver.downScale(0.5f);
         driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
-        if (input.getBool("duckWheelRight")) {
+        if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
-        } else {
+        } else if (gamepad1.right_trigger == 0f) {
             hands.setMotorPower("dw", 0);
         }
-        if (input.getBool("duckWheelLeft")) {
+        if (gamepad1.left_trigger > 0f) {
             hands.setMotorPower("dw", 1);
-        } else {
+        } else if (gamepad1.left_trigger == 0f){
             hands.setMotorPower("dw", 0);
         }
 
@@ -131,11 +131,11 @@ public class CorbinTeleop extends OpMode {
             rBumperDown = false;
         }
         if (rintakeRunning) {
-            //hands.setServoPower("isl", 1);
-            //hands.setServoPower("isr", -1);
+            hands.setServoPower("isl", 1);
+            hands.setServoPower("isr", -1);
         } else {
-            //hands.setServoPower("isl", 0);
-            //hands.setServoPower("isr", 0);
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
         }
 
         if (gamepad1.left_bumper && !lBumperDown) {
@@ -145,11 +145,11 @@ public class CorbinTeleop extends OpMode {
             lBumperDown = false;
         }
         if (lintakeRunning) {
-            //hands.setServoPower("isl", -1);
-            //hands.setServoPower("isr", 1);
+            hands.setServoPower("isl", -1);
+            hands.setServoPower("isr", 1);
         } else {
-            //hands.setServoPower("isl", 0);
-            //hands.setServoPower("isr", 0);
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
             hands.setServoPosition("is", 0.216);

@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class FeatureManager {
 
     public final static float SPEED = 0.6f;
-    public final static int TICK_PER_ROT = 1680;
+    public final static int TICK_PER_ROT = 560;
 
     public final static float P = 0.03f;
     public final static double ENCODER_CPR = 537.6;
