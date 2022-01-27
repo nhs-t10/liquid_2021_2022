@@ -23,11 +23,27 @@ public class RangeSensorLeftAuto extends OpMode {
     Rev2mDistanceSensor frontDist;
     Rev2mDistanceSensor backDist;
     int step = 1;
-    ElapsedTime timer;
+    public ElapsedTime timer = new ElapsedTime(); ;
+    int delayStep = -1;
+    double endTime = timer.milliseconds();
 
-    public void delay(double delay) {
-        double endTime = timer.milliseconds() + delay;
+    public void delayDwStop(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
         if (timer.milliseconds() >= endTime) {
+            driver.stopDrive();
+            step++;
+        }
+    }
+    public void delayDriverStop(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            hands.setMotorPower("dw", 0);
             step++;
         }
     }
@@ -40,6 +56,20 @@ public class RangeSensorLeftAuto extends OpMode {
 
     }
 
+    public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
+        double num1, num2;
+        num1 = sens1.getDistance(CM);
+        num2 = sens2.getDistance(CM);
+        if (num1>num2) {
+            return sens1;
+        }else if (num2>num1) {
+            return sens2;
+        }else {
+            return sens1;
+        }
+    }
+
+
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -47,19 +77,25 @@ public class RangeSensorLeftAuto extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+                        Servo ill = hardwareMap.get(Servo.class, "ill");
+        Servo ilr = hardwareMap.get(Servo.class, "ilr");
+        CRServo isl = hardwareMap.get(CRServo.class, "isl");
+        CRServo isr = hardwareMap.get(CRServo.class, "isr");
         hands = new ManipulationManager(
-                new CRServo[] {},
-                new String[] {},
-                new Servo[] {},
-                new String[] {},
+                new CRServo[] {isl, isr},
+                new String[] {"isl", "isr"},
+                new Servo[] {ill, ilr},
+                new String[] {"ill", "ilr"},
                 new DcMotor[] {fl, fr, br, bl, dw},
                 new String[] {"fl", "fr", "br", "bl", "dw"}
         );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        timer = new ElapsedTime();
-        backDist = hardwareMap.get(Rev2mDistanceSensor.class, "back_dist");
+        hands.setServoPosition("ill", 0.4);
+        hands.setServoPosition("ilr", 0.4);
+        frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
+        backDist = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
         telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
 
@@ -68,21 +104,18 @@ public class RangeSensorLeftAuto extends OpMode {
         switch (step) {
             case(1):
                 driver.driveRaw(0.2f,0.2f,0.2f,0.2f);
-                if (backDist.getDistance(CM) <= 22) {
-                    driver.stopDrive();
+                if (frontDist.getDistance(CM) <= 22.6) {
                     step++;
                 }
                 break;
             case(2):
-                hands.setMotorPower("dw", 1);
-                if (hands.getPosition("dw") > 1500) {
-                    hands.setMotorPower("dw", 0);
-                    step++;
 
-                }
+                hands.setMotorPower("dw", 1);
+                delayDwStop(5000);
                 break;
             case(3):
-                driver.timeDriveRaw(5000, -0.5f, -0.5f, -0.5f, -0.5f);
+                driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);
+                delayDriverStop(4000);
                 step++;
                 break;
             case(4):
@@ -107,6 +140,7 @@ public class RangeSensorLeftAuto extends OpMode {
         //telemetry.addData("back raw optical", backDist.rawOptical()); //optical data
         //telemetry.addData("back cm optical", "%.2f cm", backDist.cmOptical()); //cm distance? todo learn more
         telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM)); //cm distance
+        telemetry.addData("front cm", "%.2f cm", frontDist.getDistance(CM));
         telemetry.update();
     }
 }

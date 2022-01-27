@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
-import org.firstinspires.ftc.teamcode.managers.input.nodes.ButtonNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.JoystickNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -19,6 +19,8 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyGamepad;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyHardwareMap;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+
 
 /*
 * A: Turn 180
@@ -31,7 +33,7 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class CorbinTeleop extends OpMode {
+public class Slip extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
@@ -39,6 +41,7 @@ public class CorbinTeleop extends OpMode {
     private boolean lintakeRunning = false;
     private boolean rBumperDown = false;
     private boolean lBumperDown = false;
+    ModernRoboticsI2cRangeSensor rangeSensor;
 
     ElapsedTime timer;
     public void delay(double delay) {
@@ -60,19 +63,18 @@ public class CorbinTeleop extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        CRServo isl = hardwareMap.get(CRServo.class, "isl");
-        CRServo isr = hardwareMap.get(CRServo.class, "isr");
-        Servo ill = hardwareMap.get(Servo.class, "ill");
-        Servo ilr = hardwareMap.get(Servo.class, "ilr");
+        //Servo isl = hardwareMap.get(Servo.class, "isl");
+        //Servo isr = hardwareMap.get(Servo.class, "isr");
+        Servo is = hardwareMap.get(Servo.class, "is");
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-            new CRServo[] {isl, isr},
-            new String[] {"isl", "isr"},
-            new Servo[] {ill, ilr},
-            new String[] {"ill", "ilr"},
+            new CRServo[] {},
+            new String[] {},
+            new Servo[] {is},
+            new String[] {"is"},
             new DcMotor[] {fl, fr, br, bl, dw},
             new String[] {"fl", "fr", "br", "bl", "dw"}
         );
@@ -88,23 +90,18 @@ public class CorbinTeleop extends OpMode {
                 )
         );
 
-        input.registerInput("toggleTray",
-                new ButtonNode("left_bumper")
-        );
-        input.registerInput("toggleIn",
-                new ButtonNode("right_bumper")
-        );
-        input.registerInput("duckWheelRight",
-                new ButtonNode("right_trigger")
-        );
-        input.registerInput("duckWheelLeft",
-                new ButtonNode("left_trigger")
-        );
-        input.registerInput("spin",
-                new ButtonNode("a")
-        );
+
         driver.setDirection();
     }
+
+    public void driveToDistanceForward(float power, double cm) {
+        driver.driveRaw(power, power, power, power);
+        while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
+            //wait
+        }
+        driver.stopDrive();
+    }
+
 
     @Override
     public void loop() {
@@ -113,57 +110,21 @@ public class CorbinTeleop extends OpMode {
         driver.downScale(0.5f);
         driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
-        if (gamepad1.right_trigger > 0f) {
-            hands.setMotorPower("dw", -1);
-        } else if (gamepad1.right_trigger == 0f) {
-            hands.setMotorPower("dw", 0);
-        }
-        if (gamepad1.left_trigger > 0f) {
-            hands.setMotorPower("dw", 1);
-        } else if (gamepad1.left_trigger == 0f){
-            hands.setMotorPower("dw", 0);
+
+
+        if (gamepad1.a) {
+            driver.resetEncoders();
+            driveToDistanceForward(0.5f, 5);
+            telemetry.addData("encoder", driver.flGetTicks());
+            telemetry.addLine("5cm");
+            //todo: ([encoder value] / 548.8) * 31.4 / [slip] = 5
+            //todo: or, [slip] = ([encoder value] / 548.8) * 31.4 / 5
+            // todo: or, [slip] = [encoder value] * 0.0114431487
+        double encoders = driver.flGetTicks();
+        double slip = encoders * 0.0114431487;
+        telemetry.addData("slip", "double", slip);
         }
 
-        // Toggle input motors
-        if (gamepad1.right_bumper && !rBumperDown) {
-            rBumperDown = true;
-            rintakeRunning = !rintakeRunning;
-        } else if (!gamepad1.right_bumper && rBumperDown) {
-            rBumperDown = false;
-        }
-        if (rintakeRunning) {
-            hands.setServoPower("isl",1);
-            hands.setServoPower("isr", -1);
-        } else {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        }
-
-        if (gamepad1.left_bumper && !lBumperDown) {
-            lBumperDown = true;
-            lintakeRunning = !lintakeRunning;
-        } else if (!gamepad1.left_bumper && lBumperDown) {
-            lBumperDown = false;
-        }
-        if (lintakeRunning) {
-            hands.setServoPower("isl",-1);
-            hands.setServoPower("isr", 1);
-        } else {
-            hands.setServoPower("isl",0);
-            hands.setServoPower("isr", 0);
-        }
-        if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.216);
-            hands.setServoPosition("ilr", 0.216);
-            delay(100);
-            hands.setServoPosition("ill", -0.216);
-            hands.setServoPosition("ilr", -0.216);
-            delay(100);
-        }
-        if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.5);
-            hands.setServoPosition("ilr", 0.5);
-        }
 
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
