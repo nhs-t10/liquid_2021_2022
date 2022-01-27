@@ -119,11 +119,11 @@ public class TestBotTeleOp extends OpMode {
         if (input.getBool("intake up") && intakedown) {
             hands.setServoPosition("isl", 2); // todo: update intake system for correct position
             hands.setServoPosition("isr", 2);
-            intakedown = !intakedown
+            intakedown = !intakedown;
         } else if (input.getBool("intake down") && !intakedown) {
             hands.setServoPosition("isl", 1);
             hands.setServoPosition("isr", 1);
-            intakedown = !intakedown
+            intakedown = !intakedown;
         }
 
         telemetry.addLine("Encoder Values");
