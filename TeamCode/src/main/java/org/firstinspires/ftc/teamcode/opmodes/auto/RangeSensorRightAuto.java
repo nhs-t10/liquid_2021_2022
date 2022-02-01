@@ -114,7 +114,7 @@ public class RangeSensorRightAuto extends OpMode {
                 break;
             case(3):
                 driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);
-                delayDriverStop(4000);
+                delayDriverStop(2500);
                 step++;
                 break;
             case(4):
