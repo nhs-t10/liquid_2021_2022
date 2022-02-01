@@ -27,7 +27,7 @@ public class RangeSensorLeftAuto extends OpMode {
     int delayStep = -1;
     double endTime = timer.milliseconds();
 
-    public void delayDwStop(double delay) {
+    public void delayDriveStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
             endTime = timer.milliseconds() + delay;
@@ -37,7 +37,7 @@ public class RangeSensorLeftAuto extends OpMode {
             step++;
         }
     }
-    public void delayDriverStop(double delay) {
+    public void delayDwStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
             endTime = timer.milliseconds() + delay;
@@ -52,6 +52,7 @@ public class RangeSensorLeftAuto extends OpMode {
         driver.driveRaw(power, power, power, power);
         if (sensor.getDistance(CM) <= cm) {
             driver.stopDrive();
+            step++;
         }
 
     }
@@ -92,11 +93,12 @@ public class RangeSensorLeftAuto extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
+        hands.setServoPosition("ill", 0.5);
+        hands.setServoPosition("ilr", 0.5);
         frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
         backDist = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
         telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM));
+        telemetry.addData("back cm", "%.2f cm", frontDist.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
 
     }
@@ -104,7 +106,8 @@ public class RangeSensorLeftAuto extends OpMode {
         switch (step) {
             case(1):
                 driver.driveRaw(0.2f,0.2f,0.2f,0.2f);
-                if (frontDist.getDistance(CM) <= 22.6) {
+                if (frontDist.getDistance(CM) <= 22.6 || backDist.getDistance(CM) <= 22.6) {
+                    driver.driveRaw(0.2f,0.2f,0.2f,0.2f);
                     step++;
                 }
                 break;
@@ -115,8 +118,7 @@ public class RangeSensorLeftAuto extends OpMode {
                 break;
             case(3):
                 driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);
-                delayDriverStop(4000);
-                step++;
+                delayDriveStop(2500);
                 break;
             case(4):
                 telemetry.addLine("Autonomous Complete");

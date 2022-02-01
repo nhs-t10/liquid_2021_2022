@@ -111,7 +111,7 @@ public class CorbinTeleop extends OpMode {
         input.update();
 
         driver.downScale(0.5f);
-        driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
+        driver.testDriveOmni(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
         if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
@@ -124,6 +124,7 @@ public class CorbinTeleop extends OpMode {
             hands.setMotorPower("dw", 0);
         }
 
+
         // Toggle input motors
         if (gamepad1.right_bumper && !rBumperDown) {
             rBumperDown = true;
@@ -131,14 +132,6 @@ public class CorbinTeleop extends OpMode {
         } else if (!gamepad1.right_bumper && rBumperDown) {
             rBumperDown = false;
         }
-        if (rintakeRunning) {
-            hands.setServoPower("isl",1);
-            hands.setServoPower("isr", -1);
-        } else {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        }
-
         if (gamepad1.left_bumper && !lBumperDown) {
             lBumperDown = true;
             lintakeRunning = !lintakeRunning;
@@ -146,23 +139,23 @@ public class CorbinTeleop extends OpMode {
             lBumperDown = false;
         }
         if (lintakeRunning) {
-            hands.setServoPower("isl",-1);
-            hands.setServoPower("isr", 1);
-        } else {
-            hands.setServoPower("isl",0);
+            hands.setServoPower("isl", 1);
+            hands.setServoPower("isr", -1);
+        } else if (!lintakeRunning && !rintakeRunning) {
+            hands.setServoPower("isl", 0);
             hands.setServoPower("isr", 0);
+        } else if (rintakeRunning) {
+            hands.setServoPower("isl", -1);
+            hands.setServoPower("isr", 1);
         }
+
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.216);
-            hands.setServoPosition("ilr", 0.216);
-            delay(100);
-            hands.setServoPosition("ill", -0.216);
-            hands.setServoPosition("ilr", -0.216);
-            delay(100);
+            hands.setServoPosition("ill", 1);
+            hands.setServoPosition("ilr", 0);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.5);
-            hands.setServoPosition("ilr", 0.5);
+            hands.setServoPosition("ill", 0.75);
+            hands.setServoPosition("ilr", 0.25);
         }
 
         telemetry.addLine("Encoder Values");
