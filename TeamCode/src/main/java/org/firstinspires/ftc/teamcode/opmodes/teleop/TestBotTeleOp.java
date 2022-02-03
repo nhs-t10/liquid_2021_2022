@@ -21,17 +21,17 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
 
 /*
-* A: Turn 180
-* LB: Toggle Servo
-* RB: Toggle Intake Motors
-* L2: Duck Wheel Left
-* R2: Duck Wheel Right
-* LStick: Omni
-* RStick: X: turn
-*/
+ * A: Turn 180
+ * LB: Toggle Servo
+ * RB: Toggle Intake Motors
+ * L2: Duck Wheel Left
+ * R2: Duck Wheel Right
+ * LStick: Omni
+ * RStick: X: turn
+ */
 
 @TeleOp
-public class CorbinTeleop extends OpMode {
+public class TestBotTeleOp extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
@@ -39,7 +39,7 @@ public class CorbinTeleop extends OpMode {
     private boolean lintakeRunning = false;
     private boolean rBumperDown = false;
     private boolean lBumperDown = false;
-
+    boolean intakedown = true;
     ElapsedTime timer;
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
@@ -59,22 +59,20 @@ public class CorbinTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        CRServo isl = hardwareMap.get(CRServo.class, "isl");
-        CRServo isr = hardwareMap.get(CRServo.class, "isr");
-        Servo ill = hardwareMap.get(Servo.class, "ill");
-        Servo ilr = hardwareMap.get(Servo.class, "ilr");
+        Servo isl = hardwareMap.get(Servo.class, "isl");
+        Servo isr = hardwareMap.get(Servo.class, "isr");
+        DcMotor is = hardwareMap.get(DcMotor.class, "is");
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-            new CRServo[] {isl, isr},
-            new String[] {"isl", "isr"},
-            new Servo[] {ill, ilr},
-            new String[] {"ill", "ilr"},
-            new DcMotor[] {fl, fr, br, bl, dw},
-            new String[] {"fl", "fr", "br", "bl", "dw"}
+                new CRServo[] {},
+                new String[] {},
+                new Servo[] {isl, isr},
+                new String[] {"isl", "isr"},
+                new DcMotor[] {fl, fr, br, bl, is},
+                new String[] {"fl", "fr", "br", "bl", "is"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -88,20 +86,17 @@ public class CorbinTeleop extends OpMode {
                 )
         );
 
-        input.registerInput("toggleTray",
+        input.registerInput("intake down",
                 new ButtonNode("left_bumper")
         );
-        input.registerInput("toggleIn",
+        input.registerInput("intake up",
                 new ButtonNode("right_bumper")
         );
-        input.registerInput("duckWheelRight",
+        input.registerInput("intake",
                 new ButtonNode("right_trigger")
         );
-        input.registerInput("duckWheelLeft",
+        input.registerInput("outtake",
                 new ButtonNode("left_trigger")
-        );
-        input.registerInput("spin",
-                new ButtonNode("a")
         );
         driver.setDirection();
     }
@@ -111,51 +106,24 @@ public class CorbinTeleop extends OpMode {
         input.update();
 
         driver.downScale(0.5f);
-        driver.testDriveOmni(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
+        driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
-        if (gamepad1.right_trigger > 0f) {
-            hands.setMotorPower("dw", -1);
-        } else if (gamepad1.right_trigger == 0f) {
-            hands.setMotorPower("dw", 0);
-        }
-        if (gamepad1.left_trigger > 0f) {
-            hands.setMotorPower("dw", 1);
-        } else if (gamepad1.left_trigger == 0f){
-            hands.setMotorPower("dw", 0);
+        if (input.getBool("intake")) {
+            hands.setMotorPower("is", -1);
+        } else if (input.getBool("outtake")) {
+            hands.setMotorPower("is", 1);
+        } else {
+            hands.setMotorPower("is", 0);
         }
 
-
-        // Toggle input motors
-        if (gamepad1.right_bumper && !rBumperDown) {
-            rBumperDown = true;
-            rintakeRunning = !rintakeRunning;
-        } else if (!gamepad1.right_bumper && rBumperDown) {
-            rBumperDown = false;
-        }
-        if (gamepad1.left_bumper && !lBumperDown) {
-            lBumperDown = true;
-            lintakeRunning = !lintakeRunning;
-        } else if (!gamepad1.left_bumper && lBumperDown) {
-            lBumperDown = false;
-        }
-        if (lintakeRunning) {
-            hands.setServoPower("isl", 1);
-            hands.setServoPower("isr", -1);
-        } else if (!lintakeRunning && !rintakeRunning) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        } else if (rintakeRunning) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        }
-
-        if (gamepad1.b) {
-            hands.setServoPosition("ill", 1);
-            hands.setServoPosition("ilr", 0);
-        }
-        if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.75);
-            hands.setServoPosition("ilr", 0.25);
+        if (input.getBool("intake up") && intakedown) {
+            hands.setServoPosition("isl", 2); // todo: update intake system for correct position
+            hands.setServoPosition("isr", 2);
+            intakedown = !intakedown;
+        } else if (input.getBool("intake down") && !intakedown) {
+            hands.setServoPosition("isl", 1);
+            hands.setServoPosition("isr", 1);
+            intakedown = !intakedown;
         }
 
         telemetry.addLine("Encoder Values");
