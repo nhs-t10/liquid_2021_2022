@@ -21,13 +21,12 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
 
 /*
- * A: Turn 180
  * LB: Toggle Servo
  * RB: Toggle Intake Motors
- * L2: Duck Wheel Left
- * R2: Duck Wheel Right
+ * LT: Outtake
+ * RT: Intake
  * LStick: Omni
- * RStick: X: turn
+ * RStick: turn
  */
 
 @TeleOp
@@ -35,10 +34,6 @@ public class TestBotTeleOp extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private boolean rintakeRunning = false;
-    private boolean lintakeRunning = false;
-    private boolean rBumperDown = false;
-    private boolean lBumperDown = false;
     boolean intakedown = true;
     ElapsedTime timer;
     public void delay(double delay) {
@@ -116,13 +111,16 @@ public class TestBotTeleOp extends OpMode {
             hands.setMotorPower("is", 0);
         }
 
+
         if (input.getBool("intake up") && intakedown) {
-            hands.setServoPosition("isl", 2); // todo: update intake system for correct position
-            hands.setServoPosition("isr", 2);
+            hands.setServoPower("isl", 1); // todo: update intake system for correct position
+            hands.setServoPower("isr", 1);
+            delay(500);
             intakedown = !intakedown;
         } else if (input.getBool("intake down") && !intakedown) {
-            hands.setServoPosition("isl", 1);
-            hands.setServoPosition("isr", 1);
+            hands.setServoPower("isl", -1); // todo: update intake system for correct position
+            hands.setServoPower("isr", -1);
+            delay(500);
             intakedown = !intakedown;
         }
 
