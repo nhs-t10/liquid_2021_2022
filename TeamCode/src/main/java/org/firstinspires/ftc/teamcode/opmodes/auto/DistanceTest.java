@@ -1,31 +1,17 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static com.google.blocks.ftcrobotcontroller.hardware.HardwareType.BNO055IMU;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
-import org.firstinspires.ftc.teamcode.managers.FeatureManager;
-
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsAnalogOpticalDistanceSensor;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
 import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
@@ -35,7 +21,10 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class DistanceTest extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    Rev2mDistanceSensor rangeSensor;
+    Rev2mDistanceSensor backDist2;
+    Rev2mDistanceSensor backDist1;
+    Rev2mDistanceSensor leftDist2;
+    Rev2mDistanceSensor leftDist1;
     int step = 1;
     ElapsedTime timer;
 
@@ -44,20 +33,7 @@ public class DistanceTest extends OpMode {
         while (timer.milliseconds() <= endTime) { }
     }
 
-    public void driveToDistanceForward(float power, double cm) {
-        driver.driveRaw(power, power, power, power);
-        while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
-            //wait
-        }
-        driver.stopDrive();
-    }
-    public void driveToDistanceBackward(float power, double cm) {
-        driver.driveRaw(power, power, power, power);
-        while (rangeSensor.getDistance(DistanceUnit.CM) <= cm) {
-            //wait
-        }
-        driver.stopDrive();
-    }
+
 
     public void init() {
         FeatureManager.setIsOpModeRunning(true);
@@ -78,12 +54,16 @@ public class DistanceTest extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "rangeSensor");
+        backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
+        backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
+        leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
+        leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
     }
     public void loop() {
         switch (step) {
             case(1):
-                telemetry.addData("distance", (rangeSensor.getDistance(DistanceUnit.CM)));
+                telemetry.addData("back cm", "%.2f cm", backDist2.getDistance(CM)); //cm distance
+                telemetry.addData("front cm", "%.2f cm", backDist1.getDistance(CM));
             case(2):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
@@ -96,7 +76,10 @@ public class DistanceTest extends OpMode {
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
-        telemetry.addData("range", String.format("%.01f cm", rangeSensor.getDistance(DistanceUnit.CM)));
+        telemetry.addData("back range", String.format("%.01f cm", backDist2.getDistance(DistanceUnit.CM)));
+        telemetry.addData("back range", String.format("%.01f cm", backDist1.getDistance(DistanceUnit.CM)));
+        telemetry.addData("left range", String.format("%.01f cm", leftDist2.getDistance(DistanceUnit.CM)));
+        telemetry.addData("left range", String.format("%.01f cm", leftDist1.getDistance(DistanceUnit.CM)));
         telemetry.update();
     }
 

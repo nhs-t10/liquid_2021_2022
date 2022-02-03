@@ -29,6 +29,7 @@ public class MovementManager extends FeatureManager {
 
 
     private static float scale = 1f;
+    private static double betterscale = 1;
 
     /**
      * Create a MovementManager with four motors.
@@ -115,17 +116,17 @@ public class MovementManager extends FeatureManager {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void testDriveOmni(float y, float x, float rx) {
+    public void testDriveOmni(double y, double x, double rx) {
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double flPower = (y + x + rx)/maxValue;
         double blPower = (y - x + rx) / maxValue;
         double frPower = (y - x - rx) / maxValue;
         double brPower = (y + x - rx) / maxValue;
 
-        frontLeft.setPower(flPower * scale);
-        frontRight.setPower(frPower * scale);
-        backRight.setPower(brPower * scale);
-        backLeft.setPower(blPower * scale);
+        frontLeft.setPower(flPower);
+        frontRight.setPower(frPower);
+        backRight.setPower(brPower);
+        backLeft.setPower(blPower);
     }
 
 
@@ -237,14 +238,16 @@ public class MovementManager extends FeatureManager {
         }
         stopDrive();
     }
+
     public void driveOmni(float[] powers) {
         float[] sum = PaulMath.omniCalc(powers[0]*scale, powers[1]*scale, powers[2] * scale);
         driveRaw(sum[0], sum[1], sum[2], sum[3]);
     }
+
+
     public void driveOmni(float v, float h, float r) {
         driveOmni(new float[] {v, h, r});
     }
-
     public void driveOmniExponential(float[] powers) {
         float[] sum = PaulMath.omniCalc(
                 (float) Math.pow(powers[0], EXPONENTIAL_SCALAR),
@@ -263,14 +266,14 @@ public class MovementManager extends FeatureManager {
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    public float getScale(){
-        return scale;
+    public double getScale(){
+        return betterscale;
     }
-    public void upScale(float ScaleFactor){
-        scale+=ScaleFactor;
+    public void upScale(double ScaleFactor){
+        betterscale+=ScaleFactor;
     }
-    public void downScale(float ScaleFactor){
-        scale-=ScaleFactor;
+    public void downScale(double ScaleFactor){
+        betterscale-=ScaleFactor;
     }
 
     public float[] getMotorPositions() {

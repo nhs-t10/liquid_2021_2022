@@ -78,7 +78,7 @@ public class RangeSensorLeftAuto extends OpMode {
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
         DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-                        Servo ill = hardwareMap.get(Servo.class, "ill");
+        Servo ill = hardwareMap.get(Servo.class, "ill");
         Servo ilr = hardwareMap.get(Servo.class, "ilr");
         CRServo isl = hardwareMap.get(CRServo.class, "isl");
         CRServo isr = hardwareMap.get(CRServo.class, "isr");
@@ -98,7 +98,7 @@ public class RangeSensorLeftAuto extends OpMode {
         frontDist = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
         backDist = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
         telemetry.addData("back cm", "%.2f cm", backDist.getDistance(CM));
-        telemetry.addData("back cm", "%.2f cm", frontDist.getDistance(CM));
+        telemetry.addData("front cm", "%.2f cm", frontDist.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
 
     }

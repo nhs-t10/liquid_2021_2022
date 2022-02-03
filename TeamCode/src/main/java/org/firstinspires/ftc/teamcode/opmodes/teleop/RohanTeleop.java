@@ -31,7 +31,7 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class CorbinTeleop extends OpMode {
+public class RohanTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
@@ -104,14 +104,17 @@ public class CorbinTeleop extends OpMode {
                 new ButtonNode("a")
         );
         driver.setDirection();
+
+
     }
 
     @Override
     public void loop() {
         input.update();
-
-        driver.downScale(0.5f);
-        driver.testDriveOmni(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
+        telemetry.addLine("l Stick Values");
+        telemetry.addData("lStickX", gamepad1.left_stick_x);
+        telemetry.addData("lStickY", gamepad1.left_stick_y);
+        driver.testDriveOmni(gamepad1.left_stick_y/2.0, -gamepad1.left_stick_x/2.0, -gamepad1.right_stick_x/2.0);
 
         if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
@@ -150,12 +153,12 @@ public class CorbinTeleop extends OpMode {
         }
 
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 1);
-            hands.setServoPosition("ilr", 0);
+            hands.setServoPosition("ill", 0.95);
+            hands.setServoPosition("ilr", 0.05);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.75);
-            hands.setServoPosition("ilr", 0.25);
+            hands.setServoPosition("ill", 0.65);
+            hands.setServoPosition("ilr", 0.35);
         }
 
         telemetry.addLine("Encoder Values");
