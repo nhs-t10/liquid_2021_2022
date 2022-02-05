@@ -28,6 +28,10 @@ public class RangeSensorRightAuto extends OpMode {
     public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
     double endTime = timer.milliseconds();
+    double initDist1;
+    double initDist2;
+
+
 
     public void delayDwStop(double delay) {
         if (delayStep != step) {
@@ -35,17 +39,17 @@ public class RangeSensorRightAuto extends OpMode {
             endTime = timer.milliseconds() + delay;
         }
         if (timer.milliseconds() >= endTime) {
-            driver.stopDrive();
+            hands.setMotorPower("dw", 0);
             step++;
         }
     }
-    public void delayDriverStop(double delay) {
+    public void delayDriveStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
             endTime = timer.milliseconds() + delay;
         }
         if (timer.milliseconds() >= endTime) {
-            hands.setMotorPower("dw", 0);
+            driver.stopDrive();
             step++;
         }
     }
@@ -96,8 +100,8 @@ public class RangeSensorRightAuto extends OpMode {
         driver.setDirection();
         hands.setServoPosition("ill", 0.4);
         hands.setServoPosition("ilr", 0.4);
-        backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist");
-        backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "frontDist");
+        backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
+        backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
         leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
         telemetry.addData("back cm", "%.2f cm", backDist1.getDistance(CM));
@@ -105,15 +109,23 @@ public class RangeSensorRightAuto extends OpMode {
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
 
 
+
     }
     public void loop() {
         switch (step) {
             case(1):
-                step++;
+                final double initDist1 = backDist1.getDistance(CM);
+                final double initDist2 = backDist2.getDistance(CM);
+                driver.driveRaw(-0.1f, -0.1f, -0.1f, -0.1f);
+                if ((backDist1.getDistance(CM) - initDist1) >= 5 || (backDist2.getDistance(CM) - initDist2) >= 5) {
+                    driver.stopDrive();
+                    step++;
+                }
                 break;
             case(2):
-                driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
-                if (backDist2.getDistance(CM) <= 20.6) {
+                driver.testDriveOmni(0, 0.5, 0);
+                if (leftDist1.getDistance(CM) <= 20 || leftDist2.getDistance(CM) <= 20) {
+                    driver.stopDrive();
                     step++;
                 }
                 break;
@@ -122,9 +134,8 @@ public class RangeSensorRightAuto extends OpMode {
                 delayDwStop(5000);
                 break;
             case(4):
-                driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);
-                delayDriverStop(2500);
-                step++;
+                driver.testDriveOmni(0, -0.5, 0);
+                delayDriveStop(2500);
                 break;
             case(5):
                 telemetry.addLine("Autonomous Complete");
