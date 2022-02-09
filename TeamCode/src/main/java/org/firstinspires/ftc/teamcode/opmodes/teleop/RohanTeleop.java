@@ -104,8 +104,8 @@ public class RohanTeleop extends OpMode {
                 new ButtonNode("a")
         );
         driver.setDirection();
-
-
+        hands.setServoPosition("ill", 0.95);
+        hands.setServoPosition("ilr", 0.05);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class RohanTeleop extends OpMode {
             hands.setMotorPower("dw", 0);
         }
 
-
+        /*
         // Toggle input motors
         if (gamepad1.right_bumper && !rBumperDown) {
             rBumperDown = true;
@@ -152,6 +152,17 @@ public class RohanTeleop extends OpMode {
             hands.setServoPower("isr", 1);
         }
 
+         */
+        if (gamepad1.left_bumper) {
+            hands.setServoPower("isl", 1);
+            hands.setServoPower("isr", -1);
+        } else if (gamepad1.right_bumper) {
+            hands.setServoPower("isl", -1);
+            hands.setServoPower("isr", 1);
+        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
+        }
         if (gamepad1.b) {
             hands.setServoPosition("ill", 0.95);
             hands.setServoPosition("ilr", 0.05);
@@ -161,7 +172,8 @@ public class RohanTeleop extends OpMode {
             hands.setServoPosition("ilr", 0.35);
         }
         if (gamepad1.a) {
-            telemetry.speak("quack");
+            hands.setServoPosition("ill", 0.85);
+            hands.setServoPosition("ilr", 0.15);
         }
 
         telemetry.addLine("Encoder Values");
