@@ -93,7 +93,6 @@ public class TestBotTeleOp extends OpMode {
         input.registerInput("outtake",
                 new ButtonNode("left_trigger")
         );
-        driver.setDirection();
     }
 
     @Override
@@ -101,9 +100,10 @@ public class TestBotTeleOp extends OpMode {
         input.update();
 
         driver.downScale(0.5f);
-        driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
+        driver.testDriveOmni(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
         if (input.getBool("intake")) {
+
             hands.setMotorPower("is", -1);
         } else if (input.getBool("outtake")) {
             hands.setMotorPower("is", 1);
