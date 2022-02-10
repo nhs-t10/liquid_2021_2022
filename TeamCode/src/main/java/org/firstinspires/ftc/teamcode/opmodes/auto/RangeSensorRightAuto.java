@@ -116,16 +116,13 @@ public class RangeSensorRightAuto extends OpMode {
             case(1):
                 final double initDist1 = backDist1.getDistance(CM);
                 final double initDist2 = backDist2.getDistance(CM);
-                driver.driveRaw(-0.1f, -0.1f, -0.1f, -0.1f);
-                if ((backDist1.getDistance(CM) - initDist1) >= 5 || (backDist2.getDistance(CM) - initDist2) >= 5) {
-                    driver.stopDrive();
-                    step++;
-                }
+                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
+                delayDriveStop(400);
                 break;
             case(2):
-                driver.testDriveOmni(0, 0.5, 0);
-                if (leftDist1.getDistance(CM) <= 20 || leftDist2.getDistance(CM) <= 20) {
-                    driver.stopDrive();
+                driver.testDriveOmni(0, 0.25, 0);
+                if (leftDist1.getDistance(CM) <= 8 || leftDist2.getDistance(CM) <= 8) {
+                    driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
                     step++;
                 }
                 break;
@@ -134,7 +131,7 @@ public class RangeSensorRightAuto extends OpMode {
                 delayDwStop(5000);
                 break;
             case(4):
-                driver.testDriveOmni(0, -0.5, 0);
+                driver.testDriveOmni(0,-0.5,0);
                 delayDriveStop(5000);
                 break;
             case(5):
