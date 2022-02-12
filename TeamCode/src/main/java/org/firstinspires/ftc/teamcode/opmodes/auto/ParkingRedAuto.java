@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class RangeSensorRightAutoSmallBox extends OpMode {
+public class ParkingRedAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
@@ -114,27 +114,10 @@ public class RangeSensorRightAutoSmallBox extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                final double initDist1 = backDist1.getDistance(CM);
-                final double initDist2 = backDist2.getDistance(CM);
-                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
-                delayDriveStop(400);
+                driver.testDriveOmni(0.05,-0.75,0);
+                delayDriveStop(1750);
                 break;
             case(2):
-                driver.testDriveOmni(0, 0.25, 0);
-                if (leftDist1.getDistance(CM) <= 8 || leftDist2.getDistance(CM) <= 8) {
-                    driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
-                    step++;
-                }
-                break;
-            case(3):
-                hands.setMotorPower("dw", -1);
-                delayDwStop(5000);
-                break;
-            case(4):
-                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
-                delayDriveStop(1250);
-                break;
-            case(5):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
