@@ -115,7 +115,7 @@ public class ParkingBlueAuto extends OpMode {
         switch (step) {
             case(1):
                 driver.testDriveOmni(0.05,0.75,0);
-                delayDriveStop(1750);
+                delayDriveStop(1250);
                 break;
             case(2):
                 telemetry.addLine("Autonomous Complete");

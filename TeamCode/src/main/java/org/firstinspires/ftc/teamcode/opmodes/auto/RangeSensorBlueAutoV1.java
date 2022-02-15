@@ -118,7 +118,7 @@ public class RangeSensorBlueAutoV1 extends OpMode {
                 break;
             case(3):
                 driver.driveRaw(-0.75f, -0.75f, -0.75f, -0.75f);
-                delayDriveStop(2500);
+                delayDriveStop(2250);
                 break;
             case(4):
                 telemetry.addLine("Autonomous Complete");

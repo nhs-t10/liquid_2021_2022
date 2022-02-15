@@ -115,13 +115,10 @@ public class RangeSensorBlueAutoSmallBox extends OpMode {
         switch (step) {
             case(1):
                 driver.testDriveOmni(0, -0.25, 0);
-                if (leftDist1.getDistance(CM) >= 10 || leftDist2.getDistance(CM) >= 10) {
-                    driver.stopDrive();
-                    step++;
-                }
+                delayDriveStop(500);
                 break;
             case(2):
-                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
                 if (backDist2.getDistance(CM) <= 20.6 || backDist1.getDistance(CM) <= 20.6) {
                     driver.testDriveOmni(0,0.1,0);
                     step++;
@@ -133,9 +130,13 @@ public class RangeSensorBlueAutoSmallBox extends OpMode {
                 break;
             case(4):
                 driver.testDriveOmni(0,-0.25,0);
-                delayDriveStop(1150);
+                delayDriveStop(2250);
                 break;
             case(5):
+                driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
+                delayDriveStop(1000);
+                break;
+            case(6):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
