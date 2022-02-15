@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
-import org.firstinspires.ftc.teamcode.managers.input.nodes.ButtonNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.JoystickNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -31,14 +30,10 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class RohanTeleop extends OpMode {
+public class AutoTesterTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private boolean rintakeRunning = false;
-    private boolean lintakeRunning = false;
-    private boolean rBumperDown = false;
-    private boolean lBumperDown = false;
 
     ElapsedTime timer;
     public void delay(double delay) {
@@ -87,22 +82,6 @@ public class RohanTeleop extends OpMode {
                         new JoystickNode("right_stick_y")
                 )
         );
-
-        input.registerInput("toggleTray",
-                new ButtonNode("left_bumper")
-        );
-        input.registerInput("toggleIn",
-                new ButtonNode("right_bumper")
-        );
-        input.registerInput("duckWheelRight",
-                new ButtonNode("right_trigger")
-        );
-        input.registerInput("duckWheelLeft",
-                new ButtonNode("left_trigger")
-        );
-        input.registerInput("spin",
-                new ButtonNode("a")
-        );
         driver.setDirection();
     }
 
@@ -114,69 +93,11 @@ public class RohanTeleop extends OpMode {
         telemetry.addData("lStickY", gamepad1.left_stick_y);
         driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
 
-        if (gamepad1.right_trigger > 0f) {
-            hands.setMotorPower("dw", -1);
-        } else if (gamepad1.right_trigger == 0f) {
-            hands.setMotorPower("dw", 0);
-        }
-        if (gamepad1.left_trigger > 0f) {
-            hands.setMotorPower("dw", 1);
-        } else if (gamepad1.left_trigger == 0f){
-            hands.setMotorPower("dw", 0);
-        }
 
-        /*
-        // Toggle input motors
-        if (gamepad1.right_bumper && !rBumperDown) {
-            rBumperDown = true;
-            rintakeRunning = !rintakeRunning;
-        } else if (!gamepad1.right_bumper && rBumperDown) {
-            rBumperDown = false;
-        }
-        if (gamepad1.left_bumper && !lBumperDown) {
-            lBumperDown = true;
-            lintakeRunning = !lintakeRunning;
-        } else if (!gamepad1.left_bumper && lBumperDown) {
-            lBumperDown = false;
-        }
-        if (lintakeRunning) {
-            hands.setServoPower("isl", 1);
-            hands.setServoPower("isr", -1);
-        } else if (!lintakeRunning && !rintakeRunning) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        } else if (rintakeRunning) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        }
 
-         */
-        if (gamepad1.left_bumper) {
-            hands.setServoPower("isl", 0.5);
-            hands.setServoPower("isr", -0.5);
-        } else if (gamepad1.right_bumper) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        }
-        if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.95);
-            hands.setServoPosition("ilr", 0.05);
-        }
-        if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.65);
-            hands.setServoPosition("ilr", 0.35);
-        }
-        if (gamepad1.a) {
-            hands.setServoPosition("ill", 0.85);
-            hands.setServoPosition("ilr", 0.15);
-        }
-        if (gamepad1.y) {
-            hands.setServoPosition("ill", 0.75);
-            hands.setServoPosition("ilr", 0.25);
-        }
+
+
+
 
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
