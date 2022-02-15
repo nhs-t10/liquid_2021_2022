@@ -24,11 +24,12 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 public class IMU_Test extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
-    ModernRoboticsI2cRangeSensor rangeSensor;
+    //ModernRoboticsI2cRangeSensor rangeSensor;
     int step = 1;
     ElapsedTime timer;
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
+    Orientation angles = new Orientation();
     double globalAngle, correction;
     float power = 0.50f;
     boolean aButton, bButton;
@@ -39,7 +40,7 @@ public class IMU_Test extends OpMode {
         }
     }
 
-    public void driveToDistanceForward(float power, double cm) {
+/*    public void driveToDistanceForward(float power, double cm) {
         driver.driveRaw(power, power, power, power);
         while (rangeSensor.getDistance(DistanceUnit.CM) >= cm) {
             //wait
@@ -54,6 +55,7 @@ public class IMU_Test extends OpMode {
         }
         driver.stopDrive();
     }
+*/
 
     private void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -67,7 +69,7 @@ public class IMU_Test extends OpMode {
         // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
         // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
 
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
 
@@ -189,7 +191,7 @@ public class IMU_Test extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
         timer = new ElapsedTime();
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
+        //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
     }
 
     public void loop() {
