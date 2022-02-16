@@ -26,17 +26,27 @@ public class IMU_Test extends OpMode {
     private ManipulationManager hands;
     //ModernRoboticsI2cRangeSensor rangeSensor;
     int step = 1;
-    ElapsedTime timer;
+    int delayStep = -1;
+    ElapsedTime timer = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
     Orientation angles = new Orientation();
     double globalAngle, correction;
+    double endTime;
     float power = 0.50f;
     boolean aButton, bButton;
 
-    public void delay(double delay) {
-        double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
+    public boolean delay(double delay) {
+        boolean returnValue = false;
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            returnValue = true;
+            return returnValue;
+        } else {
+            return returnValue;
         }
     }
 
@@ -192,6 +202,9 @@ public class IMU_Test extends OpMode {
         driver.setDirection();
         timer = new ElapsedTime();
         //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
+        while (!imu.isGyroCalibrated()) {
+
+        }
     }
 
     public void loop() {
