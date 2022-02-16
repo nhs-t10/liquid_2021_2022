@@ -91,14 +91,62 @@ public class AutoTesterTeleop extends OpMode {
         telemetry.addLine("l Stick Values");
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
-        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
+        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);;
+       //Time elapsed code for Y(forward)
+        if(gamepad1.y)
+        {
+            final double initTime = timer.milliseconds();
+            double finalTime = timer.milliseconds() - initTime;
+            driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+            telemetry.addLine("Forward Values:");
+            telemetry.addData("Time elapsed:", finalTime);
 
+        }
+        else if(!gamepad1.y)
+        {
+            driver.driveRaw(0f, 0f, 0f, 0f);
+        }
 
+        //Time elapsed code for A(backwards)
 
+        if(gamepad1.a)
+        {
+            final double initTime = timer.milliseconds();
+            double finalTime = timer.milliseconds() - initTime;
+            driver.driveRaw(-0.5f, -0.5f, -0.5f, 00.5f);
+            telemetry.addLine("Backwards Values:");
+            telemetry.addData("Time elapsed:", finalTime);
 
+        }
+        else if(!gamepad1.a) {
+            driver.driveRaw(0f, 0f, 0f, 0f);
+        }
 
+        //Time Elapsed code for B(right)
 
+        if(gamepad1.b){
+            final double initTime = timer.milliseconds();
+            double finalTime = timer.milliseconds() - initTime;
+            driver.testDriveOmni(0, 0.5, 0);
+            telemetry.addLine("Right Values:");
+            telemetry.addData("Time elapsed:", finalTime);
+        }
+        else if(!gamepad1.b){
+            driver.testDriveOmni(0, 0, 0);
+        }
 
+        //Time elapsed code for X(left)
+
+        if(gamepad1.x){
+            final double initTime = timer.milliseconds();
+            double finalTime = timer.milliseconds() - initTime;
+            driver.testDriveOmni(0, -0.5, 0);
+            telemetry.addLine("Left Values:");
+            telemetry.addData("Time elapsed:", finalTime);
+        }
+        else if(!gamepad1.x){
+            driver.testDriveOmni(0, 0, 0);
+        }
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
         telemetry.addData("fr pos", driver.frGetTicks());
