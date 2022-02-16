@@ -34,7 +34,7 @@ public class IMU_Test extends OpMode {
     double globalAngle, correction;
     double endTime;
     float power = 0.50f;
-    boolean aButton, bButton, calibration;
+    boolean aButton, bButton;
 
     public boolean delay(double delay) {
         boolean returnValue = false;
@@ -202,10 +202,9 @@ public class IMU_Test extends OpMode {
         driver.setDirection();
         timer = new ElapsedTime();
         //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
-        calibration = imu.isGyroCalibrated();
 
-        while (calibration == false) {
-            calibration = imu.isGyroCalibrated();
+        while (!imu.isGyroCalibrated()) {
+
         }
     }
 
