@@ -202,9 +202,10 @@ public class IMU_Test extends OpMode {
         driver.setDirection();
         timer = new ElapsedTime();
         //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
-        boolean calibrated = imu.isGyroCalibrated();
-        while (calibrated == false) {
-            calibrated = imu.isGyroCalibrated();
+        calibration = imu.isGyroCalibrated();
+
+        while (calibration == false) {
+            calibration = imu.isGyroCalibrated();
         }
     }
 
