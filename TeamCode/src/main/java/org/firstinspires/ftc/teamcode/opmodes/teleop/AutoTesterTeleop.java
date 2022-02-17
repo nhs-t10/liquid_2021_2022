@@ -102,50 +102,39 @@ public class AutoTesterTeleop extends OpMode {
             telemetry.addData("Time elapsed:", finalTime);
 
         }
-        else if(!gamepad1.y)
-        {
-            driver.driveRaw(0f, 0f, 0f, 0f);
-        }
 
         //Time elapsed code for A(backwards)
 
-        if(gamepad1.a)
-        {
+        else if(gamepad1.a) {
             final double initTime = timer.milliseconds();
             double finalTime = timer.milliseconds() - initTime;
             driver.driveRaw(-0.5f, -0.5f, -0.5f, 00.5f);
             telemetry.addLine("Backwards Values:");
             telemetry.addData("Time elapsed:", finalTime);
-
-        }
-        else if(!gamepad1.a) {
-            driver.driveRaw(0f, 0f, 0f, 0f);
         }
 
         //Time Elapsed code for B(right)
 
-        if(gamepad1.b){
+        else if(gamepad1.b){
             final double initTime = timer.milliseconds();
             double finalTime = timer.milliseconds() - initTime;
             driver.testDriveOmni(0, 0.5, 0);
             telemetry.addLine("Right Values:");
             telemetry.addData("Time elapsed:", finalTime);
         }
-        else if(!gamepad1.b){
-            driver.testDriveOmni(0, 0, 0);
-        }
 
         //Time elapsed code for X(left)
 
-        if(gamepad1.x){
+        else if(gamepad1.x) {
             final double initTime = timer.milliseconds();
             double finalTime = timer.milliseconds() - initTime;
             driver.testDriveOmni(0, -0.5, 0);
             telemetry.addLine("Left Values:");
             telemetry.addData("Time elapsed:", finalTime);
         }
-        else if(!gamepad1.x){
-            driver.testDriveOmni(0, 0, 0);
+        else if(!gamepad1.x && !gamepad1.y && !gamepad1.b && !gamepad1.a)
+        {
+            driver.stopDrive();
         }
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
