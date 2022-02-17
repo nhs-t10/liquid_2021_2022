@@ -173,9 +173,11 @@ public class RohanTeleop extends OpMode {
             hands.setServoPosition("ill", 0.85);
             hands.setServoPosition("ilr", 0.15);
         }
-        if (gamepad1.y) {
-            hands.setServoPosition("ill", 0.75);
-            hands.setServoPosition("ilr", 0.25);
+        if(gamepad1.y) {
+            while(!gamepad1.y){
+                hands.setServoPosition("ill", 0.75);
+                hands.setServoPosition("ilr", 0.25);
+            }
         }
 
         telemetry.addLine("Encoder Values");
