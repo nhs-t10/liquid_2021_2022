@@ -102,7 +102,7 @@ public class AutoTesterTeleop extends OpMode {
             final double initTime = timer.milliseconds();
 
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            double finalfinalTime = roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 2);
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
             telemetry.addLine("Forward Values:");
             telemetry.addData("Time elapsed in forward direction:", finalfinalTime);
@@ -114,7 +114,7 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.a) {
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            double finalfinalTime = roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 2);
             driver.driveRaw(-0.5f, -0.5f, -0.5f, 00.5f);
             telemetry.addLine("Backwards Values:");
             telemetry.addData("Time elapsed in backwards direction:", finalfinalTime);
@@ -125,7 +125,7 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.b){
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            double finalfinalTime = roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 2);
             driver.testDriveOmni(0, -0.5, 0);
             telemetry.addLine("Right Values:");
             telemetry.addData("Time elapsed in right direction:", finalfinalTime);
@@ -136,7 +136,7 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.x) {
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            double finalfinalTime = roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 2);
             driver.testDriveOmni(0, 0.5, 0);
             telemetry.addLine("Left Values:");
             telemetry.addData("Time elapsed in left direction:", finalfinalTime);
@@ -146,7 +146,7 @@ public class AutoTesterTeleop extends OpMode {
             driver.stopDrive();
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            double finalfinalTime = roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 2);
             telemetry.addLine("Final Time:");
             telemetry.addData("Final Time:", finalfinalTime);
         }
