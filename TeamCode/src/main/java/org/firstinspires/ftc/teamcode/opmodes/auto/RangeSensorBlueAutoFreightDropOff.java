@@ -117,7 +117,7 @@ public class RangeSensorBlueAutoFreightDropOff extends OpMode {
                 final double initDist1 = backDist1.getDistance(CM);
                 final double initDist2 = backDist2.getDistance(CM);
                 driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
-                delayDriveStop(400);
+                delayDriveStop(4000);
                 break;
             case(2):
                 hands.setServoPower("isl", -1);
