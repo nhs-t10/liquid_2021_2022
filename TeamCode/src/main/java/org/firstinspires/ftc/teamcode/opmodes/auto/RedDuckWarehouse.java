@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class ParkingBlueAuto extends OpMode {
+public class RedDuckWarehouse extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
@@ -114,10 +114,35 @@ public class ParkingBlueAuto extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driver.testDriveOmni(0.05,0.75,0);
-                delayDriveStop(1250);
+                final double initDist1 = backDist1.getDistance(CM);
+                final double initDist2 = backDist2.getDistance(CM);
+                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
+                delayDriveStop(400);
                 break;
             case(2):
+                driver.testDriveOmni(0, 0.25, 0);
+                if (leftDist1.getDistance(CM) <= 8 || leftDist2.getDistance(CM) <= 8) {
+                    driver.testDriveOmni(0.1,0.1,0);
+                    step++;
+                }
+                break;
+            case(3):
+                hands.setMotorPower("dw", -1);
+                delayDwStop(5000);
+                break;
+            case(4):
+                driver.testDriveOmni(0,-0.25,0);
+                delayDriveStop(2500);
+                break;
+            case(5):
+                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
+                delayDriveStop(600);
+                break;
+            case(6):
+                driver.testDriveOmni(0.05,-0.75,0);
+                delayDriveStop(2000);
+                break;
+            case(7):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
