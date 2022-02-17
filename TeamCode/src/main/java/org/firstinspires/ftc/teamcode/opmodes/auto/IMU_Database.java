@@ -129,13 +129,13 @@ public class IMU_Database extends OpMode {
         // rotate until turn is completed.
         if (degrees < 0) {
             // On right turn we have to get off zero first.
-            while (getAngle() == 0) {
-            }
+            //while (getAngle() == 0) {
+            //}
 
-            while (getAngle() > degrees) {
+            while (getAngle() < degrees) {
             }
         } else    // left turn.
-            while (getAngle() < degrees) {
+            while (getAngle() > degrees) {
             }
 
         // turn the motors off.
