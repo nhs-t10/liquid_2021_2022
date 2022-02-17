@@ -119,7 +119,7 @@ public class IMU_Test extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+
         // restart imu movement tracking.
         resetAngle();
 
@@ -144,13 +144,13 @@ public class IMU_Test extends OpMode {
             while (getAngle() == 0) {
             }
 
-            while (getAngle() < degrees) {
-            }
-        } else    // left turn.
-            while (getAngle() == 0) {
-            }
             while (getAngle() > degrees) {
             }
+        } else  {  // left turn.
+            while (getAngle() == 0) {
+            }
+            while (getAngle() < degrees) {
+            }}
 
         // turn the motors off.
         fl.setPower(0);
@@ -172,7 +172,6 @@ public class IMU_Test extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
@@ -195,8 +194,8 @@ public class IMU_Test extends OpMode {
                 new String[]{},
                 new Servo[]{},
                 new String[]{},
-                new DcMotor[]{fl, fr, br, bl, dw},
-                new String[]{"fl", "fr", "br", "bl", "dw"}
+                new DcMotor[]{fl, fr, br, bl},
+                new String[]{"fl", "fr", "br", "bl"}
         );
         driver = new MovementManager(fl, fr, br, bl);
         driver.runUsingEncoders();
