@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class RangeSensorBlueAutoWarehouse extends OpMode {
+public class BlueDuckStorage extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
@@ -25,7 +25,7 @@ public class RangeSensorBlueAutoWarehouse extends OpMode {
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
     int step = 1;
-    public ElapsedTime timer = new ElapsedTime(); ;
+    public ElapsedTime timer = new ElapsedTime();
     int delayStep = -1;
     double endTime = timer.milliseconds();
     double initDist1;
@@ -115,13 +115,10 @@ public class RangeSensorBlueAutoWarehouse extends OpMode {
         switch (step) {
             case(1):
                 driver.testDriveOmni(0, -0.25, 0);
-                if (leftDist1.getDistance(CM) >= 10 || leftDist2.getDistance(CM) >= 10) {
-                    driver.stopDrive();
-                    step++;
-                }
+                delayDriveStop(500);
                 break;
             case(2):
-                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
+                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
                 if (backDist2.getDistance(CM) <= 20.6 || backDist1.getDistance(CM) <= 20.6) {
                     driver.testDriveOmni(0,0.1,0);
                     step++;
@@ -132,10 +129,14 @@ public class RangeSensorBlueAutoWarehouse extends OpMode {
                 delayDwStop(5000);
                 break;
             case(4):
-                driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
-                delayDriveStop(2000);
+                driver.testDriveOmni(0,-0.25,0);
+                delayDriveStop(2250);
                 break;
             case(5):
+                driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
+                delayDriveStop(1000);
+                break;
+            case(6):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
