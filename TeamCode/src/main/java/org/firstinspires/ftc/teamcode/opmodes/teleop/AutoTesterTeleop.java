@@ -102,10 +102,10 @@ public class AutoTesterTeleop extends OpMode {
             final double initTime = timer.milliseconds();
 
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 100);
             driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f);
             telemetry.addLine("Forward Values:");
-            telemetry.addData("Time elapsed in forward direction:", finalTime);
+            telemetry.addData("Time elapsed in forward direction:", finalfinalTime);
 
         }
 
@@ -114,10 +114,10 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.a) {
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 100);
             driver.driveRaw(-0.5f, -0.5f, -0.5f, 00.5f);
             telemetry.addLine("Backwards Values:");
-            telemetry.addData("Time elapsed in backwards direction:", finalTime);
+            telemetry.addData("Time elapsed in backwards direction:", finalfinalTime);
         }
 
         //Time Elapsed code for B(right)
@@ -125,10 +125,10 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.b){
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 100);
             driver.testDriveOmni(0, -0.5, 0);
             telemetry.addLine("Right Values:");
-            telemetry.addData("Time elapsed in right direction:", finalTime);
+            telemetry.addData("Time elapsed in right direction:", finalfinalTime);
         }
 
         //Time elapsed code for X(left)
@@ -136,19 +136,19 @@ public class AutoTesterTeleop extends OpMode {
         else if(gamepad1.x) {
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 100);
             driver.testDriveOmni(0, 0.5, 0);
             telemetry.addLine("Left Values:");
-            telemetry.addData("Time elapsed in left direction:", finalTime);
+            telemetry.addData("Time elapsed in left direction:", finalfinalTime);
         }
         else if(!gamepad1.x && !gamepad1.y && !gamepad1.b && !gamepad1.a)
         {
             driver.stopDrive();
             final double initTime = timer.milliseconds();
             double finalTime = (timer.milliseconds() - initTime)*10000;
-            roundAvoid(finalTime, 100);
+            double finalfinalTime = roundAvoid(finalTime, 100);
             telemetry.addLine("Final Time:");
-            telemetry.addData("Final Time:", finalTime);
+            telemetry.addData("Final Time:", finalfinalTime);
         }
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
