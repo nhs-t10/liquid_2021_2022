@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
 import org.firstinspires.ftc.teamcode.managers.movement.MovementManager;
 import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
+import org.firstinspires.ftc.teamcode.opmodes.auto.IMU_Database;
+import org.firstinspires.ftc.teamcode.opmodes.auto.IMU_Example;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyGamepad;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyHardwareMap;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
@@ -54,18 +56,18 @@ public class TestBotTeleOp extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        Servo isl = hardwareMap.get(Servo.class, "isl");
-        Servo isr = hardwareMap.get(Servo.class, "isr");
+        CRServo isl = hardwareMap.get(CRServo.class, "isl");
+        CRServo isr = hardwareMap.get(CRServo.class, "isr");
         DcMotor is = hardwareMap.get(DcMotor.class, "is");
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-                new CRServo[] {},
-                new String[] {},
-                new Servo[] {isl, isr},
+                new CRServo[] {isl, isr},
                 new String[] {"isl", "isr"},
+                new Servo[] {},
+                new String[] {},
                 new DcMotor[] {fl, fr, br, bl, is},
                 new String[] {"fl", "fr", "br", "bl", "is"}
         );
@@ -100,7 +102,7 @@ public class TestBotTeleOp extends OpMode {
         input.update();
 
         driver.downScale(0.5f);
-        driver.testDriveOmni(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
+        driver.testDriveOmni(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x/2f);
 
         if (input.getBool("intake")) {
 
@@ -111,15 +113,14 @@ public class TestBotTeleOp extends OpMode {
             hands.setMotorPower("is", 0);
         }
 
-
         if (input.getBool("intake up") && intakedown) {
-            hands.setServoPower("isl", 1); // todo: update intake system for correct position
-            hands.setServoPower("isr", 1);
+            hands.setServoPower("isl", -0.5); // todo: update intake system for correct position
+            hands.setServoPower("isr", -0.5);
             delay(500);
             intakedown = !intakedown;
         } else if (input.getBool("intake down") && !intakedown) {
-            hands.setServoPower("isl", -1); // todo: update intake system for correct position
-            hands.setServoPower("isr", -1);
+            hands.setServoPower("isl", 0.5); // todo: update intake system for correct position
+            hands.setServoPower("isr", 0.5);
             delay(500);
             intakedown = !intakedown;
         }

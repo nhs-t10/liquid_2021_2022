@@ -101,13 +101,12 @@ public class IMU_Database extends OpMode {
         return correction;
     }
 
-    private void rotate ( int degrees, float power){
+    public void rotate ( int degrees, float power){
         float leftPower, rightPower;
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         // restart imu movement tracking.
         resetAngle();
 
@@ -129,12 +128,13 @@ public class IMU_Database extends OpMode {
         // rotate until turn is completed.
         if (degrees < 0) {
             // On right turn we have to get off zero first.
-            //while (getAngle() == 0) {
-            //}
+            while (getAngle() == 0) {
+            }
 
             while (getAngle() < degrees) {
             }
         } else    // left turn.
+            while (getAngle()==0){}
             while (getAngle() > degrees) {
             }
 

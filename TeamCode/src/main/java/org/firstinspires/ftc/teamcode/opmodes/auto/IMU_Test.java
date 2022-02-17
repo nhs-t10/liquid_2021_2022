@@ -144,10 +144,12 @@ public class IMU_Test extends OpMode {
             while (getAngle() == 0) {
             }
 
-            while (getAngle() > degrees) {
+            while (getAngle() < degrees) {
             }
         } else    // left turn.
-            while (getAngle() < degrees) {
+            while (getAngle() == 0) {
+            }
+            while (getAngle() > degrees) {
             }
 
         // turn the motors off.

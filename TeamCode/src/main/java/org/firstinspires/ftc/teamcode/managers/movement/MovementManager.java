@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.auxilary.PaulMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
+import org.firstinspires.ftc.teamcode.opmodes.auto.IMU_Database;
 
 /*
   ========== field data ==========
@@ -61,7 +62,9 @@ public class MovementManager extends FeatureManager {
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
-
+    public void IMUTest(float power, int degrees) {
+        //IMU_Database.rotate();
+    }
     public void driveRaw(float fl, float fr, float br, float bl) {
         frontLeft.setPower(fl);
         frontRight.setPower(fr);
