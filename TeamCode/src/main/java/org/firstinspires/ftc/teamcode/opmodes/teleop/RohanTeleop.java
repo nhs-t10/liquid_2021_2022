@@ -41,7 +41,7 @@ public class RohanTeleop extends OpMode {
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
-    int step = 1;
+    int step = 2;
     int delayStep = -1;
     boolean runOnce = false;
     public ElapsedTime timer = new ElapsedTime();

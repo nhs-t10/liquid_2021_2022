@@ -29,7 +29,6 @@ public class BlueDuckStorage extends OpMode {
     int delayStep = -1;
     double endTime = timer.milliseconds();
     double initDist1;
-    double initDist2;
 
 
 
