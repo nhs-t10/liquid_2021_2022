@@ -20,14 +20,14 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
 
 /*
-* A: Turn 180
-* LB: Toggle Servo
-* RB: Toggle Intake Motors
-* L2: Duck Wheel Left
-* R2: Duck Wheel Right
-* LStick: Omni
-* RStick: X: turn
-*/
+ * A: Turn 180
+ * LB: Toggle Servo
+ * RB: Toggle Intake Motors
+ * L2: Duck Wheel Left
+ * R2: Duck Wheel Right
+ * LStick: Omni
+ * RStick: X: turn
+ */
 
 @TeleOp
 public class BlueAutoTeleop extends OpMode {
@@ -91,12 +91,12 @@ public class BlueAutoTeleop extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-            new CRServo[] {isl, isr},
-            new String[] {"isl", "isr"},
-            new Servo[] {ill, ilr},
-            new String[] {"ill", "ilr"},
-            new DcMotor[] {fl, fr, br, bl, dw},
-            new String[] {"fl", "fr", "br", "bl", "dw"}
+                new CRServo[] {isl, isr},
+                new String[] {"isl", "isr"},
+                new Servo[] {ill, ilr},
+                new String[] {"ill", "ilr"},
+                new DcMotor[] {fl, fr, br, bl, dw},
+                new String[] {"fl", "fr", "br", "bl", "dw"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -180,6 +180,7 @@ public class BlueAutoTeleop extends OpMode {
         if (gamepad1.y == true && yButton == false) {
             yButton = true;
             autoTeleop = !autoTeleop;
+            miniStep = 1;
         } else if (gamepad1.y == false && yButton == true) {
             yButton = false;
         }
@@ -191,7 +192,7 @@ public class BlueAutoTeleop extends OpMode {
                     miniStep++;
                     break;
                 case(2):
-                    driver.testDriveOmni(0,-0.5,0);
+                    driver.testDriveOmni(0,0.5,0);
                     delayDriveStop(1000);
                     break;
                 case(3):
@@ -202,11 +203,12 @@ public class BlueAutoTeleop extends OpMode {
                     delayIntakeStop(500);
                     break;
                 case(4):
-                    driver.testDriveOmni(0,0.5,0);
+                    driver.testDriveOmni(0,-0.5,0);
                     delayDriveStop(1000);
                     break;
                 case(5):
                     autoTeleop = false;
+                    miniStep++;
                     break;
             }
         }
