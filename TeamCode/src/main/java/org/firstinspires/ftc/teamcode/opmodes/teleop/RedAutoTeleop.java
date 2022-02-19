@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
-import org.firstinspires.ftc.teamcode.managers.input.nodes.ButtonNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.JoystickNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -31,26 +30,51 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class RohanTeleop extends OpMode {
+public class RedAutoTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
     private boolean autoTeleop = false;
     private boolean yButton = false;
+    public ElapsedTime timer = new ElapsedTime();
+    double endTime;
+    int delayStep = -1;
+    int miniStep = 1;
+    boolean timerDoor = false;
 
-    ElapsedTime timer;
-    public void delay(double delay) {
-        double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
-            //do nothing
+    public void generalDelay(double delay) {
+        for (int i = 0; i<1; i++) {
+            endTime = timer.milliseconds();
+        }
+        if (timer.milliseconds() >= endTime) {
+            miniStep++;
         }
     }
-
+    public void delayDriveStop(double delay) {
+        if (delayStep != miniStep) {
+            delayStep = miniStep;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            driver.stopDrive();
+            miniStep++;
+        }
+    }
+    public void delayIntakeStop(double delay) {
+        if (delayStep != miniStep) {
+            delayStep = miniStep;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
+            miniStep++;
+        }
+    }
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
         FeatureManager.setIsOpModeRunning(true);
-        timer = new ElapsedTime();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
 
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
@@ -86,21 +110,6 @@ public class RohanTeleop extends OpMode {
                 )
         );
 
-        input.registerInput("toggleTray",
-                new ButtonNode("left_bumper")
-        );
-        input.registerInput("toggleIn",
-                new ButtonNode("right_bumper")
-        );
-        input.registerInput("duckWheelRight",
-                new ButtonNode("right_trigger")
-        );
-        input.registerInput("duckWheelLeft",
-                new ButtonNode("left_trigger")
-        );
-        input.registerInput("spin",
-                new ButtonNode("a")
-        );
         driver.setDirection();
     }
 
@@ -122,9 +131,33 @@ public class RohanTeleop extends OpMode {
         } else if (gamepad1.left_trigger == 0f){
             hands.setMotorPower("dw", 0);
         }
+
+        /*
+        // Corbin Artifact
+        if (gamepad1.right_bumper && !rBumperDown) {
+            rBumperDown = true;
+            rintakeRunning = !rintakeRunning;
+        } else if (!gamepad1.right_bumper && rBumperDown) {
+            rBumperDown = false;
+        }
+
+        if (lintakeRunning) {
+            hands.setServoPower("isl", 1);
+            hands.setServoPower("isr", -1);
+        } else if (!lintakeRunning && !rintakeRunning) {
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
+        } else if (rintakeRunning) {
+            hands.setServoPower("isl", -1);
+            hands.setServoPower("isr", 1);
+        }
+
+         */
         if (gamepad1.left_bumper) {
-            hands.setServoPower("isl", 0.5);
-            hands.setServoPower("isr", -0.5);
+            hands.setServoPower("isl", 1);
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", -1);
+            hands.setServoPower("isr", 0);
         } else if (gamepad1.right_bumper) {
             hands.setServoPower("isl", -1);
             hands.setServoPower("isr", 1);
@@ -143,6 +176,41 @@ public class RohanTeleop extends OpMode {
         if (gamepad1.a) {
             hands.setServoPosition("ill", 0.85);
             hands.setServoPosition("ilr", 0.15);
+        }
+        if (gamepad1.y == true && yButton == false) {
+            yButton = true;
+            autoTeleop = !autoTeleop;
+            miniStep = 1;
+        } else if (gamepad1.y == false && yButton == true) {
+            yButton = false;
+        }
+        if (autoTeleop) {
+            switch(miniStep){
+                case(1):
+                    hands.setServoPosition("ill", 0.65);
+                    hands.setServoPosition("ilr", 0.35);
+                    miniStep++;
+                    break;
+                case(2):
+                    driver.testDriveOmni(0,-0.5,0);
+                    delayDriveStop(1000);
+                    break;
+                case(3):
+                    hands.setServoPower("isl", 1);
+                    hands.setServoPower("isl", 0);
+                    hands.setServoPower("isr", -1);
+                    hands.setServoPower("isr", 0);
+                    delayIntakeStop(500);
+                    break;
+                case(4):
+                    driver.testDriveOmni(0,0.5,0);
+                    delayDriveStop(1000);
+                    break;
+                case(5):
+                    autoTeleop = false;
+                    miniStep++;
+                    break;
+            }
         }
 
         telemetry.addLine("Encoder Values");
