@@ -31,7 +31,7 @@ import org.junit.Test;
 */
 
 @TeleOp
-public class RohanTeleop extends OpMode {
+public class DriverMotorTester extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
@@ -110,49 +110,18 @@ public class RohanTeleop extends OpMode {
         telemetry.addLine("l Stick Values");
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
-        if (!gamepad1.y) {
-            driver.testDriveOmni(gamepad1.left_stick_y/1.5, gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
-        } else if (gamepad1.y) {
-            driver.testDriveOmni(0,0.5,0);
-        }
+        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
 
-        if (gamepad1.right_trigger > 0f) {
-            hands.setMotorPower("dw", -1);
-        } else if (gamepad1.right_trigger == 0f) {
-            hands.setMotorPower("dw", 0);
-        }
-        if (gamepad1.left_trigger > 0f) {
-            hands.setMotorPower("dw", 1);
-        } else if (gamepad1.left_trigger == 0f){
-            hands.setMotorPower("dw", 0);
-        }
-        if (gamepad1.left_bumper) {
-            hands.setServoPower("isl", 0.5);
-            hands.setServoPower("isr", -0.5);
-        } else if (gamepad1.right_bumper) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        }
-        if (gamepad1.b) {
-            telemetry.speak("cunt");
-            hands.setServoPosition("ill", 1);
-            hands.setServoPosition("ilr", 0.5);
-        }
-        if (gamepad1.x) {
-            telemetry.speak("motherfucker");
-            hands.setServoPosition("ill", 0.65);
-            hands.setServoPosition("ilr", 0.35);
-        }
         if (gamepad1.a) {
-            telemetry.speak("fat ass");
-            hands.setServoPosition("ill", 0.85);
-            hands.setServoPosition("ilr", 0.15);
-        }
-        if (gamepad1.y) {
-            telemetry.speak("oi coño", "es", "ES");
+            driver.driveRaw(0.5f,0f,0f,0f);
+        }else if (gamepad1.b) {
+            driver.driveRaw(0,0.5f,0f,0f);
+        }else if (gamepad1.x) {
+            driver.driveRaw(0f,0f,0.5f,0f);
+        }else if (gamepad1.y) {
+            driver.driveRaw(0f,0f,0f,0.5f);
+        } else {
+            driver.stopDrive();
         }
 
 

@@ -108,8 +108,6 @@ public class LeoImu extends OpMode {
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         gyro = new ImuManager(imu);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
         while (!imu.isGyroCalibrated()) {
             //wait
         }
@@ -122,12 +120,19 @@ public class LeoImu extends OpMode {
     }
 
     public void loop() {
-        final float initialRotation = gyro.getZOrientation();
-        telemetry.addLine("Rotation");
-        telemetry.addLine("rotation");
-        telemetry.addData("Current rotation", gyro.getZOrientation());
-        telemetry.addData("Initial rotation", initialRotation);
-        telemetry.update();
+        switch(step) {
+            case(1):
+                final float initialRotation = gyro.getZOrientation();
+            case(2):
+                telemetry.addLine("Rotation");
+                telemetry.addLine("rotation");
+                telemetry.addData("Current rotation", gyro.getZOrientation());
+                telemetry.addData("Y Acceleration", gyro.getLinearAcceleration().yAccel);
+                telemetry.addData("X Acceleration", gyro.getLinearAcceleration().yAccel);
+                telemetry.update();
+        }
+
+
     }
 
 }

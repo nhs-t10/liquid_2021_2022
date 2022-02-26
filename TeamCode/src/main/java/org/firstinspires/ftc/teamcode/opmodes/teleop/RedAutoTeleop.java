@@ -119,7 +119,6 @@ public class RedAutoTeleop extends OpMode {
         telemetry.addLine("l Stick Values");
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
-        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
 
         if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
@@ -184,7 +183,7 @@ public class RedAutoTeleop extends OpMode {
         } else if (gamepad1.y == false && yButton == true) {
             yButton = false;
         }
-        if (autoTeleop) {
+        if (gamepad1.y) {
             switch(miniStep){
                 case(1):
                     hands.setServoPosition("ill", 0.65);
@@ -197,10 +196,8 @@ public class RedAutoTeleop extends OpMode {
                     break;
                 case(3):
                     hands.setServoPower("isl", 1);
-                    hands.setServoPower("isl", 0);
                     hands.setServoPower("isr", -1);
-                    hands.setServoPower("isr", 0);
-                    delayIntakeStop(500);
+                    delayIntakeStop(1000);
                     break;
                 case(4):
                     driver.testDriveOmni(0,0.5,0);
@@ -211,6 +208,9 @@ public class RedAutoTeleop extends OpMode {
                     miniStep++;
                     break;
             }
+        } else if (!gamepad1.y) {
+            miniStep = 1;
+            driver.testDriveOmni(-gamepad1.left_stick_y/1.5, gamepad1.left_stick_x/1.5, gamepad1.right_stick_x/2.0);
         }
 
         telemetry.addLine("Encoder Values");
