@@ -11,6 +11,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -29,6 +33,12 @@ public class LeoImu extends OpMode {
     public ElapsedTime timer = new ElapsedTime();
     int delayStep = -1;
     double endTime;
+    Orientation lastAngles = new Orientation();
+    final double veryFirstAngle = gyro.getZOrientation();
+    Rev2mDistanceSensor backDist2;
+    Rev2mDistanceSensor backDist1;
+    Rev2mDistanceSensor leftDist1;
+    Rev2mDistanceSensor leftDist2;
 
 
     public void delayDwStop(double delay) {
@@ -65,10 +75,21 @@ public class LeoImu extends OpMode {
             return returnVar;
         }
         return returnVar;
-
-
-
     }
+
+        public void rotateToStart(float power) {
+            final double initialRotation = gyro.getZOrientation();
+            if (initialRotation > 0) {
+                while (initialRotation > 0) {
+                    driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
+                }
+            } else if (initialRotation < 0) {
+                while(initialRotation < 0) {
+                    driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
+                }
+            }
+        }
+
 
     public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
         double num1, num2;
