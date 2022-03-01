@@ -281,6 +281,18 @@ public class ArlanTeleop extends OpMode {
                 driver.driveRaw(-0.5f, -0.5f, -0.5f, -0.5f);
             }
         }
+        if (gamepad1.dpad_down) {
+            rotate(180,0.5f);
+        }
+        if (gamepad1.dpad_up) {
+            rotate(0,0.5f);
+        }
+        if (gamepad1.dpad_left) {
+            rotate(-90,0.5f);
+        }
+        if (gamepad1.dpad_right) {
+            rotate(90,0.5f);
+        }
 
 
         telemetry.addLine("Encoder Values");
