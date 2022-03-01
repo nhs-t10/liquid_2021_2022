@@ -90,6 +90,22 @@ public class LeoImu extends OpMode {
             }
         }
 
+        public void rotate(double angle, float power) {
+        //angle values: negative to 180 is left, positive to 180 is right
+        //uses a zero point
+            final double initialRotation = gyro.getZOrientation();
+            if (angle > initialRotation){
+                while (gyro.getZOrientation() < angle){
+                    driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
+                }
+            }
+            if (angle < initialRotation){
+                while (gyro.getZOrientation() > angle){
+                    driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
+                }
+            }
+        }
+
 
     public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
         double num1, num2;
@@ -144,6 +160,7 @@ public class LeoImu extends OpMode {
         switch(step) {
             case(1):
                 final float initialRotation = gyro.getZOrientation();
+                telemetry.addData("rotation", gyro.getZOrientation());
             case(2):
                 telemetry.addLine("Rotation");
                 telemetry.addLine("rotation");
