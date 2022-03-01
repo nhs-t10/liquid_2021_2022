@@ -226,7 +226,7 @@ public class TimeTesterTeleop extends OpMode {
                     }
                     break;
                 case(2):
-                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                    driver.driveOmni(0f, -0.5f, 0f);
                     delayDriveStop(mostRecentTime);
                     break;
                 case(3):
@@ -265,7 +265,7 @@ public class TimeTesterTeleop extends OpMode {
                     }
                     break;
                 case(2):
-                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                    driver.driveOmni(0f, 0.5f, 0f);
                     delayDriveStop(mostRecentTime);
                     break;
                 case(3):
