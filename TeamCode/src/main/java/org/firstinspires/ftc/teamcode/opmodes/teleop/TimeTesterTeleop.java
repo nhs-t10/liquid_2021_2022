@@ -36,6 +36,9 @@ public class TimeTesterTeleop extends OpMode {
     private InputManager input;
     int delayStep = -1;
     int step = 1;
+    int bstep = 1;
+    int rstep = 1;
+    int lstep = 1;
     int endTime;
     boolean aButton = false; // backward
     boolean bButton = false; // right
@@ -163,12 +166,12 @@ public class TimeTesterTeleop extends OpMode {
         if (gamepad1.y && !yButton) {
             yButton = true;
             forwardTest = !forwardTest;
-            step = 1;
+            bstep = 1;
         } else if (!gamepad1.y && yButton) {
             yButton = false;
         }
         if (backwardTest) {
-            switch(step) {
+            switch(bstep) {
                 case(1):
                     telemetry.addLine("Choose Time");
                     if (gamepad1.right_bumper && !timerIncrease) {
@@ -180,7 +183,7 @@ public class TimeTesterTeleop extends OpMode {
                     telemetry.addData("Backward Time", mostRecentTime);
                     telemetry.addLine("Press right trigger to go on");
                     if (gamepad1.right_trigger > 0f) {
-                        step = 2;
+                        bstep = 2;
                     }
                     break;
                 case(2):
@@ -193,11 +196,90 @@ public class TimeTesterTeleop extends OpMode {
                     telemetry.addLine("press right trigger to exit");
                     if (gamepad1.right_trigger > 0f) {
                         telemetry.clearAll();
-                        step = 4;
+                        bstep = 4;
                     }
                     break;
             }
         }
+        //right Tester
+        if (gamepad1.b && !bButton) {
+            bButton = true;
+            rightTest = !rightTest;
+            rstep = 1;
+        } else if (!gamepad1.b && bButton) {
+            bButton = false;
+        }
+        if (rightTest) {
+            switch(rstep) {
+                case(1):
+                    telemetry.addLine("Choose Time");
+                    if (gamepad1.right_bumper && !timerIncrease) {
+                        timerIncrease = true;
+                        mostRecentTime += 50;
+                    } else if (!gamepad1.right_bumper && timerIncrease) {
+                        timerIncrease = false;
+                    }
+                    telemetry.addData("Backward Time", mostRecentTime);
+                    telemetry.addLine("Press right trigger to go on");
+                    if (gamepad1.right_trigger > 0f) {
+                        rstep = 2;
+                    }
+                    break;
+                case(2):
+                    driver.driveOmni(0f, -0.5f, 0f);
+                    delayDriveStop(mostRecentTime);
+                    break;
+                case(3):
+                    telemetry.addLine("Final Results");
+                    telemetry.addData("Most recent time", mostRecentTime);
+                    telemetry.addLine("press right trigger to exit");
+                    if (gamepad1.right_trigger > 0f) {
+                        telemetry.clearAll();
+                        rstep = 4;
+                    }
+                    break;
+            }
+        }
+       //left Tester
+        if (gamepad1.x && !xButton) {
+            xButton = true;
+            leftTest = !leftTest;
+            lstep = 1;
+        } else if (!gamepad1.x && xButton) {
+            xButton = false;
+        }
+        if (leftTest) {
+            switch(lstep) {
+                case(1):
+                    telemetry.addLine("Choose Time");
+                    if (gamepad1.right_bumper && !timerIncrease) {
+                        timerIncrease = true;
+                        mostRecentTime += 50;
+                    } else if (!gamepad1.right_bumper && timerIncrease) {
+                        timerIncrease = false;
+                    }
+                    telemetry.addData("Backward Time", mostRecentTime);
+                    telemetry.addLine("Press right trigger to go on");
+                    if (gamepad1.right_trigger > 0f) {
+                        lstep = 2;
+                    }
+                    break;
+                case(2):
+                    driver.driveOmni(0f, 0.5f, 0f);
+                    delayDriveStop(mostRecentTime);
+                    break;
+                case(3):
+                    telemetry.addLine("Final Results");
+                    telemetry.addData("Most recent time", mostRecentTime);
+                    telemetry.addLine("press right trigger to exit");
+                    if (gamepad1.right_trigger > 0f) {
+                        telemetry.clearAll();
+                        lstep = 4;
+                    }
+                    break;
+            }
+        }
+
 
 
 
