@@ -186,24 +186,27 @@ public class RedAutoTeleop extends OpMode {
         if (gamepad1.y) {
             switch(miniStep){
                 case(1):
+                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                    delayDriveStop(500);
+                case(2):
                     hands.setServoPosition("ill", 0.65);
                     hands.setServoPosition("ilr", 0.35);
                     miniStep++;
                     break;
-                case(2):
+                case(3):
                     driver.testDriveOmni(0,-0.5,0);
                     delayDriveStop(1000);
                     break;
-                case(3):
+                case(4):
                     hands.setServoPower("isl", 1);
                     hands.setServoPower("isr", -1);
                     delayIntakeStop(1000);
                     break;
-                case(4):
+                case(5):
                     driver.testDriveOmni(0,0.5,0);
                     delayDriveStop(1000);
                     break;
-                case(5):
+                case(6):
                     autoTeleop = false;
                     miniStep++;
                     break;

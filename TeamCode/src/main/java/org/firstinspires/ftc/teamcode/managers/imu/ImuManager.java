@@ -43,6 +43,15 @@ public class ImuManager extends FeatureManager {
     public float getZOrientation() {
         return getOrientation().thirdAngle;
     }
+public float getNiceAngle() {
+        if (getZOrientation() > 360 || getZOrientation() < 360){
+            return getZOrientation()%360; //percent divides and then gives remainder
+        }
+        else {
+            return getZOrientation();
+        }
+}
+
 
     public Position getPosition() {
         return imu.getPosition();
