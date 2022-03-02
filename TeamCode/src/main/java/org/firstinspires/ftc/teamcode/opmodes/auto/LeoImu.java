@@ -83,7 +83,7 @@ public class LeoImu extends OpMode {
                 while (initialRotation > 0) {
                     driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
                 }
-            } else if (initialRotation < 0) {
+            } else {
                 while(initialRotation < 0) {
                     driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
                 }
