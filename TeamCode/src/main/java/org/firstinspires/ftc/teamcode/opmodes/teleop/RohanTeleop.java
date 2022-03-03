@@ -137,17 +137,20 @@ public class RohanTeleop extends OpMode {
             hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            telemetry.speak("cunt");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 1);
             hands.setServoPosition("ilr", 0.5);
         }
         if (gamepad1.x) {
-            telemetry.speak("motherfucker");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 0.65);
             hands.setServoPosition("ilr", 0.35);
         }
         if (gamepad1.a) {
-            telemetry.speak("fat ass");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 0.85);
             hands.setServoPosition("ilr", 0.15);
         }
@@ -160,11 +163,6 @@ public class RohanTeleop extends OpMode {
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
-        telemetry.speak("Gimme the loot");
-        telemetry.addLine("Make Rohan Project Manager");
-        telemetry.speak("Gimme the loot");
-        telemetry.addLine("Make Rohan Project Manager");
-        telemetry.speak("Gimme the loot");
         telemetry.update();
     }
 
