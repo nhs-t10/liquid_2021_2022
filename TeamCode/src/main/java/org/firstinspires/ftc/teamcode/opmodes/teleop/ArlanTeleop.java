@@ -11,9 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
@@ -282,16 +279,16 @@ public class ArlanTeleop extends OpMode {
             }
         }
         if (gamepad1.dpad_down) {
-            rotate(180,0.5f);
+            //rotate(180,0.5f);
         }
         if (gamepad1.dpad_up) {
-            rotate(0,0.5f);
+            //rotate(0,0.5f);
         }
         if (gamepad1.dpad_left) {
-            rotate(-90,0.5f);
+            //rotate(-90,0.5f);
         }
         if (gamepad1.dpad_right) {
-            rotate(90,0.5f);
+            //rotate(90,0.5f);
         }
 
 

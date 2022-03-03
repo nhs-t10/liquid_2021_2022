@@ -97,8 +97,8 @@ public class BlueDuckStorage extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
+        hands.setServoPosition("ill", 0.7);
+        hands.setServoPosition("ilr", 0.3);
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
@@ -112,30 +112,29 @@ public class BlueDuckStorage extends OpMode {
     }
     public void loop() {
         switch (step) {
+            case(0):
+                driver.testDriveOmni(0,0.25,0);
+                delayDriveStop(750);
             case(1):
-                driver.testDriveOmni(0, -0.25, 0);
-                delayDriveStop(500);
-                break;
-            case(2):
-                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
-                if (backDist2.getDistance(CM) <= 20.6 || backDist1.getDistance(CM) <= 20.6) {
-                    driver.testDriveOmni(0,0.1,0);
+                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
+                if (backDist1.getDistance(CM) <= 21.6) {
+                    driver.testDriveOmni(-0.25,-0.25,0);
                     step++;
                 }
                 break;
-            case(3):
-                hands.setMotorPower("dw", 1);
+            case(2):
+                hands.setMotorPower("dw", -1);
                 delayDwStop(5000);
                 break;
+            case(3):
+                driver.testDriveOmni(0,0.5,0);
+                delayDriveStop(1050);
+                break;
             case(4):
-                driver.testDriveOmni(0,-0.25,0);
-                delayDriveStop(2250);
+                driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
+                delayDriveStop(1500);
                 break;
             case(5):
-                driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
-                delayDriveStop(1000);
-                break;
-            case(6):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
