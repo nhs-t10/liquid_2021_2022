@@ -119,7 +119,6 @@ public class BlueAutoTeleop extends OpMode {
         telemetry.addLine("l Stick Values");
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
-        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
 
         if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
@@ -155,9 +154,7 @@ public class BlueAutoTeleop extends OpMode {
          */
         if (gamepad1.left_bumper) {
             hands.setServoPower("isl", 1);
-            hands.setServoPower("isl", 0);
             hands.setServoPower("isr", -1);
-            hands.setServoPower("isr", 0);
         } else if (gamepad1.right_bumper) {
             hands.setServoPower("isl", -1);
             hands.setServoPower("isr", 1);
@@ -166,16 +163,16 @@ public class BlueAutoTeleop extends OpMode {
             hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.95);
-            hands.setServoPosition("ilr", 0.05);
+            hands.setServoPosition("ill", 0.15);
+            hands.setServoPosition("ilr", 0.85);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.65);
-            hands.setServoPosition("ilr", 0.35);
+            hands.setServoPosition("ill", 0.55);
+            hands.setServoPosition("ilr", 0.45);
         }
         if (gamepad1.a) {
-            hands.setServoPosition("ill", 0.85);
-            hands.setServoPosition("ilr", 0.15);
+            hands.setServoPosition("ill", 0.35);
+            hands.setServoPosition("ilr", 0.65);
         }
         if (gamepad1.y == true && yButton == false) {
             yButton = true;
@@ -184,33 +181,37 @@ public class BlueAutoTeleop extends OpMode {
         } else if (gamepad1.y == false && yButton == true) {
             yButton = false;
         }
-        if (autoTeleop) {
+        if (gamepad1.y) {
             switch(miniStep){
                 case(1):
-                    hands.setServoPosition("ill", 0.65);
-                    hands.setServoPosition("ilr", 0.35);
+                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                    delayDriveStop(500);
+                case(2):
+                    hands.setServoPosition("ill", 0.4);
+                    hands.setServoPosition("ilr", 0.6);
                     miniStep++;
                     break;
-                case(2):
-                    driver.testDriveOmni(0,0.5,0);
-                    delayDriveStop(1000);
-                    break;
                 case(3):
-                    hands.setServoPower("isl", 1);
-                    hands.setServoPower("isl", 0);
-                    hands.setServoPower("isr", -1);
-                    hands.setServoPower("isr", 0);
-                    delayIntakeStop(500);
+                    driver.testDriveOmni(-0.1,-0.5,0);
+                    delayDriveStop(1350);
                     break;
                 case(4):
-                    driver.testDriveOmni(0,-0.5,0);
-                    delayDriveStop(1000);
+                    hands.setServoPower("isl", 1);
+                    hands.setServoPower("isr", -1);
+                    delayIntakeStop(1500);
                     break;
                 case(5):
+                    driver.testDriveOmni(-0.1,0.5,0);
+                    delayDriveStop(1200);
+                    break;
+                case(6):
                     autoTeleop = false;
                     miniStep++;
                     break;
             }
+        } else if (!gamepad1.y) {
+            miniStep = 1;
+            driver.testDriveOmni(-gamepad1.left_stick_y/1.5, gamepad1.left_stick_x/1.5, gamepad1.right_stick_x/2.0);
         }
 
         telemetry.addLine("Encoder Values");

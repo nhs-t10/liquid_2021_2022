@@ -86,58 +86,21 @@ public class ArlanTeleop extends OpMode {
 
 
 
-    /*private void rotate ( int degrees, float power){
-        float leftPower, rightPower;
-        DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
-        DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
-        DcMotor br = hardwareMap.get(DcMotor.class, "br");
-        DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        // restart imu movement tracking.
-        resetAngle();
-
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        // clockwise (right).
-
-        if (degrees < 0) {   // turn right.
-            leftPower = power;
-            rightPower = -power;
-        } else if (degrees > 0) {   // turn left.
-            leftPower = -power;
-            rightPower = power;
-        } else return;
-
-        // set power to rotate.
-        driver.driveRaw(leftPower, rightPower, rightPower, leftPower);
-
-
-        // rotate until turn is completed.
-        if (degrees < 0) {
-            // On right turn we have to get off zero first.
-            while (getAngle() == 0) {
+    public void rotate(double angle, float power) {
+        //angle values: negative to 180 is left, positive to 180 is right
+        //uses a zero point
+        final double initialRotation = gyro.getZOrientation();
+        if (angle < initialRotation){
+            while (gyro.getZOrientation() > (float)angle){
+                driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
             }
-
-            while (getAngle() > degrees) {
-            }
-        } else    // left turn.
-            while (getAngle() == 0) {
-            }
-        while (getAngle() < degrees) {
         }
-
-        // turn the motors off.
-        fl.setPower(0);
-        bl.setPower(0);
-        fr.setPower(0);
-        br.setPower(0);
-
-        // wait for rotation to stop.
-        delay(1000);
-
-        // reset angle tracking on new heading.
-        resetAngle();
+        else{
+            while (gyro.getZOrientation() < (float)angle){
+                driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
+            }
+        }
     }
-*/
 
     @Override
     public void init() {
@@ -280,6 +243,21 @@ public class ArlanTeleop extends OpMode {
             while (backDist1.getDistance(CM) <= 3 || backDist2.getDistance(CM) <= 3) {
                 driver.driveRaw(-0.5f, -0.5f, -0.5f, -0.5f);
             }
+        }
+        if (gamepad1.dpad_down) {
+            rotateToStart(0.5f);
+            rotate(180,0.5f);
+        }
+        if (gamepad1.dpad_up) {
+            rotateToStart(0.5f);
+        }
+        if (gamepad1.dpad_left) {
+            rotateToStart(0.5f);
+            rotate(90,0.5f);
+        }
+        if (gamepad1.dpad_right) {
+            rotateToStart(0.5f);
+            rotate(-90,0.5f);
         }
 
 

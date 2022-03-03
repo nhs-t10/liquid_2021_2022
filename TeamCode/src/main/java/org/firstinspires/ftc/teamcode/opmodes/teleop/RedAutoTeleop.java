@@ -154,9 +154,7 @@ public class RedAutoTeleop extends OpMode {
          */
         if (gamepad1.left_bumper) {
             hands.setServoPower("isl", 1);
-            hands.setServoPower("isl", 0);
             hands.setServoPower("isr", -1);
-            hands.setServoPower("isr", 0);
         } else if (gamepad1.right_bumper) {
             hands.setServoPower("isl", -1);
             hands.setServoPower("isr", 1);
@@ -165,16 +163,16 @@ public class RedAutoTeleop extends OpMode {
             hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.95);
-            hands.setServoPosition("ilr", 0.05);
+            hands.setServoPosition("ill", 0.15);
+            hands.setServoPosition("ilr", 0.85);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.65);
-            hands.setServoPosition("ilr", 0.35);
+            hands.setServoPosition("ill", 0.55);
+            hands.setServoPosition("ilr", 0.45);
         }
         if (gamepad1.a) {
-            hands.setServoPosition("ill", 0.85);
-            hands.setServoPosition("ilr", 0.15);
+            hands.setServoPosition("ill", 0.35);
+            hands.setServoPosition("ilr", 0.65);
         }
         if (gamepad1.y == true && yButton == false) {
             yButton = true;
@@ -186,24 +184,27 @@ public class RedAutoTeleop extends OpMode {
         if (gamepad1.y) {
             switch(miniStep){
                 case(1):
-                    hands.setServoPosition("ill", 0.65);
-                    hands.setServoPosition("ilr", 0.35);
+                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                    delayDriveStop(500);
+                case(2):
+                    hands.setServoPosition("ill", 0.35);
+                    hands.setServoPosition("ilr", 0.65);
                     miniStep++;
                     break;
-                case(2):
-                    driver.testDriveOmni(0,-0.5,0);
+                case(3):
+                    driver.testDriveOmni(0,0.5,0);
                     delayDriveStop(1000);
                     break;
-                case(3):
+                case(4):
                     hands.setServoPower("isl", 1);
                     hands.setServoPower("isr", -1);
                     delayIntakeStop(1000);
                     break;
-                case(4):
-                    driver.testDriveOmni(0,0.5,0);
+                case(5):
+                    driver.testDriveOmni(0,-0.5,0);
                     delayDriveStop(1000);
                     break;
-                case(5):
+                case(6):
                     autoTeleop = false;
                     miniStep++;
                     break;

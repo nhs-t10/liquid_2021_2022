@@ -152,7 +152,6 @@ public class RohanTeleop extends OpMode {
             hands.setServoPosition("ilr", 0.15);
         }
         if (gamepad1.y) {
-            telemetry.speak("oi coño", "es", "ES");
         }
 
 

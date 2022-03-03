@@ -17,21 +17,33 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class BlueDuckStorage extends OpMode {
+public class BlueFreightDuckWarehouse extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
+    Rev2mDistanceSensor rightDist1;
+    Rev2mDistanceSensor rightDist2;
     int step = 1;
     public ElapsedTime timer = new ElapsedTime();
     int delayStep = -1;
     double endTime = timer.milliseconds();
-    double initDist1;
 
 
 
+    public void delayIntakeStop(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
+            step++;
+        }
+    }
     public void delayDwStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
@@ -97,8 +109,8 @@ public class BlueDuckStorage extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.7);
-        hands.setServoPosition("ilr", 0.3);
+        hands.setServoPosition("ill", 0.4);
+        hands.setServoPosition("ilr", 0.4);
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
@@ -112,29 +124,48 @@ public class BlueDuckStorage extends OpMode {
     }
     public void loop() {
         switch (step) {
-            case(0):
-                driver.testDriveOmni(0,0.25,0);
-                delayDriveStop(750);
             case(1):
-                driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
-                if (backDist1.getDistance(CM) <= 21.6) {
-                    driver.testDriveOmni(-0.25,-0.25,0);
+                driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
+                if (backDist2.getDistance(CM) >= 62 && backDist2.getDistance(CM) < 300 || backDist1.getDistance(CM) >= 62 && backDist1.getDistance(CM) < 300) {
+                    driver.stopDrive();
                     step++;
                 }
                 break;
             case(2):
-                hands.setMotorPower("dw", -1);
-                delayDwStop(5000);
+                hands.setServoPower("isl", 1);
+                hands.setServoPower("isr", -1);
+                delayIntakeStop(500);
                 break;
             case(3):
-                driver.testDriveOmni(0,0.5,0);
-                delayDriveStop(1050);
-                break;
+                driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+                if (backDist2.getDistance(CM) <= 5 || backDist1.getDistance(CM) <= 5) {
+                    driver.stopDrive();
+                    step++;
+                }
             case(4):
-                driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
-                delayDriveStop(1500);
+                driver.testDriveOmni(0, -0.25, 0);
+                delayDriveStop(500);
                 break;
             case(5):
+                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
+                if (backDist2.getDistance(CM) <= 20.6 || backDist1.getDistance(CM) <= 20.6) {
+                    driver.testDriveOmni(0,0.1,0);
+                    step++;
+                }
+                break;
+            case(6):
+                hands.setMotorPower("dw", 1);
+                delayDwStop(5000);
+                break;
+            case(7):
+                driver.testDriveOmni(0,-0.25,0);
+                delayDriveStop(2250);
+                break;
+            case(8):
+                driver.driveRaw(0.1f,0.1f,0.1f,0.1f);
+                delayDriveStop(1000);
+                break;
+            case(9):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);

@@ -41,6 +41,7 @@ public class LeoImu extends OpMode {
     Rev2mDistanceSensor leftDist2;
 
 
+    
     public void delayDwStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
@@ -83,9 +84,25 @@ public class LeoImu extends OpMode {
                 while (initialRotation > 0) {
                     driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
                 }
-            } else if (initialRotation < 0) {
+            } else {
                 while(initialRotation < 0) {
                     driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
+                }
+            }
+        }
+
+        public void rotate(double angle, float power) {
+        //angle values: negative to 180 is left, positive to 180 is right
+        //uses a zero point
+            final double initialRotation = gyro.getZOrientation();
+            if (angle > initialRotation){
+                while (gyro.getZOrientation() < angle){
+                    driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
+                }
+            }
+            if (angle < initialRotation){
+                while (gyro.getZOrientation() > angle){
+                    driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
                 }
             }
         }
@@ -144,6 +161,7 @@ public class LeoImu extends OpMode {
         switch(step) {
             case(1):
                 final float initialRotation = gyro.getZOrientation();
+                telemetry.addData("rotation", gyro.getZOrientation());
             case(2):
                 telemetry.addLine("Rotation");
                 telemetry.addLine("rotation");
