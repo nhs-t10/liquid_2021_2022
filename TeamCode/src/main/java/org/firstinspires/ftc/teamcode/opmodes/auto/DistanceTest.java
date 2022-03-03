@@ -25,6 +25,8 @@ public class DistanceTest extends OpMode {
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist2;
     Rev2mDistanceSensor leftDist1;
+    Rev2mDistanceSensor rightDist1;
+    Rev2mDistanceSensor rightDist2;
     int step = 1;
     ElapsedTime timer;
 
@@ -58,12 +60,21 @@ public class DistanceTest extends OpMode {
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
+        rightDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist2");
+        rightDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist1");
     }
     public void loop() {
         switch (step) {
             case(1):
-                telemetry.addData("back cm", "%.2f cm", backDist2.getDistance(CM)); //cm distance
-                telemetry.addData("front cm", "%.2f cm", backDist1.getDistance(CM));
+                telemetry.addData("back2 cm", "%.2f cm", backDist2.getDistance(CM)); //cm distance
+                telemetry.addData("back1 cm", "%.2f cm", backDist1.getDistance(CM));
+                telemetry.addData("left1 cm", "%.2f cm", leftDist1.getDistance(CM));
+                telemetry.addData("left2 cm", "%.2f cm", leftDist2.getDistance(CM));
+                telemetry.addData("right1 cm", "%.2f cm", rightDist1.getDistance(CM));
+                telemetry.addData("right2 cm", "%.2f cm", rightDist2.getDistance(CM));
+
+
+
             case(2):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
@@ -71,11 +82,7 @@ public class DistanceTest extends OpMode {
                 telemetry.update();
                 step++;
         }
-        telemetry.addLine("Encoder Values");
-        telemetry.addData("fl pos", driver.flGetTicks());
-        telemetry.addData("fr pos", driver.frGetTicks());
-        telemetry.addData("bl pos", driver.blGetTicks());
-        telemetry.addData("br pos", driver.brGetTicks());
+
         telemetry.addData("back range", String.format("%.01f cm", backDist2.getDistance(DistanceUnit.CM)));
         telemetry.addData("back range", String.format("%.01f cm", backDist1.getDistance(DistanceUnit.CM)));
         telemetry.addData("left range", String.format("%.01f cm", leftDist2.getDistance(DistanceUnit.CM)));

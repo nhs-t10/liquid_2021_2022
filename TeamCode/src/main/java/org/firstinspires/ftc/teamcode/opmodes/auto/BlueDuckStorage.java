@@ -112,23 +112,20 @@ public class BlueDuckStorage extends OpMode {
     }
     public void loop() {
         switch (step) {
-            case(0):
-                driver.testDriveOmni(0,0.25,0);
-                delayDriveStop(750);
             case(1):
                 driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
-                if (backDist1.getDistance(CM) <= 21.6) {
-                    driver.testDriveOmni(-0.25,-0.25,0);
+                if (backDist1.getDistance(CM) <= 22.6 || backDist2.getDistance(CM) <= 22.6) {
+                    driver.testDriveOmni(-0.4,-0.4,0);
                     step++;
                 }
                 break;
             case(2):
                 hands.setMotorPower("dw", -1);
-                delayDwStop(5000);
+                delayDwStop(4000);
                 break;
             case(3):
                 driver.testDriveOmni(0,0.5,0);
-                delayDriveStop(1050);
+                delayDriveStop(1000);
                 break;
             case(4):
                 driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
