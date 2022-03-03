@@ -137,17 +137,20 @@ public class RohanTeleop extends OpMode {
             hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            telemetry.speak("cunt");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 1);
             hands.setServoPosition("ilr", 0.5);
         }
         if (gamepad1.x) {
-            telemetry.speak("motherfucker");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 0.65);
             hands.setServoPosition("ilr", 0.35);
         }
         if (gamepad1.a) {
-            telemetry.speak("fat ass");
+            telemetry.speak("Gimme the loot");
+            telemetry.speak("Gimme the loot");
             hands.setServoPosition("ill", 0.85);
             hands.setServoPosition("ilr", 0.15);
         }
