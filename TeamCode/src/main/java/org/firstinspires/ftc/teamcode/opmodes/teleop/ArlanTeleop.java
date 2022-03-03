@@ -91,12 +91,12 @@ public class ArlanTeleop extends OpMode {
         //uses a zero point
         final double initialRotation = gyro.getZOrientation();
         if (angle < initialRotation){
-            while (gyro.getZOrientation() > angle){
+            while (gyro.getZOrientation() > (float)angle){
                 driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
             }
         }
         else{
-            while (gyro.getZOrientation() < angle){
+            while (gyro.getZOrientation() < (float)angle){
                 driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
             }
         }
