@@ -161,6 +161,11 @@ public class RohanTeleop extends OpMode {
         telemetry.addData("fr pos", driver.frGetTicks());
         telemetry.addData("bl pos", driver.blGetTicks());
         telemetry.addData("br pos", driver.brGetTicks());
+        telemetry.speak("Gimme the loot");
+        telemetry.addLine("Make Rohan Project Manager");
+        telemetry.speak("Gimme the loot");
+        telemetry.addLine("Make Rohan Project Manager");
+        telemetry.speak("Gimme the loot");
         telemetry.update();
     }
 
