@@ -163,8 +163,8 @@ public class RedAutoTeleop extends OpMode {
             hands.setServoPower("isr", 0);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.15);
-            hands.setServoPosition("ilr", 0.85);
+            hands.setServoPosition("ill", 0.25);
+            hands.setServoPosition("ilr", 0.75);
         }
         if (gamepad1.x) {
             hands.setServoPosition("ill", 0.55);

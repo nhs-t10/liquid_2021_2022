@@ -27,23 +27,14 @@ public class BlueFreightWarehouse extends OpMode {
     Rev2mDistanceSensor rightDist1;
     Rev2mDistanceSensor rightDist2;
     int step = 1;
-    public ElapsedTime timer = new ElapsedTime();
+    public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
     double endTime = timer.milliseconds();
+    double initDist1;
+    double initDist2;
 
 
 
-    public void delayIntakeStop(double delay) {
-        if (delayStep != step) {
-            delayStep = step;
-            endTime = timer.milliseconds() + delay;
-        }
-        if (timer.milliseconds() >= endTime) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-            step++;
-        }
-    }
     public void delayDwStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
@@ -71,6 +62,26 @@ public class BlueFreightWarehouse extends OpMode {
             driver.stopDrive();
         }
 
+    }
+    public void delayIntakeStop(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            hands.setServoPower("isl", 0);
+            hands.setServoPower("isr", 0);
+            step++;
+        }
+    }
+    public void delay(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            step++;
+        }
     }
 
     public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
@@ -109,12 +120,14 @@ public class BlueFreightWarehouse extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
+        hands.setServoPosition("ill", 0.7);
+        hands.setServoPosition("ilr", 0.3);
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
         leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
+        rightDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist2");
+        rightDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist1");
         telemetry.addData("back cm", "%.2f cm", backDist1.getDistance(CM));
         telemetry.addData("front cm", "%.2f cm", backDist2.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
@@ -125,31 +138,53 @@ public class BlueFreightWarehouse extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
-                if (backDist2.getDistance(CM) >= 62 && backDist2.getDistance(CM) < 300 || backDist1.getDistance(CM) >= 62 && backDist1.getDistance(CM) < 300) {
-                    driver.stopDrive();
-                    step++;
-                }
+                hands.setServoPosition("ill", 0.5);
+                hands.setServoPosition("ilr", 0.5);
+                delay(1000);
+                step++;
                 break;
             case(2):
-                hands.setServoPower("isl", 1);
-                hands.setServoPower("isr", -1);
-                delayIntakeStop(500);
+                driver.driveRaw(0.25f,0.25f,0.25f,0.25f);
+                if ((backDist1.getDistance(CM) < 300 || backDist2.getDistance(CM) < 300) && (backDist1.getDistance(CM) > 40 || backDist2.getDistance(CM) > 40)) {
+                    driver.stopDrive();
+                    step++;
+                }
                 break;
             case(3):
-                driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
-                if (backDist2.getDistance(CM) <= 5 || backDist1.getDistance(CM) <= 5) {
-                    driver.stopDrive();
-                    step++;
-                }
+                hands.setServoPower("isl", 1);
+                hands.setServoPower("isr", -1);
+                delayIntakeStop(200);
+                break;
+                //TODO add delay for 200
             case(4):
-                driver.testDriveOmni(0, -0.25, 0);
-                if (leftDist2.getDistance(CM) <= 5 || leftDist1.getDistance(CM) <= 5) {
+                hands.setServoPower("isl", 1);
+                hands.setServoPower("isr", -1);
+                delayIntakeStop(200);
+                break;
+                //todo add delay for 200
+            case(5):
+                hands.setServoPower("isl", 1);
+                hands.setServoPower("isr", -1);
+                delayIntakeStop(200);
+                break;
+            case(6):
+                driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
+                if (backDist1.getDistance(CM) <= 8 || backDist2.getDistance(CM) <= 8) {
                     driver.stopDrive();
                     step++;
                 }
                 break;
-            case(5):
+            case(7):
+                driver.testDriveOmni(-0.25,-0.5,0);
+                delayDriveStop(2250);
+                break;
+            case(8):
+                hands.setServoPosition("ill", 0.6);
+                hands.setServoPosition("ilr", 0.4);
+                driver.driveRaw(0.25f,0.25f,0.25f,0.25f);
+                delayDriveStop(750);
+                break;
+            case(9):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);

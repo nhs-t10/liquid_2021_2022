@@ -17,13 +17,15 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class BlueFreightDuckStorage extends OpMode {
+public class RedFreightWarehouse extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
+    Rev2mDistanceSensor rightDist1;
+    Rev2mDistanceSensor rightDist2;
     int step = 1;
     public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
@@ -61,15 +63,6 @@ public class BlueFreightDuckStorage extends OpMode {
         }
 
     }
-    public void delay(double delay) {
-        if (delayStep != step) {
-            delayStep = step;
-            endTime = timer.milliseconds() + delay;
-        }
-        if (timer.milliseconds() >= endTime) {
-            step++;
-        }
-    }
     public void delayIntakeStop(double delay) {
         if (delayStep != step) {
             delayStep = step;
@@ -78,6 +71,15 @@ public class BlueFreightDuckStorage extends OpMode {
         if (timer.milliseconds() >= endTime) {
             hands.setServoPower("isl", 0);
             hands.setServoPower("isr", 0);
+            step++;
+        }
+    }
+    public void delay(double delay) {
+        if (delayStep != step) {
+            delayStep = step;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
             step++;
         }
     }
@@ -124,6 +126,8 @@ public class BlueFreightDuckStorage extends OpMode {
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
         leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
+        rightDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist2");
+        rightDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist1");
         telemetry.addData("back cm", "%.2f cm", backDist1.getDistance(CM));
         telemetry.addData("front cm", "%.2f cm", backDist2.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
@@ -134,8 +138,8 @@ public class BlueFreightDuckStorage extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                hands.setServoPosition("ill", 0.55);
-                hands.setServoPosition("ilr", 0.45);
+                hands.setServoPosition("ill", 0.5);
+                hands.setServoPosition("ilr", 0.5);
                 delay(1000);
                 step++;
                 break;
@@ -169,25 +173,19 @@ public class BlueFreightDuckStorage extends OpMode {
                 }
                 break;
             case(7):
-                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
-                delayDriveStop(500);
-                break;
-            case(8):
-                driver.testDriveOmni(0, 0.4, 0);
-                if (leftDist1.getDistance(CM) <= 8 || leftDist2.getDistance(CM) <= 8) {
-                    driver.testDriveOmni(-0.3, 0.3, 0);
+                driver.testDriveOmni(-0.25,-0.5,0);
+                if (leftDist1.getDistance(CM) <= 30 || leftDist2.getDistance(CM) <= 30) {
+                    driver.stopDrive();
+                    hands.setServoPosition("ill", 0.6);
+                    hands.setServoPosition("ilr", 0.4);
                     step++;
                 }
                 break;
+            case(8):
+                driver.driveRaw(0.25f,0.25f,0.25f,0.25f);
+                delayDriveStop(750);
+                break;
             case(9):
-                hands.setMotorPower("dw", 1);
-                delayDwStop(4000);
-                break;
-            case(10):
-                driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
-                delayDriveStop(900);
-                break;
-            case(11):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
