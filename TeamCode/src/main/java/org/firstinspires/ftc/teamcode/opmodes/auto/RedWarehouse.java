@@ -24,6 +24,8 @@ public class RedWarehouse extends OpMode {
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
+    Rev2mDistanceSensor rightDist1;
+    Rev2mDistanceSensor rightDist2;
     int step = 1;
     public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
@@ -98,12 +100,14 @@ public class RedWarehouse extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
+        hands.setServoPosition("ill", 0.7);
+        hands.setServoPosition("ilr", 0.3);
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
         leftDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist2");
+        rightDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist2");
+        rightDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "rightDist1");
         telemetry.addData("back cm", "%.2f cm", backDist1.getDistance(CM));
         telemetry.addData("front cm", "%.2f cm", backDist2.getDistance(CM));
         telemetry.addData("dw encoder value", hands.getPosition("dw"));
@@ -114,8 +118,11 @@ public class RedWarehouse extends OpMode {
     public void loop() {
         switch (step) {
             case(1):
-                driver.testDriveOmni(0.05,-0.75,0);
-                delayDriveStop(1750);
+                driver.testDriveOmni(0,0.5,0);
+                if (rightDist1.getDistance(CM) <= 22 || rightDist2.getDistance(CM) <= 22) {
+                    driver.stopDrive();
+                    step++;
+                }
                 break;
             case(2):
                 telemetry.addLine("Autonomous Complete");

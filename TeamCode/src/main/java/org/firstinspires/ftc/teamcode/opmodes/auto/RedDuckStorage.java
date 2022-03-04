@@ -98,8 +98,8 @@ public class RedDuckStorage extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
-        hands.setServoPosition("ill", 0.4);
-        hands.setServoPosition("ilr", 0.4);
+        hands.setServoPosition("ill", 0.7);
+        hands.setServoPosition("ilr", 0.3);
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
@@ -118,19 +118,19 @@ public class RedDuckStorage extends OpMode {
                 delayDriveStop(500);
                 break;
             case(2):
-                driver.testDriveOmni(0, -0.25, 0);
+                driver.testDriveOmni(0, -0.4, 0);
                 if (leftDist1.getDistance(CM) <= 8 || leftDist2.getDistance(CM) <= 8) {
-                    driver.testDriveOmni(0.1,0.1,0);
+                    driver.testDriveOmni(-0.3, -0.3, 0);
                     step++;
                 }
                 break;
             case(3):
                 hands.setMotorPower("dw", 1);
-                delayDwStop(5000);
+                delayDwStop(4000);
                 break;
             case(4):
                 driver.driveRaw(0.25f, 0.25f, 0.25f, 0.25f);
-                delayDriveStop(1000);
+                delayDriveStop(900);
                 break;
             case(5):
                 telemetry.addLine("Autonomous Complete");

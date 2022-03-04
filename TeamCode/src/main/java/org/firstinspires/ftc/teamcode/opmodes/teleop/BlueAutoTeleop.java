@@ -158,7 +158,7 @@ public class BlueAutoTeleop extends OpMode {
         } else if (gamepad1.right_bumper) {
             hands.setServoPower("isl", -1);
             hands.setServoPower("isr", 1);
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
+        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper && !gamepad1.y) {
             hands.setServoPower("isl", 0);
             hands.setServoPower("isr", 0);
         }

@@ -24,7 +24,7 @@ public class BlueDuckStorage extends OpMode {
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
     Rev2mDistanceSensor leftDist2;
-    int step = 1;
+    int step = 0;
     public ElapsedTime timer = new ElapsedTime();
     int delayStep = -1;
     double endTime = timer.milliseconds();
@@ -112,10 +112,14 @@ public class BlueDuckStorage extends OpMode {
     }
     public void loop() {
         switch (step) {
+            case(0):
+                driver.testDriveOmni(0,0.4,0);
+                delayDriveStop(500);
+                break;
             case(1):
                 driver.driveRaw(-0.25f, -0.25f, -0.25f, -0.25f);
                 if (backDist1.getDistance(CM) <= 22.6 || backDist2.getDistance(CM) <= 22.6) {
-                    driver.testDriveOmni(-0.4,-0.4,0);
+                    driver.testDriveOmni(-0.25,-0.25,0);
                     step++;
                 }
                 break;
@@ -128,10 +132,6 @@ public class BlueDuckStorage extends OpMode {
                 delayDriveStop(1000);
                 break;
             case(4):
-                driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
-                delayDriveStop(1500);
-                break;
-            case(5):
                 telemetry.addLine("Autonomous Complete");
                 telemetry.addData("time", timer.milliseconds());
                 telemetry.addData("Step #", step);
