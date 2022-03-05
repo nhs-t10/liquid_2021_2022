@@ -193,7 +193,7 @@ public class RedAutoTeleop extends OpMode {
                     break;
                 case(3):
                     driver.testDriveOmni(-0.1,0.5,0);
-                    delayDriveStop(1350);
+                    delayDriveStop(1600);
                     break;
                 case(4):
                     hands.setServoPower("isl", 1);
