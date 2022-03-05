@@ -176,7 +176,7 @@ public class BlueFreightWarehouse extends OpMode {
                 break;
             case(7):
                 driver.testDriveOmni(-0.25,-0.5,0);
-                delayDriveStop(2250);
+                delayDriveStop(2000);
                 break;
             case(8):
                 hands.setServoPosition("ill", 0.6);
