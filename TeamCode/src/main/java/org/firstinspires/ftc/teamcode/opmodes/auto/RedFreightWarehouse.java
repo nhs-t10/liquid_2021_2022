@@ -26,7 +26,7 @@ public class RedFreightWarehouse extends OpMode {
     Rev2mDistanceSensor leftDist2;
     Rev2mDistanceSensor rightDist1;
     Rev2mDistanceSensor rightDist2;
-    int step = 1;
+    int step = 0;
     public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
     double endTime = timer.milliseconds();
@@ -137,6 +137,9 @@ public class RedFreightWarehouse extends OpMode {
     }
     public void loop() {
         switch (step) {
+            case(0):
+                delay(15000);
+                break;
             case(1):
                 hands.setServoPosition("ill", 0.5);
                 hands.setServoPosition("ilr", 0.5);
