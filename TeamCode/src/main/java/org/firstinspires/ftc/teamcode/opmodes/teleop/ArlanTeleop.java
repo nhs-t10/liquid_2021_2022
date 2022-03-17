@@ -66,8 +66,8 @@ public class ArlanTeleop extends OpMode {
             endTime = timer.milliseconds() + delay;
         }
         if (timer.milliseconds() >= endTime) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
+            hands.setServoPower("intakeL", 0);
+            hands.setServoPower("intakeR", 0);
             miniStep++;
         }
     }
@@ -81,22 +81,23 @@ public class ArlanTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        CRServo isl = hardwareMap.get(CRServo.class, "isl");
-        CRServo isr = hardwareMap.get(CRServo.class, "isr");
-        Servo ill = hardwareMap.get(Servo.class, "ill");
-        Servo ilr = hardwareMap.get(Servo.class, "ilr");
+        CRServo launcherL = hardwareMap.get(CRServo.class, "launcherL");
+        CRServo launcherR = hardwareMap.get(CRServo.class, "launcherR");
+        CRServo intakeL = hardwareMap.get(CRServo.class, "intakeL");
+        CRServo intakeR = hardwareMap.get(CRServo.class, "intakeR");
+        Servo lifterL = hardwareMap.get(Servo.class, "lifterL");
+        Servo lifterR = hardwareMap.get(Servo.class, "lifterR");
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-                new CRServo[] {isl, isr},
-                new String[] {"isl", "isr"},
-                new Servo[] {ill, ilr},
-                new String[] {"ill", "ilr"},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
+                new CRServo[] {intakeL, intakeR, launcherL, launcherR},
+                new String[] {"intakeL", "intakeR", "launcherL", "launcherR"},
+                new Servo[] {lifterL, lifterR},
+                new String[] {"lifterL", "lifterR"},
+                new DcMotor[] {fl, fr, br, bl,},
+                new String[] {"fl", "fr", "br", "bl"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -120,7 +121,7 @@ public class ArlanTeleop extends OpMode {
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
 
-        if (gamepad1.right_trigger > 0f) {
+/*        if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
         } else if (gamepad1.right_trigger == 0f) {
             hands.setMotorPower("dw", 0);
@@ -129,89 +130,27 @@ public class ArlanTeleop extends OpMode {
             hands.setMotorPower("dw", 1);
         } else if (gamepad1.left_trigger == 0f){
             hands.setMotorPower("dw", 0);
-        }
+        }*/
 
-        /*
-        // Corbin Artifact
-        if (gamepad1.right_bumper && !rBumperDown) {
-            rBumperDown = true;
-            rintakeRunning = !rintakeRunning;
-        } else if (!gamepad1.right_bumper && rBumperDown) {
-            rBumperDown = false;
-        }
-
-        if (lintakeRunning) {
-            hands.setServoPower("isl", 1);
-            hands.setServoPower("isr", -1);
-        } else if (!lintakeRunning && !rintakeRunning) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        } else if (rintakeRunning) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        }
-
-         */
         if (gamepad1.left_bumper) {
-            hands.setServoPower("isl", 1);
-            hands.setServoPower("isr", -1);
+            hands.setServoPower("launcherR", -1);
+            hands.setServoPower("LauncherL", 1);
+            generalDelay(5000);
         } else if (gamepad1.right_bumper) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper && !gamepad1.y) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
+            hands.setServoPower("intakeL", 1);
+            hands.setServoPower("intakeR", -1);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.25);
-            hands.setServoPosition("ilr", 0.75);
+            hands.setServoPosition("lifterL", 0.25);
+            hands.setServoPosition("lifterR", 0.75);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.55);
-            hands.setServoPosition("ilr", 0.45);
+            hands.setServoPosition("lifterL", 0.55);
+            hands.setServoPosition("lifterR", 0.45);
         }
         if (gamepad1.a) {
-            hands.setServoPosition("ill", 0.35);
-            hands.setServoPosition("ilr", 0.65);
-        }
-        if (gamepad1.y == true && yButton == false) {
-            yButton = true;
-            autoTeleop = !autoTeleop;
-            miniStep = 1;
-        } else if (gamepad1.y == false && yButton == true) {
-            yButton = false;
-        }
-        if (gamepad1.y) {
-            switch(miniStep){
-                case(1):
-                    driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
-                    delayDriveStop(500);
-                case(2):
-                    hands.setServoPosition("ill", 0.4);
-                    hands.setServoPosition("ilr", 0.6);
-                    miniStep++;
-                    break;
-                case(3):
-                    driver.testDriveOmni(-0.1,-0.5,0);
-                    delayDriveStop(1350);
-                    break;
-                case(4):
-                    hands.setServoPower("isl", 1);
-                    hands.setServoPower("isr", -1);
-                    delayIntakeStop(1500);
-                    break;
-                case(5):
-                    driver.testDriveOmni(-0.1,0.5,0);
-                    delayDriveStop(1200);
-                    break;
-                case(6):
-                    autoTeleop = false;
-                    miniStep++;
-                    break;
-            }
-        } else if (!gamepad1.y) {
-            miniStep = 1;
-            driver.testDriveOmni(-gamepad1.left_stick_y/1.5, gamepad1.left_stick_x/1.5, gamepad1.right_stick_x/2.0);
+            hands.setServoPosition("lifterL", 0.35);
+            hands.setServoPosition("lifterR", 0.65);
         }
 
         telemetry.addLine("Encoder Values");
