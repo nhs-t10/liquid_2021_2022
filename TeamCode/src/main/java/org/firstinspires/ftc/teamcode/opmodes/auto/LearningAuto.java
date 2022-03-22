@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class RedFreightWarehouse extends OpMode {
+public class LearningAuto extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     Rev2mDistanceSensor backDist2;
@@ -30,8 +30,6 @@ public class RedFreightWarehouse extends OpMode {
     public ElapsedTime timer = new ElapsedTime(); ;
     int delayStep = -1;
     double endTime = timer.milliseconds();
-    double initDist1;
-    double initDist2;
 
 
 
@@ -120,8 +118,11 @@ public class RedFreightWarehouse extends OpMode {
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
         driver.setDirection();
+
         hands.setServoPosition("ill", 0.7);
         hands.setServoPosition("ilr", 0.3);
+
+
         backDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist1");
         backDist2 = hardwareMap.get(Rev2mDistanceSensor.class, "backDist2");
         leftDist1 = hardwareMap.get(Rev2mDistanceSensor.class, "leftDist1");
@@ -136,83 +137,37 @@ public class RedFreightWarehouse extends OpMode {
 
     }
     public void loop() {
-        switch (step) {
+        /*Instructions:
+        move to the right until distance is less than 20 (rightDist1 and rightDist2)
+        spin outtake servos for 500 milliseconds (isl and isr)
+        move to the left until distance is greater than 20 (rightDist1 and rightDist2)
+        spin the duck wheel for 1 second (motor name dw)
+        move forward for 5 seconds
+         */
+        switch(step) {
             case(0):
-                delay(15000);
-                break;
-            case(1):
-                hands.setServoPosition("ill", 0.5);
-                hands.setServoPosition("ilr", 0.5);
-                delay(1000);
-                break;
-            case(2):
-                driver.driveRaw(0.25f,0.25f,0.25f,0.25f);
-                if ((backDist1.getDistance(CM) < 300 || backDist2.getDistance(CM) < 300) && (backDist1.getDistance(CM) > 37.5 || backDist2.getDistance(CM) > 37.5)) {
+                driver.driveHorizontal(0.5);
+                if(rightDist1.getDistance(CM) <= 20 || rightDist2.getDistance(CM) <= 20) {
                     driver.stopDrive();
-                    step++;
                 }
-                break;
-            case(3):
-                hands.setServoPower("isl", 1);
-                hands.setServoPower("isr", -1);
-                delayIntakeStop(200);
-                break;
-            case(4):
-                delay(200);
-                break;
-            case(5):
-                hands.setServoPower("isl", 1);
-                hands.setServoPower("isr", -1);
-                delayIntakeStop(200);
-                break;
-            case(6):
-                delay(200);
-                break;
-            case(7):
-                hands.setServoPower("isl", 1);
-                hands.setServoPower("isr", -1);
-                delayIntakeStop(200);
-                break;
-            case(8):
-                driver.driveRaw(-0.25f,-0.25f,-0.25f,-0.25f);
-                if (backDist1.getDistance(CM) <= 8 || backDist2.getDistance(CM) <= 8) {
-                    driver.stopDrive();
-                    step++;
-                }
-                break;
-            case(9):
-                driver.testDriveOmni(-0.25,0.5,0);
-                delayDriveStop(2000);
-                break;
-            case(10):
-                hands.setServoPosition("ill", 0.6);
-                hands.setServoPosition("ilr", 0.4);
-                driver.driveRaw(0.25f,0.25f,0.25f,0.25f);
-                delayDriveStop(750);
-                break;
-            case(11):
-                telemetry.addLine("Autonomous Complete");
-                telemetry.addData("time", timer.milliseconds());
-                telemetry.addData("Step #", step);
-                telemetry.update();
                 step++;
                 break;
+            case(1):
+                hands.setServoPower("isl", 0.5);
+                hands.setServoPower("isr", -0.5);
+                delayIntakeStop(500);
+                break;
+            case(2):
+                driver.driveHorizontal(-0.5);
+                if(rightDist1.getDistance(CM) >= 20 || rightDist2.getDistance(CM) >= 20) {
+                    driver.stopDrive();
+                }
+                step++;
+                break;
+            case(3):
+                hands.setServoPower("dw", 0.5);
+                delayDwStop(1000);
+                break;
         }
-        telemetry.addLine("Encoder Values");
-        telemetry.addData("fl pos", driver.flGetTicks());
-        telemetry.addData("fr pos", driver.frGetTicks());
-        telemetry.addData("bl pos", driver.blGetTicks());
-        telemetry.addData("br pos", driver.brGetTicks());
-        //Note: Commented out several lines with errors, I don't think .rawUltrasonic, .rawOptical, and .cmOptical exist.
-        //telemetry.addData("front raw ultrasonic", frontDist.rawUltrasonic()); //ultrasonic data
-        //telemetry.addData("front raw optical", frontDist.rawOptical()); //optical data
-        //telemetry.addData("front cm optical", "%.2f cm", frontDist.cmOptical()); //cm distance? todo learn more
-        //telemetry.addData("front cm", "%.2f cm", frontDist.getDistance(DistanceUnit.CM)); //cm distance
-        //telemetry.addData("back raw ultrasonic", backDist.rawUltrasonic()); //ultrasonic data
-        //telemetry.addData("back raw optical", backDist.rawOptical()); //optical data
-        //telemetry.addData("back cm optical", "%.2f cm", backDist.cmOptical()); //cm distance? todo learn more
-        telemetry.addData("back cm", "%.2f cm", backDist2.getDistance(CM)); //cm distance
-        telemetry.addData("front cm", "%.2f cm", backDist1.getDistance(CM));
-        telemetry.update();
     }
 }

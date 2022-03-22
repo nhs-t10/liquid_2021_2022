@@ -34,7 +34,6 @@ public class IMU_Test extends OpMode {
     double globalAngle, correction;
     double endTime;
     float power = 0.50f;
-    boolean aButton, bButton;
 
     public boolean delay(double delay) {
         boolean returnValue = false;

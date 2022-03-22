@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,14 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
-import org.firstinspires.ftc.teamcode.managers.imu.ImuManager;
 import org.firstinspires.ftc.teamcode.managers.input.InputManager;
-import org.firstinspires.ftc.teamcode.managers.input.nodes.ButtonNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.JoystickNode;
 import org.firstinspires.ftc.teamcode.managers.input.nodes.MultiInputNode;
 import org.firstinspires.ftc.teamcode.managers.manipulation.ManipulationManager;
@@ -44,92 +34,70 @@ public class ArlanTeleop extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     private InputManager input;
-    private ImuManager gyro;
-    private boolean rintakeRunning = false;
-    private boolean lintakeRunning = false;
-    private boolean rBumperDown = false;
-    private boolean lBumperDown = false;
-    Rev2mDistanceSensor backDist2;
-    Rev2mDistanceSensor backDist1;
-    Rev2mDistanceSensor leftDist1;
-    Rev2mDistanceSensor leftDist2;
-    int step = 1;
-    int delayStep = -1;
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
-    Orientation angles = new Orientation();
-    double globalAngle, correction;
+    private boolean autoTeleop = false;
+    private boolean yButton = false;
+    public ElapsedTime timer = new ElapsedTime();
     double endTime;
-    float power = 0.50f;
+    int delayStep = -1;
+    int miniStep = 1;
+    boolean timerDoor = false;
 
-
-    ElapsedTime timer;
-    public void delay(double delay) {
-        double endTime = timer.milliseconds() + delay;
-        while (timer.milliseconds() <= endTime) {
-            //do nothing
+    public void generalDelay(double delay) {
+        for (int i = 0; i<1; i++) {
+            endTime = timer.milliseconds();
+        }
+        if (timer.milliseconds() >= endTime) {
+            miniStep++;
         }
     }
-
-    public void rotateToStart(float power) {
-        final double initialRotation = gyro.getZOrientation();
-        if (initialRotation > 0) {
-            while (initialRotation > 0) {
-                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
-            }
-        } else if (initialRotation < 0) {
-            while(initialRotation < 0) {
-                driver.driveRaw(0.5f, 0.5f, 0.5f, 0.5f); /*todo: fix values*/
-            }
+    public void delayDriveStop(double delay) {
+        if (delayStep != miniStep) {
+            delayStep = miniStep;
+            endTime = timer.milliseconds() + delay;
+        }
+        if (timer.milliseconds() >= endTime) {
+            driver.stopDrive();
+            miniStep++;
         }
     }
-
-
-
-    public void rotate(double angle, float power) {
-        //angle values: negative to 180 is left, positive to 180 is right
-        //uses a zero point
-        final double initialRotation = gyro.getZOrientation();
-        if (angle < initialRotation){
-            while (gyro.getZOrientation() > (float)angle){
-                driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
-            }
+    public void delayIntakeStop(double delay) {
+        if (delayStep != miniStep) {
+            delayStep = miniStep;
+            endTime = timer.milliseconds() + delay;
         }
-        else{
-            while (gyro.getZOrientation() < (float)angle){
-                driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
-            }
+        if (timer.milliseconds() >= endTime) {
+            hands.setServoPower("intakeL", 0);
+            hands.setServoPower("intakeR", 0);
+            miniStep++;
         }
     }
-
     @Override
     public void init() {
         /* Phone is labelled as Not Ready For Use */
         FeatureManager.setIsOpModeRunning(true);
-        timer = new ElapsedTime();
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        gyro = new ImuManager(imu);
 
         DcMotor fl = hardwareMap.get(DcMotor.class, "fl");
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
-        CRServo isl = hardwareMap.get(CRServo.class, "isl");
-        CRServo isr = hardwareMap.get(CRServo.class, "isr");
-        Servo ill = hardwareMap.get(Servo.class, "ill");
-        Servo ilr = hardwareMap.get(Servo.class, "ilr");
+        CRServo launcherL = hardwareMap.get(CRServo.class, "launcherL");
+        CRServo launcherR = hardwareMap.get(CRServo.class, "launcherR");
+        CRServo intakeL = hardwareMap.get(CRServo.class, "intakeL");
+        CRServo intakeR = hardwareMap.get(CRServo.class, "intakeR");
+        Servo lifterL = hardwareMap.get(Servo.class, "lifterL");
+        Servo lifterR = hardwareMap.get(Servo.class, "lifterR");
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-                new CRServo[] {isl, isr},
-                new String[] {"isl", "isr"},
-                new Servo[] {ill, ilr},
-                new String[] {"ill", "ilr"},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
+                new CRServo[] {intakeL, intakeR, launcherL, launcherR},
+                new String[] {"intakeL", "intakeR", "launcherL", "launcherR"},
+                new Servo[] {lifterL, lifterR},
+                new String[] {"lifterL", "lifterR"},
+                new DcMotor[] {fl, fr, br, bl,},
+                new String[] {"fl", "fr", "br", "bl"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -143,26 +111,7 @@ public class ArlanTeleop extends OpMode {
                 )
         );
 
-        input.registerInput("toggleTray",
-                new ButtonNode("left_bumper")
-        );
-        input.registerInput("toggleIn",
-                new ButtonNode("right_bumper")
-        );
-        input.registerInput("duckWheelRight",
-                new ButtonNode("right_trigger")
-        );
-        input.registerInput("duckWheelLeft",
-                new ButtonNode("left_trigger")
-        );
-        input.registerInput("spin",
-                new ButtonNode("a")
-        );
-        input.registerInput("wallTouch",
-                new ButtonNode(/*todo*/"")
-        );
         driver.setDirection();
-        gyro.getZOrientation();
     }
 
     @Override
@@ -171,13 +120,8 @@ public class ArlanTeleop extends OpMode {
         telemetry.addLine("l Stick Values");
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
-        driver.testDriveOmni(gamepad1.left_stick_y/1.5, -gamepad1.left_stick_x/1.5, -gamepad1.right_stick_x/2.0);
 
-
-        final double initDist1 = backDist1.getDistance(CM);
-        final double initDist2 = backDist2.getDistance(CM);
-
-        if (gamepad1.right_trigger > 0f) {
+/*        if (gamepad1.right_trigger > 0f) {
             hands.setMotorPower("dw", -1);
         } else if (gamepad1.right_trigger == 0f) {
             hands.setMotorPower("dw", 0);
@@ -186,80 +130,28 @@ public class ArlanTeleop extends OpMode {
             hands.setMotorPower("dw", 1);
         } else if (gamepad1.left_trigger == 0f){
             hands.setMotorPower("dw", 0);
-        }
+        }*/
 
-        /*
-        // Toggle input motors
-        if (gamepad1.right_bumper && !rBumperDown) {
-            rBumperDown = true;
-            rintakeRunning = !rintakeRunning;
-        } else if (!gamepad1.right_bumper && rBumperDown) {
-            rBumperDown = false;
-        }
-        if (gamepad1.left_bumper && !lBumperDown) {
-            lBumperDown = true;
-            lintakeRunning = !lintakeRunning;
-        } else if (!gamepad1.left_bumper && lBumperDown) {
-            lBumperDown = false;
-        }
-        if (lintakeRunning) {
-            hands.setServoPower("isl", 1);
-            hands.setServoPower("isr", -1);
-        } else if (!lintakeRunning && !rintakeRunning) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
-        } else if (rintakeRunning) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        }
-
-         */
         if (gamepad1.left_bumper) {
-            hands.setServoPower("isl", 0.5);
-            hands.setServoPower("isr", -0.5);
+            hands.setServoPower("launcherR", -1);
+            hands.setServoPower("LauncherL", 1);
+            generalDelay(5000);
         } else if (gamepad1.right_bumper) {
-            hands.setServoPower("isl", -1);
-            hands.setServoPower("isr", 1);
-        } else if (!gamepad1.left_bumper && !gamepad1.right_bumper) {
-            hands.setServoPower("isl", 0);
-            hands.setServoPower("isr", 0);
+            hands.setServoPower("intakeL", 1);
+            hands.setServoPower("intakeR", -1);
         }
         if (gamepad1.b) {
-            hands.setServoPosition("ill", 0.95);
-            hands.setServoPosition("ilr", 0.05);
+            hands.setServoPosition("lifterL", 0.25);
+            hands.setServoPosition("lifterR", 0.75);
         }
         if (gamepad1.x) {
-            hands.setServoPosition("ill", 0.65);
-            hands.setServoPosition("ilr", 0.35);
+            hands.setServoPosition("lifterL", 0.55);
+            hands.setServoPosition("lifterR", 0.45);
         }
         if (gamepad1.a) {
-            hands.setServoPosition("ill", 0.85);
-            hands.setServoPosition("ilr", 0.15);
+            hands.setServoPosition("lifterL", 0.35);
+            hands.setServoPosition("lifterR", 0.65);
         }
-
-
-        if (gamepad1.y/*todo*/) {
-            rotateToStart(power);
-            while (backDist1.getDistance(CM) <= 3 || backDist2.getDistance(CM) <= 3) {
-                driver.driveRaw(-0.5f, -0.5f, -0.5f, -0.5f);
-            }
-        }
-        if (gamepad1.dpad_down) {
-            rotateToStart(0.5f);
-            rotate(180,0.5f);
-        }
-        if (gamepad1.dpad_up) {
-            rotateToStart(0.5f);
-        }
-        if (gamepad1.dpad_left) {
-            rotateToStart(0.5f);
-            rotate(90,0.5f);
-        }
-        if (gamepad1.dpad_right) {
-            rotateToStart(0.5f);
-            rotate(-90,0.5f);
-        }
-
 
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
