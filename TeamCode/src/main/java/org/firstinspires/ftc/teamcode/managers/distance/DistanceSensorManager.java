@@ -51,6 +51,36 @@ public class DistanceSensorManager extends FeatureManager {
         double dist2 = distanceSensors[place].getDistance(CM);
         return RohanMath.getDistanceTrig(dist1, dist2);
     }
+    public double getDistanceAverage2(String distSensorName1, String distSensorName2){
+        checkDistSensor(distSensorName1);
+        double dist1 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName2);
+        double dist2 = distanceSensors[place].getDistance(CM);
+        double[] distSensors = {dist1,dist2};
+        return RohanMath.doubleAve(distSensors);
+    }
+    public double getDistanceAverage3(String distSensorName1, String distSensorName2, String distSensorName3){
+        checkDistSensor(distSensorName1);
+        double dist1 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName2);
+        double dist2 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName3);
+        double dist3 = distanceSensors[place].getDistance(CM);
+        double[] distSensors = {dist1,dist2,dist3};
+        return RohanMath.doubleAve(distSensors);
+    }
+    public double getDistanceAverage4(String distSensorName1, String distSensorName2, String distSensorName3, String distSensorName4){
+        checkDistSensor(distSensorName1);
+        double dist1 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName2);
+        double dist2 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName3);
+        double dist3 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName4);
+        double dist4 = distanceSensors[place].getDistance(CM);
+        double[] distSensors = {dist1,dist2,dist3,dist4};
+        return RohanMath.doubleAve(distSensors);
+    }
 
 
 }
