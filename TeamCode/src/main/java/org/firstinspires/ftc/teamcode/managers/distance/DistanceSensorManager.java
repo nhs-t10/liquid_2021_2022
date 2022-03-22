@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.auxilary.RohanMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 
 public class DistanceSensorManager extends FeatureManager {
@@ -22,13 +23,16 @@ public class DistanceSensorManager extends FeatureManager {
     public int place = 0;
 
     public void checkDistSensor(String distSensorName) {
-        for (int i = 0; i <= distanceSensorNames.length; i++) {
+        boolean isIn = false;
+        for (int i = 0; i < distanceSensorNames.length; i++) {
             String currentName = distanceSensorNames[i];
             if (currentName.equals(distSensorName)) {
+                isIn = true;
                 place = i;
-            } else if (i == distanceSensorNames.length) {
-                throw new IllegalArgumentException("Not a distance sensor on the list");
             }
+        }
+        if (!isIn) {
+            throw new IllegalArgumentException("Distance sensor "+distSensorName+" not in array");
         }
     }
 
@@ -37,4 +41,14 @@ public class DistanceSensorManager extends FeatureManager {
         return distanceSensors[place].getDistance(CM);
 
     }
+
+    public double getDistanceTrig(String distSensorName1, String distSensorName2) {
+        checkDistSensor(distSensorName1);
+        double dist1 = distanceSensors[place].getDistance(CM);
+        checkDistSensor(distSensorName2);
+        double dist2 = distanceSensors[place].getDistance(CM);
+        return RohanMath.getDistanceTrig(dist1, dist2);
+    }
+
+
 }
