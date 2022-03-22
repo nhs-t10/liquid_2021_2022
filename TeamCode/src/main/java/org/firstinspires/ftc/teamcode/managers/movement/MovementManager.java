@@ -71,6 +71,12 @@ public class MovementManager extends FeatureManager {
         backRight.setPower(br);
         backLeft.setPower(bl);
     }
+    public void driveHorizontal(double power) {
+        testDriveOmni(0, power, 0);
+    }
+    public void driveVertical(double power) {
+        testDriveOmni(power, 0, 0);
+    }
 
     public void stopDrive() {
         frontLeft.setPower(0);
