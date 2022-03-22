@@ -17,16 +17,14 @@ public abstract class RohanMath extends FeatureManager {
         }
         return degree;
     }
-    public static double getDistanceTrig(double d1, double d2){
-        int theta = 90;
-        if(d1 > 300){
-            d1 = d2;
-        }
-        else if(d2 > 300){
-            d2 = d1;
-        }
-        double h = (((d2)/Math.pow(2.0, 0.5))+((d1)/Math.pow(2.0, 0.5)))/2;
-        return h;
+    public static double getDistanceTrig(double x, double y) {
+         double c = Math.pow((Math.pow(x, 2) + Math.pow(y, 2)), 1/2);
+         double alpha = Math.toDegrees(Math.asin(y/c));
+         double theta = 90 - alpha;
+         double h = x*Math.cos(Math.toRadians(theta));
+         return h;
+
     }
+
 
 }
