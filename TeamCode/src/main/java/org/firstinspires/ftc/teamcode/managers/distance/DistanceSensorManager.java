@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.managers.distance;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
+
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,22 +21,21 @@ public class DistanceSensorManager extends FeatureManager {
         this.distanceSensors = _distanceSensor;
     }
 
-    public int checkDistSensor(String distSensorName) {
-        for (int i = 0; i < distanceSensorNames.length; i++) {
+    public int place = 0;
+
+    public void checkDistSensor(String distSensorName) {
+        for (int i = 0; i <= distanceSensorNames.length; i++) {
             String currentName = distanceSensorNames[i];
-
-            if (currentName == distSensorName)
+            if (currentName.equals(distSensorName)){
+                place = i;
+                }
+            else if (i == distanceSensorNames.length) {
+                throw new IllegalArgumentException("Not a distance sensor on the list");
+                }
         }
-
     }
-    public void getDistance(String distSensorName) {
-        for (int i = 0; i< distanceSensorNames.length; i++){
-            String currentName = distanceSensorNames[i];
-
-            if (currentName == distSensorName) {
-
-            }
-            else if ()
-        }
+    public double getDistance(String distSensorName) {
+        checkDistSensor(distSensorName);
+        return distanceSensors[place].getDistance(CM);
     }
 }
