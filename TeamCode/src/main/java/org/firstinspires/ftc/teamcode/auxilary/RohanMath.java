@@ -25,6 +25,31 @@ public abstract class RohanMath extends FeatureManager {
          return h;
 
     }
+    public static double doubleAve(double[] array){
+        double sum = 0;
+        for(int i = 0; i < array.length; i++){
+            sum = sum + array[i];
+        }
+        return sum/array.length;
+    }
+    public static double intAve(int[] array){
+        double sum = 0;
+        for(int i = 0; i < array.length; i++){
+            sum = sum + array[i];
+        }
+        return sum/array.length;
+    }
 
+    public static double[] getInputOmniValues(double x, double y) {
+        double maxValue = Math.max(Math.abs(y) + Math.abs(x), 1);
+        double flPower = (y + x)/maxValue;
+        double blPower = (y - x) / maxValue;
+        double frPower = (y - x) / maxValue;
+        double brPower = (y + x) / maxValue;
+
+        double[] omniDriveValues = {flPower,frPower,blPower,brPower};
+
+        return omniDriveValues;
+    }
 
 }

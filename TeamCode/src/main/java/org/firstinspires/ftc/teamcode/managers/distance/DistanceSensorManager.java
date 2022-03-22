@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.auxilary.RohanMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class DistanceSensorManager extends FeatureManager {
 
     public Rev2mDistanceSensor[] distanceSensors;
@@ -35,7 +38,6 @@ public class DistanceSensorManager extends FeatureManager {
             throw new IllegalArgumentException("Distance sensor "+distSensorName+" not in array");
         }
     }
-
     public double getDistance(String distSensorName) {
         checkDistSensor(distSensorName);
         return distanceSensors[place].getDistance(CM);
