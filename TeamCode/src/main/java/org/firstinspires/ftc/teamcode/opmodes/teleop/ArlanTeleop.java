@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -18,7 +17,8 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyGamepad;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyHardwareMap;
 import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
-
+import com.qualcomm.ftccommon.SoundPlayer;
+import android.content.Context;
 /*
  * A: Turn 180
  * LB: Toggle Servo
@@ -36,11 +36,15 @@ public class ArlanTeleop extends OpMode {
     private InputManager input;
     private boolean autoTeleop = false;
     private boolean yButton = false;
+    private int quackID = hardwareMap.appContext.getResources().getIdentifier("quack", "raw", hardwareMap.appContext.getPackageName());
+    public Context appContext;
     public ElapsedTime timer = new ElapsedTime();
     double endTime;
     int delayStep = -1;
     int miniStep = 1;
     boolean timerDoor = false;
+
+
 
     public void generalDelay(double delay) {
         for (int i = 0; i<1; i++) {
@@ -87,6 +91,8 @@ public class ArlanTeleop extends OpMode {
         CRServo intakeR = hardwareMap.get(CRServo.class, "intakeR");
         Servo lifterL = hardwareMap.get(Servo.class, "lifterL");
         Servo lifterR = hardwareMap.get(Servo.class, "lifterR");
+        appContext = hardwareMap.appContext;
+        quackID = hardwareMap.appContext.getResources().getIdentifier("Duck-quack", "mp3", hardwareMap.appContext.getPackageName());
 
 
         driver = new MovementManager(fl, fr, br, bl);
@@ -152,6 +158,11 @@ public class ArlanTeleop extends OpMode {
             hands.setServoPosition("lifterL", 0.35);
             hands.setServoPosition("lifterR", 0.65);
         }
+
+        if (gamepad1.y) {
+            SoundPlayer.getInstance().startPlaying(appContext, quackID);
+        }
+
 
         telemetry.addLine("Encoder Values");
         telemetry.addData("fl pos", driver.flGetTicks());
