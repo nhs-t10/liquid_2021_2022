@@ -86,7 +86,7 @@ public class OutreachTeleop extends OpMode {
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
 
-        driver.treadDrive(gamepad1.left_stick_y, gamepad1.right_stick_x);
+        driver.treadDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.a);
 
         if (gamepad1.y) {
             hands.setServoPosition("hammer1", 1);

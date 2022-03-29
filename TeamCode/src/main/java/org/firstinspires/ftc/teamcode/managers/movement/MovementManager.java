@@ -137,12 +137,19 @@ public class MovementManager extends FeatureManager {
         backRight.setPower(brPower);
         backLeft.setPower(blPower);
     }
-    public void treadDrive(double y, double rx) {
+    public void treadDrive(double y, double rx, boolean fixBackup) {
 
-        frontLeft.setPower(y*rx);
-        frontRight.setPower(y*(0-rx));
-        backRight.setPower(y*(0-rx));
-        backLeft.setPower(y*rx);
+        if (y <= 0 || fixBackup == false){
+        frontLeft.setPower(y+rx);
+        frontRight.setPower(y-rx);
+        backRight.setPower(y-rx);
+        backLeft.setPower(y+rx);}
+        else {
+            frontLeft.setPower(y-rx);
+            frontRight.setPower(y+rx);
+            backRight.setPower(y+rx);
+            backLeft.setPower(y-rx);}
+
     }
 
 
