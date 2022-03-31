@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,18 +14,18 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_Short_Left extends OpMode {
+public class AutoDagonalTB extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
     int step = 1;
-    ElapsedTime timer;
+    ElapsedTime timer = new ElapsedTime();
     public void delay(double delay) {
         double endTime = timer.milliseconds() + delay;
         while (timer.milliseconds() <= endTime) {
-
+            //do nothing
         }
-        driver.stopDrive();
+
 
     }
 
@@ -35,38 +35,24 @@ public class Auto_Short_Left extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
+        /*DcMotor dw = hardwareMap.get(DcMotor.class, "dw"); todo uncomment this */
+        hands = new ManipulationManager(
+                new CRServo[] {},
+                new String[] {},
+                new Servo[] {},
+                new String[] {},
+                new DcMotor[] {fl, fr, br, bl, /*dw*/}, // todo uncomment this
+                new String[] {"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
+        );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
-        hands = new ManipulationManager(new CRServo[] {}, new String[] {}, new Servo[] {}, new String[] {}, new DcMotor[] {fl, fr, br, bl, dw}, new String[] {"fl", "fr", "br", "bl", "dw"});
+        driver.setDirection();
+        timer = new ElapsedTime();
 
     }
     public void loop() {
-        switch (step) {
-            case(1):
-                driver.runToPosition();
-                driver.resetEncoders();
-                int WheelDistCaro = 4;
-                driver.setTargetPositions(WheelDistCaro,WheelDistCaro,WheelDistCaro,WheelDistCaro);
-                step++;
-                break;
-            case(2):
-                hands.setMotorPower("dw", 0.5);
-                hands.setMotorPower("dw", 0);
-                step++;
-                break;
-            case(3):
-                driver.resetEncoders();
-                int WheelBackCaro = -8;
-                driver.setTargetPositions(WheelBackCaro,WheelBackCaro,WheelBackCaro,WheelBackCaro);
-                step++;
-                break;
-        }
+        driver.timeDriveRaw(10000,10,10,10,10);
     }
 
 }
 
-
-
-//driver.setTargetPositions(,,,)
-//hands.setMotorPower("dw", power (-0.5)

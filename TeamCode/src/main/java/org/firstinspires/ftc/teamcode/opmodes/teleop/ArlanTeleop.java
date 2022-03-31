@@ -19,6 +19,9 @@ import org.firstinspires.ftc.teamcode.unitTests.dummy.DummyTelemetry;
 import org.junit.Test;
 import com.qualcomm.ftccommon.SoundPlayer;
 import android.content.Context;
+import android.media.MediaPlayer;
+
+import java.io.File;
 /*
  * A: Turn 180
  * LB: Toggle Servo
@@ -36,8 +39,6 @@ public class ArlanTeleop extends OpMode {
     private InputManager input;
     private boolean autoTeleop = false;
     private boolean yButton = false;
-    private int quackID = hardwareMap.appContext.getResources().getIdentifier("quack", "raw", hardwareMap.appContext.getPackageName());
-    public Context appContext;
     public ElapsedTime timer = new ElapsedTime();
     double endTime;
     int delayStep = -1;
@@ -63,17 +64,7 @@ public class ArlanTeleop extends OpMode {
             driver.stopDrive();
             miniStep++;
         }
-    }
-    public void delayIntakeStop(double delay) {
-        if (delayStep != miniStep) {
-            delayStep = miniStep;
-            endTime = timer.milliseconds() + delay;
-        }
-        if (timer.milliseconds() >= endTime) {
-            hands.setServoPower("intakeL", 0);
-            hands.setServoPower("intakeR", 0);
-            miniStep++;
-        }
+
     }
     @Override
     public void init() {
@@ -85,23 +76,15 @@ public class ArlanTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        CRServo launcherL = hardwareMap.get(CRServo.class, "launcherL");
-        CRServo launcherR = hardwareMap.get(CRServo.class, "launcherR");
-        CRServo intakeL = hardwareMap.get(CRServo.class, "intakeL");
-        CRServo intakeR = hardwareMap.get(CRServo.class, "intakeR");
-        Servo lifterL = hardwareMap.get(Servo.class, "lifterL");
-        Servo lifterR = hardwareMap.get(Servo.class, "lifterR");
-        appContext = hardwareMap.appContext;
-        quackID = hardwareMap.appContext.getResources().getIdentifier("Duck-quack", "mp3", hardwareMap.appContext.getPackageName());
 
 
         driver = new MovementManager(fl, fr, br, bl);
 
         hands = new ManipulationManager(
-                new CRServo[] {intakeL, intakeR, launcherL, launcherR},
-                new String[] {"intakeL", "intakeR", "launcherL", "launcherR"},
-                new Servo[] {lifterL, lifterR},
-                new String[] {"lifterL", "lifterR"},
+                new CRServo[] {},
+                new String[] {""},
+                new Servo[] {},
+                new String[] {""},
                 new DcMotor[] {fl, fr, br, bl,},
                 new String[] {"fl", "fr", "br", "bl"}
         );
@@ -137,30 +120,34 @@ public class ArlanTeleop extends OpMode {
         } else if (gamepad1.left_trigger == 0f){
             hands.setMotorPower("dw", 0);
         }*/
-
-        if (gamepad1.left_bumper) {
-            hands.setServoPower("launcherR", -1);
-            hands.setServoPower("LauncherL", 1);
-            generalDelay(5000);
-        } else if (gamepad1.right_bumper) {
-            hands.setServoPower("intakeL", 1);
-            hands.setServoPower("intakeR", -1);
+        if (gamepad1.right_bumper) {
+            int random_int = (int)Math.floor(Math.random()*(5+1)+1);
+            if (random_int == 1){
+                telemetry.speak("Dodo");
+            } else if (random_int == 2){
+                telemetry.speak("Baby");
+            } else if (random_int == 3){
+                telemetry.speak("Dumbhead");
+            } else if (random_int == 4){
+                telemetry.speak("Idiot");
+            } else if (random_int == 5){
+                telemetry.speak("loser");
+            }
         }
         if (gamepad1.b) {
-            hands.setServoPosition("lifterL", 0.25);
-            hands.setServoPosition("lifterR", 0.75);
+            telemetry.speak("You fool!");
         }
         if (gamepad1.x) {
-            hands.setServoPosition("lifterL", 0.55);
-            hands.setServoPosition("lifterR", 0.45);
+            telemetry.speak("die scumbag die!");
         }
         if (gamepad1.a) {
-            hands.setServoPosition("lifterL", 0.35);
-            hands.setServoPosition("lifterR", 0.65);
+            telemetry.speak("You Idiot!");
+
         }
 
         if (gamepad1.y) {
-            SoundPlayer.getInstance().startPlaying(appContext, quackID);
+            telemetry.speak("Hi! ... I'm ");
+
         }
 
 

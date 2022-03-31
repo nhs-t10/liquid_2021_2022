@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_TimeBased_Short_Left extends OpMode {
+public class Auto_TimeBased_Short_Right extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -55,9 +55,9 @@ public class Auto_TimeBased_Short_Left extends OpMode {
             case(1):
 
                 driver.timeDriveRaw(2000, 0.5f, 0.5f, 0.5f, 0.5f);
-                /*hands.setMotorPower("dw", 0.5);
+                /*hands.setMotorPower("dw", -0.5);
                 delay(5000);
-                hands.setMotorPower("dw",0); */ //todo uncomment duck wheel later
+                hands.setMotorPower("dw",0);  //todo uncomment duck wheel later*/
                 driver.timeDriveRaw(5000,-0.5f,-0.5f, -0.5f, -0.5f);
                 step++;
                 break;
