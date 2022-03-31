@@ -149,7 +149,6 @@ public class MovementManager extends FeatureManager {
             frontRight.setPower(y+rx);
             backRight.setPower(y+rx);
             backLeft.setPower(y-rx);}
-
     }
 
 
