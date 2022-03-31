@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.managers.telemetry.TelemetryManager;
 
 
 @Autonomous
-public class Auto_TimeBased_Long_Left extends OpMode {
+public class Arlan_TimeBased_Template extends OpMode {
     private MovementManager driver;
     private ManipulationManager hands;
     float [] omniValues = new float [4];
@@ -35,14 +35,14 @@ public class Auto_TimeBased_Long_Left extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        /*DcMotor dw = hardwareMap.get(DcMotor.class, "dw"); todo uncomment this */
+        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         hands = new ManipulationManager(
                 new CRServo[] {},
                 new String[] {},
                 new Servo[] {},
                 new String[] {},
-                new DcMotor[] {fl, fr, br, bl, /*dw*/}, // todo uncomment this
-                new String[] {"fl", "fr", "br", "bl", /*"dw"*/} //todo uncomment this
+                new DcMotor[] {fl, fr, br, bl, dw},
+                new String[] {"fl", "fr", "br", "bl", "dw"}
             );
         driver = new MovementManager(fl, fr, br, bl);
         telemetry = new TelemetryManager(telemetry, this, TelemetryManager.BITMASKS.NONE);
@@ -54,9 +54,11 @@ public class Auto_TimeBased_Long_Left extends OpMode {
         switch (step) {
             case(1):
 
-                driver.timeDriveRaw(4000, 0.5f, 0.5f, 0.5f, 0.5f);
-                /*hands.setMotorPower("dw",0); */ //todo uncomment duck wheel later
-                driver.timeDriveRaw(5000,-0.5f,-0.5f, -0.5f, -0.5f);
+                driver.timeDriveOmni(0, 0, 0, 0);
+                hands.setMotorPower("dw", 0);
+                delay(5);
+                hands.setMotorPower("dw",0);
+                driver.timeDriveOmni(0,0,0, 0);
                 step++;
                 break;
             case(2):

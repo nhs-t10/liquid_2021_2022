@@ -6,6 +6,7 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.auxilary.RohanMath;
 import org.firstinspires.ftc.teamcode.managers.FeatureManager;
@@ -19,11 +20,20 @@ public class DistanceSensorManager extends FeatureManager {
     public String[] distanceSensorNames;
 
 
+
+    public ElapsedTime timer = new ElapsedTime();
+
     public DistanceSensorManager(Rev2mDistanceSensor[] _distanceSensor) {
         this.distanceSensors = _distanceSensor;
     }
 
     public int place = 0;
+
+    public void delay (double milliseconds){
+        while (timer.milliseconds() < milliseconds){
+            //do nothing
+        }
+    }
 
     public void checkDistSensor(String distSensorName) {
         boolean isIn = false;
@@ -81,6 +91,19 @@ public class DistanceSensorManager extends FeatureManager {
         double[] distSensors = {dist1,dist2,dist3,dist4};
         return RohanMath.doubleAve(distSensors);
     }
-
+public double  waitforDistChange(String distSensorName, double checkTimeMilliseconds){
+    checkDistSensor(distSensorName);
+    double currentDist = distanceSensors[place].getDistance(CM);
+        for(int i = 0; i < 1;){
+            if (currentDist != distanceSensors[place].getDistance(CM)){
+                i++;
+            }
+            else{
+                currentDist = distanceSensors[place].getDistance(CM);
+                delay(checkTimeMilliseconds);
+            }
+        }
+    return distanceSensors[place].getDistance(CM);
+}
 
 }

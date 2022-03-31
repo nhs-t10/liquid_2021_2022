@@ -140,15 +140,21 @@ public class MovementManager extends FeatureManager {
     public void treadDrive(double y, double rx, boolean fixBackup) {
 
         if (y <= 0 || fixBackup == false){
-        frontLeft.setPower(y+rx);
-        frontRight.setPower(y-rx);
-        backRight.setPower(y-rx);
-        backLeft.setPower(y+rx);}
+            frontLeft.setPower(y+rx);
+            frontRight.setPower(y-rx);
+            backRight.setPower(y-rx);
+            backLeft.setPower(y+rx);}
         else {
             frontLeft.setPower(y-rx);
             frontRight.setPower(y+rx);
             backRight.setPower(y+rx);
             backLeft.setPower(y-rx);}
+    }
+    public void treadDriveRaw(double y, double rx, boolean fixBackup) {
+            frontLeft.setPower(y+rx);
+            frontRight.setPower(y-rx);
+            backRight.setPower(y-rx);
+            backLeft.setPower(y+rx);
     }
 
 

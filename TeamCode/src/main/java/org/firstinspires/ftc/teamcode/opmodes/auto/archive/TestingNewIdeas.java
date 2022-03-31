@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import static com.google.blocks.ftcrobotcontroller.hardware.HardwareType.BNO055IMU;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
