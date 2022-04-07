@@ -34,7 +34,7 @@ public class LeoImu extends OpMode {
     int delayStep = -1;
     double endTime;
     Orientation lastAngles = new Orientation();
-    final double veryFirstAngle = gyro.getZOrientation();
+    double veryFirstAngle;
     Rev2mDistanceSensor backDist2;
     Rev2mDistanceSensor backDist1;
     Rev2mDistanceSensor leftDist1;
@@ -91,21 +91,40 @@ public class LeoImu extends OpMode {
             }
         }
 
-        public void rotate(double angle, float power) {
-        //angle values: negative to 180 is left, positive to 180 is right
+    public void rotate(double angle, float power) {
+        //angle values: 0 - 360 = zero is straight, as angle increases you go left
         //uses a zero point
-            final double initialRotation = gyro.getZOrientation();
-            if (angle > initialRotation){
-                while (gyro.getZOrientation() < angle){
-                    driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
-                }
-            }
-            if (angle < initialRotation){
-                while (gyro.getZOrientation() > angle){
-                    driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
-                }
+        final double initialRotation = gyro.getZOrientation();
+        if (angle > initialRotation){
+            while (gyro.getZOrientation() < angle){
+                driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
             }
         }
+        else if (angle < initialRotation){
+            while (gyro.getZOrientation() > angle){
+                driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
+            }
+        }
+    }
+    public void rotateStep (double angle, float power ) {
+        //angle values: 0 - 360 = zero is straight, as angle increases you go left
+        //uses a zero point
+        final double initialRotation = gyro.getZOrientation();
+        if (angle > initialRotation){
+            driver.driveRaw(0.5f, -0.5f, -0.5f,0.5f);
+            if (gyro.getNiceAngle() >= angle){
+                driver.stopDrive();
+                step++;
+            }
+        }
+        else if (angle < initialRotation){
+            driver.driveRaw(-0.5f, 0.5f, 0.5f,-0.5f);
+            if (gyro.getNiceAngle() <= angle){
+                driver.stopDrive();
+                step++;
+            }
+        }
+    }
 
 
     public Rev2mDistanceSensor smallerDist(Rev2mDistanceSensor sens1, Rev2mDistanceSensor sens2) {
@@ -160,8 +179,7 @@ public class LeoImu extends OpMode {
     public void loop() {
         switch(step) {
             case(1):
-                final float initialRotation = gyro.getZOrientation();
-                telemetry.addData("rotation", gyro.getZOrientation());
+                rotateStep(90,0.25f);
             case(2):
                 telemetry.addLine("Rotation");
                 telemetry.addLine("rotation");

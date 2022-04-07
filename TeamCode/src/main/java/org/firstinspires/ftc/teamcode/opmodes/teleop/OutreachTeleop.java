@@ -49,7 +49,6 @@ public class OutreachTeleop extends OpMode {
         DcMotor fr = hardwareMap.get(DcMotor.class, "fr");
         DcMotor br = hardwareMap.get(DcMotor.class, "br");
         DcMotor bl = hardwareMap.get(DcMotor.class, "bl");
-        DcMotor dw = hardwareMap.get(DcMotor.class, "dw");
         Servo hammer1 = hardwareMap.get(Servo.class, "hammer1");
         Servo hammer2 = hardwareMap.get(Servo.class, "hammer2");
 
@@ -61,8 +60,8 @@ public class OutreachTeleop extends OpMode {
                 new String[] {},
                 new Servo[] {hammer1, hammer2},
                 new String[] {"hammer1", "hammer2"},
-                new DcMotor[] {fl, fr, br, bl, dw},
-                new String[] {"fl", "fr", "br", "bl", "dw"}
+                new DcMotor[] {fl, fr, br, bl},
+                new String[] {"fl", "fr", "br", "bl"}
         );
 
         input = new InputManager(gamepad1, gamepad2);
@@ -86,7 +85,7 @@ public class OutreachTeleop extends OpMode {
         telemetry.addData("lStickX", gamepad1.left_stick_x);
         telemetry.addData("lStickY", gamepad1.left_stick_y);
 
-        driver.treadDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.a);
+        driver.treadDriveRaw(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.a);
 
         if (gamepad1.y) {
             hands.setServoPosition("hammer1", 1);
