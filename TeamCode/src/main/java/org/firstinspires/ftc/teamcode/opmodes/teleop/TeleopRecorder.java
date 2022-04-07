@@ -33,7 +33,11 @@ public class TeleopRecorder extends OpMode {
     private ManipulationManager hands;
     public ElapsedTime timer = new ElapsedTime();
     double endTime;
-    int step = 1;
+    int fStep = 1;
+    int bStep = 1;
+    int lStep = 1;
+    int rStep = 1;
+
     int delayStep = -1;
     int miniStep = 1;
     double[] driverDirection;
@@ -95,11 +99,66 @@ public class TeleopRecorder extends OpMode {
     @Override
 
     public void loop() {
-        driverDirection = RohanMath.getInputOmniValues(gamepad1.left_stick_x, gamepad1.left_stick_y);
-
-        if (driverDirection[0] != 0) {
-
+        if (gamepad1.dpad_up) {
+            driver.driveRaw(0.5f,0.5f,0.5f,0.5f);
+            switch(fStep) {
+                case(1):
+                    timer.reset();
+                    fStep++;
+                    break;
+                case(2):
+                    telemetry.addData("Forward time: ", timer.milliseconds());
+            }
+        } else if (gamepad1.dpad_left) {
+            driver.testDriveOmni(0,-0.5,0);
+            switch(lStep) {
+                case(1):
+                    timer.reset();
+                    lStep++;
+                    break;
+                case(2):
+                    telemetry.addData("Left time: ", timer.milliseconds());
+            }
+        } else if (gamepad1.dpad_down) {
+            driver.driveRaw(-0.5f,-0.5f,-0.5f,-0.5f);
+            switch(bStep) {
+                case(1):
+                    timer.reset();
+                    bStep++;
+                    break;
+                case(2):
+                    telemetry.addData("Backward time: ", timer.milliseconds());
+            }
+        } else if (gamepad1.dpad_right) {
+            driver.testDriveOmni(0, 0.5, 0);
+            switch(rStep) {
+                case(1):
+                    timer.reset();
+                    rStep++;
+                    break;
+                case(2):
+                    telemetry.addData("Right Time: ", timer.milliseconds());
+            }
+        } else {
+            driver.stopDrive();
+            fStep = 1;
+            bStep = 1;
+            rStep = 1;
+            lStep = 1;
         }
+
+
+
+//        if (driverDirection[0] != 0) {
+//            switch(step) {
+//                case(1):
+//                    final double initTime = timer.milliseconds();
+//                    step++;
+//                    break;
+//                case(2):
+//
+//            }
+//        }
 
     }
     public void stop() {
